@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <RelativeLayout
+        android:id="@+id/layoutZona"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/layoutAddress"
+        android:layout_marginTop="10dp"
+        android:background="#e0e0e0"
+        android:padding="5dp">
+
+        <TextView
+            android:text="Zona"
+            android:id="@+id/lblZonaPref"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_height="wrap_content"/>
+        <Spinner
+            android:layout_toRightOf="@id/lblZona"
+            android:gravity="end"
+            android:textAlignment="textEnd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/spZonaPref"
+            android:entries="@array/zonas"
+            android:layout_alignParentRight="true">
+        </Spinner>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutDepartamento"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/layoutZona"
+        android:layout_marginTop="10dp"
+        android:background="#e0e0e0"
+        android:padding="5dp">
+
+
+        <TextView
+            android:text="Departamento"
+            android:id="@+id/lblDeptoPref"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_height="wrap_content"/>
+        <Spinner
+            android:layout_toRightOf="@id/lblDepto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/spnDeptoPref"
+            android:gravity="end"
+            android:textAlignment="textEnd"
+            android:layout_alignParentRight="true">
+        </Spinner>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutMunicipio"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/layoutDepartamento"
+        android:layout_marginTop="10dp"
+        android:background="#e0e0e0"
+        android:padding="5dp">
+        <TextView
+            android:text="Municipio"
+            android:id="@+id/lblMunPref"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:textSize="10sp"
+            android:layout_height="wrap_content"/>
+        <Spinner
+            android:layout_toRightOf="@id/lblMun"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/spMunicipioPref"
+            android:gravity="end"
+            android:textAlignment="textEnd"
+            android:layout_alignParentRight="true">
+        </Spinner>
+    </RelativeLayout>
+    <Button
+        android:layout_alignParentBottom="true"
+        android:textColor="#fff"
+        android:text="Aceptar"
+        android:onClick="fnOkey"
+        android:id="@+id/btnOkPrefs"
+        android:background="@color/colorPrimaryBtn"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        />
+</RelativeLayout>

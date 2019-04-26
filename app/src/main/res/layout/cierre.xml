@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:weightSum="1">
+
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="360dp"
+        android:layout_height="69dp"
+        android:background="@color/colorPrimaryDark"
+
+        android:scaleType="fitCenter"
+        app:srcCompat="@mipmap/icono"
+        tools:ignore="ContentDescription"
+        tools:layout_gravity="left" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimaryDark"
+        android:lineSpacingExtra="10sp"
+        android:text="Cierre"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp"
+        tools:ignore="HardcodedText" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/pin_c"
+        android:layout_width="match_parent"
+        android:layout_height="87dp"
+        android:ems="10"
+        android:hint="Ingresar Pin"
+        android:inputType="numberPassword"
+        android:textAlignment="center"
+        tools:ignore="HardcodedText" />
+
+</LinearLayout>

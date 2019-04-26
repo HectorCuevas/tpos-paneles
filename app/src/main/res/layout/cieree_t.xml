@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:weightSum="1">
+
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="314dp"
+        android:layout_height="68dp"
+        android:scaleType="fitCenter"
+
+        app:srcCompat="@mipmap/icono"
+        tools:ignore="ContentDescription"
+        tools:layout_gravity="left" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Total Venta Credito"
+        android:textAlignment="center"
+        android:textColor="@color/rojo3"
+        android:textSize="30sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/tvc"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:text="Q 0.00"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Total Venta Contado"
+        android:textAlignment="center"
+        android:textColor="#d32f2f"
+        android:textSize="30sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/tvcc"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="Q 0.00"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_light"
+        android:textSize="30sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Total  Cobrado"
+        android:textAlignment="center"
+        android:textColor="#d32f2f"
+        android:textSize="30sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/tcc"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:text="Q 0.00"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Total de Boleta"
+        android:textAlignment="center"
+        android:textColor="@color/rojo3"
+        android:textSize="30sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/boleta"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="Q 0.00"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_light"
+        android:textSize="30sp"
+        tools:ignore="HardcodedText" />
+
+</LinearLayout>
