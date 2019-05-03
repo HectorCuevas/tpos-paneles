@@ -1,10 +1,19 @@
 
 package com.rasoftec.tpos2;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,8 +46,6 @@ import static com.rasoftec.ApplicationTpos.p;
 public class locationActivity extends AppCompatActivity{
     EditText txtAddress, txtMunicipio, txtDepartamento, txtZona;
     database dbObjetc;
-
-
     ProgressDialog pdialog;
     SoapObject enc, detalle, encabezado;
     SoapPrimitive fahtocel, celtofah;
@@ -55,22 +62,24 @@ public class locationActivity extends AppCompatActivity{
     String NAMESPACE = "http://grupomenas.carrierhouse.us/wstposp/";
     String SOAP_URL1 = "http://grupomenas.carrierhouse.us/wstposp/GetStockArtWS.asmx";
     String SOAP_URL = "http://grupomenas.carrierhouse.us/wstops2/GetStockArtWS.asmx";
+    LocationManager locationManager;
+    LocationListener locationListener;
+    Double longitude;
+    Double latitude;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
         txtAddress = (EditText) findViewById(R.id.txtAddress);
-
         lblDeptoPref = (TextView) findViewById(R.id.lblDeptoPref);
         lblMunPref = (TextView) findViewById(R.id.lblMunPref);
         lblZonaPref = (TextView) findViewById(R.id.lblZonaPref);
-
         btnPref = (Button) findViewById(R.id.btnConfigPrefs);
-
 
         dbObjetc = new database(this);
         wsCod = new webservice(this);
 
+        /*** Verificacion de preferencias ***/
         if (PreferenceManager.checkPref(locationActivity.this, PreferenceManager.PREF_STR_DEPTO)){
             String str =PreferenceManager.getPref(locationActivity.this, PreferenceManager.PREF_STR_DEPTO);
             lblDeptoPref.setText(str);
@@ -103,6 +112,52 @@ public class locationActivity extends AppCompatActivity{
             }
         });
 
+        /*** Location manager ***/
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                updateLocationInfo(location);
+            }
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+            }
+            @Override
+            public void onProviderEnabled(String s) {
+            }
+            @Override
+            public void onProviderDisabled(String s) {
+            }
+        };
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (lastKnownLocation != null) {
+                updateLocationInfo(lastKnownLocation);
+            }
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startListening();
+        }
+    }
+    public void startListening() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0, locationListener);
+        }
+    }
+    public void updateLocationInfo(Location location) {
+         longitude = location.getLongitude();
+         latitude = location.getLatitude();
+         newFactura_encabezado.setLatitude(latitude.toString());
+         newFactura_encabezado.setLongitude(longitude.toString());
     }
 
     public void clearAddress(View view){
@@ -131,6 +186,8 @@ public class locationActivity extends AppCompatActivity{
             jsonObject.put("departamento", p.get(0).getDepto());
             jsonObject.put("zona", p.get(0).getZona());
             jsonObject.put("email", p.get(0).getEmail());
+            jsonObject.put("latitud", p.get(0).getLatitude());
+            jsonObject.put("longitud", p.get(0).getLongitude());
             storeDatabase(jsonObject);
         } catch (JSONException e) {
             Toast.makeText(this, "No se ha podido crear el objeto json", Toast.LENGTH_SHORT).show();
@@ -175,6 +232,7 @@ public class locationActivity extends AppCompatActivity{
         }
     }
 
+    /*** Clase asincrona para transporte de datos ***/
     private class CelsiusAsync extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -211,7 +269,9 @@ public class locationActivity extends AppCompatActivity{
             encabezado.addProperty("procesado", "S");
             encabezado.addProperty("cobrado", Double.toString(ApplicationTpos.totalEncabezado));
             encabezado.addProperty("fecha", "2019-04-04");
-            encabezado.addProperty("dpi", "1346789");
+            encabezado.addProperty("latitud", p.get(0).getLatitude());
+            encabezado.addProperty("longitud", p.get(0).getLongitude());
+            encabezado.addProperty("dpi", p.get(0).getDpi());
             encabezado.addProperty("nombre", p.get(0).getNombre());
             encabezado.addProperty("nit", p.get(0).getNit());
             encabezado.addProperty("direccion", p.get(0).getDireccion());

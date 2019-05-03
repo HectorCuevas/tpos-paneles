@@ -152,7 +152,9 @@ public class database extends SQLiteOpenHelper {
                 "  \"municipio\" VARCHAR(50),\n" +
                 "  \"departamento\" VARCHAR(50),\n" +
                 "  \"zona\" VARCHAR(50),\n" +
-                "  \"email\" VARCHAR(50)\n" +
+                "  \"email\" VARCHAR(50),\n" +
+                "  \"latitud\" VARCHAR(50),\n" +
+                "  \"longitud\" VARCHAR(50)\n" +
                 "); ");
         db.execSQL("CREATE TABLE detalle_venta (\n" +
                 "    cod_detalle INTEGER       PRIMARY KEY AUTOINCREMENT\n" +
@@ -274,6 +276,8 @@ public class database extends SQLiteOpenHelper {
         encabezado.put("departamento", jsonObject.getString("departamento"));
         encabezado.put("zona", jsonObject.getString("zona"));
         encabezado.put("email", jsonObject.getString("email"));
+        encabezado.put("latitud", jsonObject.getString("zona"));
+        encabezado.put("longitud", jsonObject.getString("email"));
         db.insert("factura_encabezado", null, encabezado);
 
         //insert detail

@@ -30,7 +30,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:layout_toRightOf="@id/imgName"
-            android:hint="Direccion" />
+            android:hint="Dirección de compra" />
 
         <ImageView
             android:layout_width="17dp"

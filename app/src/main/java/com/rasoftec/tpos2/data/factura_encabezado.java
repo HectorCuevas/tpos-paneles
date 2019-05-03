@@ -4,6 +4,21 @@ import android.media.Image;
 import android.widget.ImageView;
 
 public class factura_encabezado {
+
+    private String numeroDpi;
+    private String nombre;
+    private String nit;
+    private String dpi;
+    private String direccion="";
+    private String depto="";
+    private String municipio="";
+    private String zona="";
+    private String email;
+    private String latitude;
+    private String longitude;
+    private ImageView dpiFrontal;
+    private ImageView dpiTrasero;
+
     public String getNumeroDpi() {
         return numeroDpi;
     }
@@ -92,17 +107,25 @@ public class factura_encabezado {
         this.dpi = dpi;
     }
 
-    String numeroDpi;
-    String nombre;
-    String nit;
-    String dpi;
-    String direccion="";
-    String depto="";
-    String municipio="";
-    String zona="";
-    String email;
-    ImageView dpiFrontal;
-    ImageView dpiTrasero;
+
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+
     public String getCel() {
         return cel;
     }

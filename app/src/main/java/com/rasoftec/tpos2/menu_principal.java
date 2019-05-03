@@ -359,9 +359,9 @@ public class menu_principal extends AppCompatActivity {
     public void saldo(View v) {
         final CharSequence[] pos;
         if (base.get_estado() == 3)
-            pos = new CharSequence[]{"Venta Piso", "Venta Profit"};
+            pos = new CharSequence[]{"Venta Piso", "Venta Profit", ""};
         else
-            pos = new CharSequence[]{"Venta Local", "Venta Profit", "Cobro", "Reporte Totales"};
+            pos = new CharSequence[]{"Venta Local", "Venta Profit", "Cobro", "Reporte Totales", "Reporte grafico"};
 
 
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
@@ -403,8 +403,6 @@ public class menu_principal extends AppCompatActivity {
 
         } else if (s.toLowerCase().equals("venta profit")) {
             total_venta();
-
-
         }
 
     }
