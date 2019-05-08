@@ -361,7 +361,7 @@ public class menu_principal extends AppCompatActivity {
         if (base.get_estado() == 3)
             pos = new CharSequence[]{"Venta Piso", "Venta Profit", ""};
         else
-            pos = new CharSequence[]{"Venta Local", "Venta Profit", "Cobro", "Reporte Totales", "Reporte grafico"};
+            pos = new CharSequence[]{"Venta Local", "Venta Profit", "Reporte Totales", "Reporte grafico"};
 
 
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
@@ -390,8 +390,8 @@ public class menu_principal extends AppCompatActivity {
         if (s.toLowerCase().equals("reporte totales")) {
 
             total();
-        } else if (s.toLowerCase().equals("cobro")) {
-            cobro_reporte(s);
+        } else if (s.toLowerCase().equals("reporte grafico")) {
+            graphicReport();
 
         } else if (s.toLowerCase().equals("venta local")) {
             venta_tipo(s);
@@ -405,8 +405,16 @@ public class menu_principal extends AppCompatActivity {
             total_venta();
         }
 
+
     }
 
+    private void graphicReport(){
+        Intent cambiarActividad = new Intent(getApplicationContext(), ChartActivity.class);
+        startActivity(cambiarActividad);
+        if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
+            startActivity(cambiarActividad);
+        }
+    }
     class venta3 {
         String tipo_venta, cliente, total_saldo;
 
