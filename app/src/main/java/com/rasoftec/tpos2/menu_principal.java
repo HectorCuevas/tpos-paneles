@@ -388,8 +388,9 @@ public class menu_principal extends AppCompatActivity {
 
     private void reporte(String s) {
         if (s.toLowerCase().equals("reporte totales")) {
-
-            total();
+            //descomentar esta linea y comentar TableReport
+            //total();
+            TableReport();
         } else if (s.toLowerCase().equals("reporte grafico")) {
             graphicReport();
 
@@ -410,6 +411,13 @@ public class menu_principal extends AppCompatActivity {
 
     private void graphicReport(){
         Intent cambiarActividad = new Intent(getApplicationContext(), ChartActivity.class);
+        startActivity(cambiarActividad);
+        if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
+            startActivity(cambiarActividad);
+        }
+    }
+    private void TableReport(){
+        Intent cambiarActividad = new Intent(getApplicationContext(), TableActivity.class);
         startActivity(cambiarActividad);
         if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
             startActivity(cambiarActividad);

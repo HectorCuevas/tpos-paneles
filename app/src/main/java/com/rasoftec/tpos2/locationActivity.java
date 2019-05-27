@@ -43,7 +43,7 @@ import static com.rasoftec.ApplicationTpos.detalleVenta;
 import static com.rasoftec.ApplicationTpos.newFactura_encabezado;
 import static com.rasoftec.ApplicationTpos.p;
 
-public class locationActivity extends AppCompatActivity{
+public class locationActivity extends AppCompatActivity {
     EditText txtAddress, txtMunicipio, txtDepartamento, txtZona;
     database dbObjetc;
     ProgressDialog pdialog;
@@ -56,6 +56,7 @@ public class locationActivity extends AppCompatActivity{
     String SOAP_ACTION2 = "http://grupomenas.carrierhouse.us/wstposp/detalle_insert";
     Spinner spnMunicipios;
     Spinner spinner1;
+    String fActual;
     Spinner spZona;
     Button btnPref;
     TextView lblZonaPref, lblMunPref, lblDeptoPref;
@@ -64,13 +65,17 @@ public class locationActivity extends AppCompatActivity{
     String SOAP_URL = "http://grupomenas.carrierhouse.us/wstops2/GetStockArtWS.asmx";
     LocationManager locationManager;
     LocationListener locationListener;
-    Double longitude;
-    Double latitude;
+    Double longitude = 0D;
+    Spinner spnDireccionRecarga;
+    Double latitude = 0D;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
-        txtAddress = (EditText) findViewById(R.id.txtAddress);
+
+        //txtAddress = (EditText) findViewById(R.id.txtAddress);
+        spnDireccionRecarga = (Spinner) findViewById(R.id.spnDireccionRecarga);
         lblDeptoPref = (TextView) findViewById(R.id.lblDeptoPref);
         lblMunPref = (TextView) findViewById(R.id.lblMunPref);
         lblZonaPref = (TextView) findViewById(R.id.lblZonaPref);
@@ -79,90 +84,54 @@ public class locationActivity extends AppCompatActivity{
         dbObjetc = new database(this);
         wsCod = new webservice(this);
 
+
+        //Set adapter from resource
+        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.zonas, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spnDireccionRecarga.setAdapter(adapter);
+
         /*** Verificacion de preferencias ***/
-        if (PreferenceManager.checkPref(locationActivity.this, PreferenceManager.PREF_STR_DEPTO)){
-            String str =PreferenceManager.getPref(locationActivity.this, PreferenceManager.PREF_STR_DEPTO);
-            lblDeptoPref.setText(str);
-        }else{
-            lblDeptoPref.setText("Guatemala");
-        }
+        try {
+            if (PreferenceManager.checkPref(locationActivity.this, PreferenceManager.PREF_STR_DEPTO)) {
+                String str = PreferenceManager.getPref(locationActivity.this, PreferenceManager.PREF_STR_DEPTO);
+                lblDeptoPref.setText(str);
+            } else {
+                lblDeptoPref.setText("Guatemala");
+            }
 
-        if (PreferenceManager.checkPref(locationActivity.this, PreferenceManager.PREF_STR_MUN)){
-            String str =PreferenceManager.getPref(locationActivity.this, PreferenceManager.PREF_STR_MUN);
-            lblMunPref.setText(str);
-        }else{
-            lblMunPref.setText("Guatemala");
-        }
+            if (PreferenceManager.checkPref(locationActivity.this, PreferenceManager.PREF_STR_MUN)) {
+                String str = PreferenceManager.getPref(locationActivity.this, PreferenceManager.PREF_STR_MUN);
+                lblMunPref.setText(str);
+            } else {
+                lblMunPref.setText("Guatemala");
+            }
 
-        if (PreferenceManager.checkPref(locationActivity.this, PreferenceManager.PREF_STR_ZONA)){
-            String str =PreferenceManager.getPref(locationActivity.this, PreferenceManager.PREF_STR_ZONA);
-            lblZonaPref.setText(str);
-        }else{
-            lblMunPref.setText("1");
-        }
+            if (PreferenceManager.checkPref(locationActivity.this, PreferenceManager.PREF_STR_ZONA)) {
+                String str = PreferenceManager.getPref(locationActivity.this, PreferenceManager.PREF_STR_ZONA);
+                lblZonaPref.setText(str);
+            } else {
+                lblZonaPref.setText("1");
+            }
 
-        btnPref.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent changePrefs = new Intent(getApplicationContext(), LocationPreferences.class);
-                startActivity(changePrefs);
-                if (changePrefs.resolveActivity(getPackageManager()) != null) {
+
+            btnPref.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent changePrefs = new Intent(getApplicationContext(), LocationPreferences.class);
                     startActivity(changePrefs);
+                    if (changePrefs.resolveActivity(getPackageManager()) != null) {
+                        startActivity(changePrefs);
+                    }
                 }
-            }
-        });
-
-        /*** Location manager ***/
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                updateLocationInfo(location);
-            }
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
-            }
-            @Override
-            public void onProviderEnabled(String s) {
-            }
-            @Override
-            public void onProviderDisabled(String s) {
-            }
-        };
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (lastKnownLocation != null) {
-                updateLocationInfo(lastKnownLocation);
-            }
+            });
+        } catch (Exception e) {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         }
 
+
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startListening();
-        }
-    }
-    public void startListening() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0, locationListener);
-        }
-    }
-    public void updateLocationInfo(Location location) {
-         longitude = location.getLongitude();
-         latitude = location.getLatitude();
-         newFactura_encabezado.setLatitude(latitude.toString());
-         newFactura_encabezado.setLongitude(longitude.toString());
-    }
-
-    public void clearAddress(View view){
-        txtAddress.getText().clear();
-    }
 
 
     public void addJsonArray() {
@@ -190,12 +159,13 @@ public class locationActivity extends AppCompatActivity{
             jsonObject.put("longitud", p.get(0).getLongitude());
             storeDatabase(jsonObject);
         } catch (JSONException e) {
-            Toast.makeText(this, "No se ha podido crear el objeto json", Toast.LENGTH_SHORT).show();
-            Intent cambiarActividad = new Intent(getApplicationContext(), menu_principal.class);
+            /*Intent cambiarActividad = new Intent(getApplicationContext(), menu_principal.class);
             startActivity(cambiarActividad);
             if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
                 startActivity(cambiarActividad);
-            }
+            }*/
+            Toast.makeText(this, "No se ha podido crear el objeto json", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 
@@ -203,37 +173,36 @@ public class locationActivity extends AppCompatActivity{
         try {
             dbObjetc.setVenta(detalleVenta, jsonObject);
         } catch (Exception e) {
-            Toast.makeText(this, "No se ha podido crear el objeto json", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No se ha podido crear el objeto BD json", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 
     public void checkout(View view) {
-        try{
-            String address = txtAddress.getText().toString();
-            String municipio =  lblMunPref.getText().toString();
+        try {
+            //String address = txtAddress.getText().toString();
+            String direccionRecarga = spnDireccionRecarga.getSelectedItem().toString();
+            String municipio = lblMunPref.getText().toString();
             String departamento = lblDeptoPref.getText().toString();
             String zona = lblZonaPref.getText().toString();
-            newFactura_encabezado.setDireccion(address);
+            newFactura_encabezado.setDireccion(direccionRecarga);
             newFactura_encabezado.setMunicipio(municipio);
             newFactura_encabezado.setDepto(departamento);
             newFactura_encabezado.setZona(zona);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "" + e, Toast.LENGTH_SHORT).show();
         }
-        catch (Exception e){
-            Toast.makeText(getApplicationContext(), ""+e, Toast.LENGTH_SHORT).show();
-        }
-        if(txtAddress.getText().toString().equals("")){
-            Toast.makeText(getApplicationContext(), "Rellene todos los campos", Toast.LENGTH_SHORT).show();
-        }else{
 
-            p.add(newFactura_encabezado);
-            addJsonArray();
-            CelsiusAsync celsiustofahr = new CelsiusAsync();
-            celsiustofahr.execute();
-        }
+        p.add(newFactura_encabezado);
+        addJsonArray();
+        CelsiusAsync celsiustofahr = new CelsiusAsync();
+        celsiustofahr.execute();
+
     }
 
     /*** Clase asincrona para transporte de datos ***/
     private class CelsiusAsync extends AsyncTask<Void, Void, Void> {
+
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -269,8 +238,13 @@ public class locationActivity extends AppCompatActivity{
             encabezado.addProperty("procesado", "S");
             encabezado.addProperty("cobrado", Double.toString(ApplicationTpos.totalEncabezado));
             encabezado.addProperty("fecha", "2019-04-04");
-            encabezado.addProperty("latitud", p.get(0).getLatitude());
-            encabezado.addProperty("longitud", p.get(0).getLongitude());
+            if((p.get(0).getLatitude()==null) || (p.get(0).getLongitude()==null)){
+                encabezado.addProperty("latitud", "0");
+                encabezado.addProperty("longitud", "0");
+            }else{
+                encabezado.addProperty("latitud", p.get(0).getLatitude());
+                encabezado.addProperty("longitud", p.get(0).getLongitude());
+            }
             encabezado.addProperty("dpi", p.get(0).getDpi());
             encabezado.addProperty("nombre", p.get(0).getNombre());
             encabezado.addProperty("nit", p.get(0).getNit());
@@ -291,6 +265,12 @@ public class locationActivity extends AppCompatActivity{
                 e.getMessage();
 
             } finally {
+                /*Intent cambiarActividad = new Intent(getApplicationContext(), menu_principal.class);
+                startActivity(cambiarActividad);
+                if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
+                    startActivity(cambiarActividad);
+                }*/
+                Toast.makeText(getApplicationContext(), fahtocel.toString(), Toast.LENGTH_SHORT);
                 fahtocel.toString();
             }
             return null;

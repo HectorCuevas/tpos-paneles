@@ -6,5 +6,8 @@
     <color name="gris">#bdbdbd</color>
     <color name="rojo3">#880e4f</color>
     <color name="colorPrimaryBtn">#00bbd3</color>
+    <color name="gray">#bdbdbd</color>
+    <color name="white">#fff</color>
+
 
 </resources>

@@ -4,8 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp">
+    <Button
+        android:id="@+id/btnCheckout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimaryBtn"
+        android:onClick="checkout"
+        android:text="Confirmar"
+        android:textColor="#fff" />
 
     <RelativeLayout
+        android:layout_below="@id/btnCheckout"
         android:id="@+id/layoutAddress"
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -13,40 +23,23 @@
         android:background="#e0e0e0"
         android:padding="5dp">
 
-        <ImageView
-            android:id="@+id/imgName"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_baseline_location_city_24px" />
-
-        <EditText
-            android:id="@+id/txtAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@id/imgName"
-            android:hint="Dirección de compra" />
-
-        <ImageView
-            android:layout_width="17dp"
-            android:layout_height="17dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:onClick="clearAddress"
-            android:src="@drawable/ic_round_close_24px" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
+            android:id="@+id/lblDireccionRecarga"
             android:layout_toRightOf="@id/imgName"
-            android:text="Requerido" />
+            android:text="Dirección a recarga" />
+        <Spinner
+            android:gravity="end"
+            android:id="@+id/spnDireccionRecarga"
+            android:textAlignment="textEnd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        </Spinner>
     </RelativeLayout>
 
     <RelativeLayout
@@ -134,12 +127,5 @@
         android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
         />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimaryBtn"
-        android:onClick="checkout"
-        android:text="Confirmar"
-        android:textColor="#fff" />
+
 </RelativeLayout>

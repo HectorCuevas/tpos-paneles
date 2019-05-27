@@ -531,7 +531,8 @@ public class webservice extends AsyncTask<String, String, String> {
 
         } else if (params[1].equals("12")) {
             publishProgress("Sincronizando Ventas", "Sincronizacion");
-            ventas();
+            /*** Para sincronizar ventas con los ws antiguos descomentar la linea de abajo ***/
+            //ventas();
             String[] actual_local = base.get_access();
             int estado = Integer.parseInt(actual_local[1].toString());
             if (estado < 3) {

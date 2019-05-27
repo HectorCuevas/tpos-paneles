@@ -46,5 +46,6 @@
         <activity android:name="com.rasoftec.tpos2.login"></activity>
         <activity android:name="com.rasoftec.tpos2.Preferences.LocationPreferences"></activity>
         <activity android:name="com.rasoftec.tpos2.ChartActivity"></activity>
+        <activity android:name="com.rasoftec.tpos2.TableActivity"></activity>
     </application>
 </manifest>

@@ -44,6 +44,7 @@ dependencies {
     implementation files('libs/ksoap2-android-2.5.2.jar')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+    compile 'de.codecrafters.tableview:tableview:2.8.0'
 }
 repositories {
     mavenCentral()

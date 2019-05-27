@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
@@ -23,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,19 +46,25 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
+import static android.text.TextUtils.isEmpty;
 import static android.widget.Toast.LENGTH_SHORT;
 
 public class venta extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private String CustomerName;
+
+    private BottomSheetDialog mBottomSheetDialog;
     private String CustomerNit;
+    String m_text;
     private String actual;
     private String nombre;
+    View bottomSheet;
     int pos;
     private String ruta;
     ArrayList<nodo_producto> carrito = new ArrayList<>();
     ArrayList<nodo_producto> lista_info = new ArrayList<>();
     private ListView lista_g;
+    RadioButton radio10;
     private CheckBox abono;
     EditText cobro_venta;
     ArrayList<nodo_factura> facturas_actual;
@@ -66,9 +74,10 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
     int tipo, cantidad;
     int PhoneNumber = 0;
     int contadorCantidadRecargas = 0;
-    int cantidadRecarga = 0;
+    int cantidadRecarga = 10;
     int total_pos;
     double abono_actual_v = 0.00;
+    EditText numeroDeTelefono;
     private ErrorRed ero;
     int codigo = 0;
     ArrayAdapter<nodo_producto> adapter;
@@ -91,6 +100,10 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
         configuracion();
 
 
+        bottomSheet = findViewById(R.id.framelayout_bottom_sheet);
+
+
+
         setTitle("Area de Venta(s)");
     }
 
@@ -100,100 +113,112 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
     }
 
-    public void abono_accion(View v) {
-//         cobro_venta= (EditText)findViewById(R.id.abono_venta);
-//        if(abono.isChecked()){
-//
-//            cobro_venta.setVisibility(View.VISIBLE);
-//
-//
-//        }else{
-//            cobro_venta.setVisibility(View.INVISIBLE);
-//        }
-
-
-    }
-
-
     private void mensaje(String reviso, final nodo_producto reviso2) {
-        isPhoneNumber = true;
-        String DialogMessage = "", DialogButton = "";
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        if (reviso.equals("ORGA.01")) {
-            DialogMessage = "Valor de recarga";
-            DialogButton = "Asignar";
-            isPhoneNumber = false;
-        } else {
+        try {
+            if (reviso.equals("ORGA.01")) {
+                isPhoneNumber = false;
+            }
+            else {
+                isPhoneNumber = true;
+            }
+            final View bottomSheetLayout = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
+            numeroDeTelefono = bottomSheetLayout.findViewById(R.id.txtNumeroDeTelefono);
+            numeroDeTelefono.requestFocus();
+            mBottomSheetDialog = new BottomSheetDialog(this);
+            mBottomSheetDialog.setContentView(bottomSheetLayout);
+            mBottomSheetDialog.show();
 
-            DialogMessage = "Numero de telefono a asignar";
-            DialogButton = "Agregar";
-            isPhoneNumber = true;
+            (bottomSheetLayout.findViewById(R.id.button_close)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mBottomSheetDialog.dismiss();
+                }
+            });
+
+            (bottomSheetLayout.findViewById(R.id.button_ok)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try{
+                        CheckBox bonificacion = bottomSheetLayout.findViewById(R.id.checkBoxBono);
+                        radio10 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_10);
+                        RadioButton radio15 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_15);
+                        RadioButton radio20 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_20);
+                        RadioButton radio25 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_25);
+                        RadioButton radio50 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_50);
+                        RadioButton radio100 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_100);
+                        EditText txtOtros = (EditText) bottomSheetLayout.findViewById(R.id.txtOtros);
+                        if( !isEmpty(txtOtros.getText().toString())){
+                            m_text = txtOtros.getText().toString();
+                        }else if (radio10.isChecked()) {
+                            m_text = "10";
+                        }else if (radio15.isChecked()) {
+                            m_text = "15";
+                        }else if (radio20.isChecked()) {
+                            m_text = "20";
+                        }else if (radio25.isChecked()) {
+                            m_text = "25";
+                        }else if (radio50.isChecked()) {
+                            m_text = "50";
+                        }else if (radio100.isChecked()) {
+                            m_text = "100";
+                        }
+
+//                        TextView total = (TextView) bottomSheetLayout.findViewById(R.id.tv_title);
+                        cantidadRecarga=Integer.parseInt(m_text);
+                        String phone = numeroDeTelefono.getText().toString();
+                        PhoneNumber = Integer.parseInt(phone);
+                        if (m_text.length() > 0) {
+                            cantidad = Integer.parseInt(m_text);
+                            if (cantidad > 0) {
+                                nodo_producto tem = reviso2;
+                                nodo_producto existe = existe(reviso2.getCodigo(), cantidad);
+                                ValidateIfPhoneNumber(cantidad); //This function validate if it's phone number or reload / return int:cantidad.
+                                tem.setNumeroCel(PhoneNumber);
+                                if (existe == null) {
+                                    tem.setCompra(cantidad);
+                                    if(bonificacion.isChecked()){
+                                        tem.setPrecio(0);
+                                    }
+                                    carrito.add(tem);
+                                }
+                                actualizar_total(carrito);
+                                nodo_producto reviso1 = new nodo_producto();
+                                reviso1.setCodigo("ORGA.01");
+                                reviso1.setCompra(cantidadRecarga);
+                                reviso1.setDescripcion("Recarga electronica");
+                                reviso1.setPrecio(1.0);
+                                reviso1.setStock(1500);
+                                reviso1.setNumeroCel(contadorCantidadRecargas);
+                                //mensaje(reviso1.getCodigo(), reviso1);
+                                carrito.add(reviso1);
+                                contadorCantidadRecargas += 10;
+                                actualizar_total(carrito);
+                                nodo_lista_todo();
+                            } else {
+                                nodo_producto existe = existe(reviso2.getCodigo(), cantidad);
+                                carrito.remove(existe);
+                                actualizar_total(carrito);
+                                nodo_lista_todo();
+                            }
+                        } else {
+                            info("Debe Ingresar Una Cantidad para Agregar el Articulo");
+
+                        }
+
+                        Toast.makeText(getApplicationContext(), ""+PhoneNumber, Toast.LENGTH_SHORT).show();
+                        mBottomSheetDialog.dismiss();
+                    }catch (Exception e){
+                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
 
-        builder.setTitle(DialogMessage);
-        final EditText input = new EditText(this);
-
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-        builder.setView(input);
-        if (reviso2.getCompra() > 0)
-            input.setText("" + reviso2.getCompra());
-
-        builder.setPositiveButton(DialogButton, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String m_Text = input.getText().toString();
-
-                if (m_Text.length() > 0) {
-                    cantidad = Integer.parseInt(m_Text);
-                    if (cantidad > 0) {
-                        nodo_producto tem = reviso2;
-                        nodo_producto existe = existe(reviso2.getCodigo(), cantidad);
-                        ValidateIfPhoneNumber(cantidad); //This function validate if it's phone number or reload / return int:cantidad.
-                        tem.setNumeroCel(PhoneNumber);
-                        if (existe == null) {
-                            tem.setCompra(cantidad);
-                            carrito.add(tem);
-                        }
-                        actualizar_total(carrito);
-
-                       nodo_producto reviso1 = new nodo_producto();
-                        reviso1.setCodigo("ORGA.01");
-                        reviso1.setCompra(cantidadRecarga);
-                        reviso1.setDescripcion("Recarga electronica");
-                        reviso1.setPrecio(1.0);
-                        reviso1.setStock(1500);
-                        reviso1.setNumeroCel(contadorCantidadRecargas);
-                        //mensaje(reviso1.getCodigo(), reviso1);
-                        carrito.add(reviso1);
-                        contadorCantidadRecargas+=10;
-                        actualizar_total(carrito);
-                        nodo_lista_todo();
-                    } else {
-                        nodo_producto existe = existe(reviso2.getCodigo(), cantidad);
-                        carrito.remove(existe);
-                        actualizar_total(carrito);
-                        nodo_lista_todo();
-                    }
-                } else {
-                    info("Debe Ingresar Una Cantidad para Agregar el Articulo");
-
-                }
-
-            }
-        });
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-        input.requestFocus();
-
-
     }
+
 
     private int ValidateIfPhoneNumber(int quantity) {
         if (isPhoneNumber) {
@@ -256,7 +281,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                     mensaje(reviso.getCodigo(), reviso1);
                 }*/
                 mensaje(reviso.getCodigo(), reviso);
-                CustomersData("Cantidad de recarga", false);
+                //CustomersData("Cantidad de recarga", false);
 
 
             }
@@ -289,13 +314,14 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
         if (venta_detalle.round(total_actual, 2) > 0) {
             forma_pago(descripcion, total_actual);
             //This function displays dialog message if it's name or nit // return Alertdialog type: dialog
-           // CustomersData("Cantidad de recarga", false);
+            // CustomersData("Cantidad de recarga", false);
             // CustomersData("Ingrese Nit del cliente", false);
         } else {
             info("El Valor de la Venta debe ser Mayor de Q 0.00");
         }
 
     }
+
     private void CustomersData(String Description, final boolean isName) {
         String[] singleChoiceItems = getResources().getStringArray(R.array.opcionesRecarga);
         final int itemSelected = 0;
@@ -309,25 +335,25 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
         input.setHint("Otro");
         builder.setView(input);
         builder.setTitle(DialogMessage)
-        .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int selectedIndex) {
-                String valorRecarga;
-                pos = selectedIndex;
-                valorRecarga=getResources().getStringArray(R.array.opcionesRecarga)[selectedIndex];
-                cantidadRecarga = Integer.parseInt(valorRecarga);
-            }
-        })
-        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(!input.getText().toString().equals("")){
-                    cantidadRecarga = Integer.parseInt(input.getText().toString());
-                   // Toast.makeText(getApplicationContext(), ""+cantidadRecarga, Toast.LENGTH_SHORT).show();
-                }
-            }
-        })
-        .setNegativeButton("Cancel", null);
+                .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int selectedIndex) {
+                        String valorRecarga;
+                        pos = selectedIndex;
+                        valorRecarga = getResources().getStringArray(R.array.opcionesRecarga)[selectedIndex];
+                        cantidadRecarga = Integer.parseInt(valorRecarga);
+                    }
+                })
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (!input.getText().toString().equals("")) {
+                            cantidadRecarga = Integer.parseInt(input.getText().toString());
+                            // Toast.makeText(getApplicationContext(), ""+cantidadRecarga, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", null);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
@@ -348,13 +374,15 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
             operacion_venta(descripcion2, total, "Contado");
         }
     }
-    public void cambiarActividad(View v){
+
+    public void cambiarActividad(View v) {
         Intent cambiarActividad = new Intent(this, DetailActivity.class);
         startActivity(cambiarActividad);
         if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
             startActivity(cambiarActividad);
         }
     }
+
     private void operacion_venta(String descripcion, Double total_actual, String tipo) {
         final String tipo2 = tipo;
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
@@ -388,7 +416,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                         i.putExtra("ruta", ruta);
                         startActivity(i);
                     }
-                   // info("Se Realizo la Venta con Exito");
+                    // info("Se Realizo la Venta con Exito");
                     base.setcliente(actual);
                 } catch (Exception e) {
 
@@ -405,7 +433,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
 
     private void realizar_venta(String tipo) {
-        ApplicationTpos.totalEncabezado=total_carrito(carrito);
+        ApplicationTpos.totalEncabezado = total_carrito(carrito);
         ApplicationTpos.detalleVenta = carrito;
         try {
             if (tipo.toLowerCase().equals("contado")) {
@@ -413,7 +441,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                 String tipo2 = "CONT";
                 tem.put("usuario_movilizandome", base.get_ruta().trim());
                 tem.put("co_cli", String.valueOf(actual));
-                tem.put("forma_pag",  CustomerNit+"."+CustomerName);
+                tem.put("forma_pag", CustomerNit + "." + CustomerName);
                 tem.put("total", total_carrito(carrito));
                 tem.put("cobrado", total_carrito(carrito));
                 tem.put("Procesado", "S");
