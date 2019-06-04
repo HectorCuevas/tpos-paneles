@@ -270,7 +270,9 @@ public class locationActivity extends AppCompatActivity {
                 if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
                     startActivity(cambiarActividad);
                 }*/
-                Toast.makeText(getApplicationContext(), fahtocel.toString(), Toast.LENGTH_SHORT);
+               //
+                //
+                // 3......00Toast.makeText(getApplicationContext(), fahtocel.toString(), Toast.LENGTH_SHORT);
                 fahtocel.toString();
             }
             return null;

@@ -19,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -53,12 +55,13 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
     private String CustomerName;
 
-    private BottomSheetDialog mBottomSheetDialog;
+    private BottomSheetDialog mBottomSheetDialog, mBottomSheetDialog1;
     private String CustomerNit;
     String m_text;
+    int nuevoPrecio=15;
     private String actual;
     private String nombre;
-    View bottomSheet;
+    View bottomSheet, bottomSheeet1;
     int pos;
     private String ruta;
     ArrayList<nodo_producto> carrito = new ArrayList<>();
@@ -102,6 +105,8 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
         bottomSheet = findViewById(R.id.framelayout_bottom_sheet);
 
+        bottomSheeet1 = findViewById(R.id.framelayout_bottom_sheet1);
+
 
 
         setTitle("Area de Venta(s)");
@@ -115,15 +120,19 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
     private void mensaje(String reviso, final nodo_producto reviso2) {
         try {
+            //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            final String sbCodigo = reviso.substring(0, 7);
             if (reviso.equals("ORGA.01")) {
                 isPhoneNumber = false;
-            }
-            else {
+            } else{
                 isPhoneNumber = true;
             }
             final View bottomSheetLayout = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
             numeroDeTelefono = bottomSheetLayout.findViewById(R.id.txtNumeroDeTelefono);
             numeroDeTelefono.requestFocus();
+            if(!sbCodigo.equals("SIMCARD")){
+                showKeyboard();
+            }
             mBottomSheetDialog = new BottomSheetDialog(this);
             mBottomSheetDialog.setContentView(bottomSheetLayout);
             mBottomSheetDialog.show();
@@ -144,8 +153,8 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                         RadioButton radio15 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_15);
                         RadioButton radio20 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_20);
                         RadioButton radio25 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_25);
-                        RadioButton radio50 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_50);
-                        RadioButton radio100 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_100);
+                        //RadioButton radio50 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_50);
+                       // RadioButton radio100 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_100);
                         EditText txtOtros = (EditText) bottomSheetLayout.findViewById(R.id.txtOtros);
                         if( !isEmpty(txtOtros.getText().toString())){
                             m_text = txtOtros.getText().toString();
@@ -157,10 +166,6 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                             m_text = "20";
                         }else if (radio25.isChecked()) {
                             m_text = "25";
-                        }else if (radio50.isChecked()) {
-                            m_text = "50";
-                        }else if (radio100.isChecked()) {
-                            m_text = "100";
                         }
 
 //                        TextView total = (TextView) bottomSheetLayout.findViewById(R.id.tv_title);
@@ -172,23 +177,28 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                             if (cantidad > 0) {
                                 nodo_producto tem = reviso2;
                                 nodo_producto existe = existe(reviso2.getCodigo(), cantidad);
-                                ValidateIfPhoneNumber(cantidad); //This function validate if it's phone number or reload / return int:cantidad.
                                 tem.setNumeroCel(PhoneNumber);
-                                if (existe == null) {
+                                ValidateIfPhoneNumber(cantidad); //This function validate if it's phone number or reload / return int:cantidad.
+                                if (existe == null && sbCodigo.equals("SIMCARD")) {
+                                    tem.setCompra(1);
+                                    tem.setPrecio(nuevoPrecio);
+                                    carrito.add(tem);
+                                }else if(existe == null){
                                     tem.setCompra(cantidad);
-                                    if(bonificacion.isChecked()){
-                                        tem.setPrecio(0);
-                                    }
                                     carrito.add(tem);
                                 }
+                            //    Toast.makeText(getApplicationContext(), carrito.get(0).getPrecio()+"", Toast.LENGTH_SHORT).show();
                                 actualizar_total(carrito);
                                 nodo_producto reviso1 = new nodo_producto();
                                 reviso1.setCodigo("ORGA.01");
                                 reviso1.setCompra(cantidadRecarga);
                                 reviso1.setDescripcion("Recarga electronica");
-                                reviso1.setPrecio(1.0);
+                                if(bonificacion.isChecked()){
+                                    reviso1.setPrecio(0);
+                                }else
+                                    reviso1.setPrecio(1.0);
                                 reviso1.setStock(1500);
-                                reviso1.setNumeroCel(contadorCantidadRecargas);
+                                reviso1.setNumeroCel(Integer.parseInt(phone));
                                 //mensaje(reviso1.getCodigo(), reviso1);
                                 carrito.add(reviso1);
                                 contadorCantidadRecargas += 10;
@@ -205,13 +215,51 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
                         }
 
-                        Toast.makeText(getApplicationContext(), ""+PhoneNumber, Toast.LENGTH_SHORT).show();
-                        mBottomSheetDialog.dismiss();
+                        //Toast.makeText(getApplicationContext(), ""+PhoneNumber, Toast.LENGTH_SHORT).show();
+                        if(isEmpty(numeroDeTelefono.getText().toString())){
+                            Toast.makeText(getApplicationContext(), "Asigne un numero", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mBottomSheetDialog.dismiss();
+                        }
                     }catch (Exception e){
-                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Asigne un numero de telefono" +e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
+            if(sbCodigo.equals("SIMCARD")){
+
+                final View bottomSheetLayoutSim = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog1, null);
+                mBottomSheetDialog1 = new BottomSheetDialog(this);
+                mBottomSheetDialog1.setContentView(bottomSheetLayoutSim);
+                mBottomSheetDialog1.show();
+                (bottomSheetLayoutSim.findViewById(R.id.button_closeSim)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mBottomSheetDialog1.dismiss();
+                    }
+                });
+                (bottomSheetLayoutSim.findViewById(R.id.button_okSim)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RadioButton radio0 = (RadioButton) bottomSheetLayoutSim.findViewById(R.id.radio_0);
+                        RadioButton radios10 = (RadioButton) bottomSheetLayoutSim.findViewById(R.id.radio_s10);
+                        RadioButton radios15 = (RadioButton) bottomSheetLayoutSim.findViewById(R.id.radio_s15);
+                        TextView txtOTrosSim = (TextView)bottomSheetLayoutSim.findViewById(R.id.txtOtroValorSim);
+
+                        if( !isEmpty(txtOTrosSim.getText().toString())){
+                            nuevoPrecio = Integer.parseInt(txtOTrosSim.getText().toString());
+                        }else if(radio0.isChecked()){
+                            nuevoPrecio = 0;
+                        }else if(radios10.isChecked()){
+                            nuevoPrecio = 10;
+                        }else if(radios15.isChecked()){
+                            nuevoPrecio = 15;
+                        }
+                        mBottomSheetDialog1.dismiss();
+
+                    }
+                });
+            }
 
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
@@ -818,6 +866,10 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+    public void showKeyboard(){
+        InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
 }

@@ -537,7 +537,7 @@ public class webservice extends AsyncTask<String, String, String> {
             int estado = Integer.parseInt(actual_local[1].toString());
             if (estado < 3) {
                 publishProgress("Sincronizando Cobros", "Sincronizacion");
-                cobros();
+               // cobros();
                 publishProgress("Sincronizado Cuentas Por Cobrar", "Sincronizacion");
                 obtener_facturas();
                 publishProgress("Sincronizando Productos", "Sincronizacion");

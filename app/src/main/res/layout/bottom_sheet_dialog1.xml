@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginTop="5dp"
-        android:text="Valor del sim"
+        android:text="Valor de la tarjeta SIM"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/opcionesSim"

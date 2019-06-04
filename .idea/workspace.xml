@@ -43,7 +43,7 @@
     <session id="883432897">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="31" />
+          <entry key="project.closed" value="34" />
           <entry key="project.open.time.10" value="2" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.15" value="1" />
@@ -54,11 +54,12 @@
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.30" value="1" />
           <entry key="project.open.time.32" value="1" />
-          <entry key="project.open.time.33" value="1" />
+          <entry key="project.open.time.33" value="2" />
           <entry key="project.open.time.34" value="1" />
           <entry key="project.open.time.36" value="3" />
-          <entry key="project.open.time.38" value="1" />
+          <entry key="project.open.time.38" value="2" />
           <entry key="project.open.time.4" value="1" />
+          <entry key="project.open.time.42" value="1" />
           <entry key="project.open.time.45" value="1" />
           <entry key="project.open.time.47" value="1" />
           <entry key="project.open.time.48" value="1" />
@@ -72,16 +73,16 @@
           <entry key="project.open.time.7" value="2" />
           <entry key="project.open.time.76" value="1" />
           <entry key="project.open.time.9" value="2" />
-          <entry key="project.opened" value="36" />
+          <entry key="project.opened" value="39" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="class" value="2" />
           <entry key="gradle" value="10" />
-          <entry key="java" value="96" />
+          <entry key="java" value="100" />
           <entry key="png" value="1" />
-          <entry key="xml" value="92" />
+          <entry key="xml" value="93" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -89,115 +90,53 @@
           <entry key="CLASS" value="2" />
           <entry key="Groovy" value="10" />
           <entry key="Image" value="1" />
-          <entry key="JAVA" value="96" />
-          <entry key="XML" value="92" />
+          <entry key="JAVA" value="100" />
+          <entry key="XML" value="93" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gradle" value="14" />
-          <entry key="java" value="11488" />
-          <entry key="xml" value="2696" />
+          <entry key="java" value="12223" />
+          <entry key="xml" value="2719" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="14" />
-          <entry key="JAVA" value="11488" />
-          <entry key="XML" value="2696" />
+          <entry key="JAVA" value="12223" />
+          <entry key="XML" value="2719" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/locationActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="369">
-              <caret line="232" column="49" selection-start-line="232" selection-start-column="49" selection-end-line="232" selection-end-column="49" />
+            <state relative-caret-position="1117">
+              <caret line="276" selection-start-line="276" selection-end-line="276" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/DetailActivity.java">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/data/webservice.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="139" column="18" selection-start-line="139" selection-start-column="11" selection-end-line="139" selection-end-column="18" />
-              <folding>
-                <element signature="e#2163#2328#0" expanded="true" />
-                <element signature="e#2327#2328#0" expanded="true" />
-                <element signature="e#2407#2628#0" expanded="true" />
-                <element signature="e#2627#2628#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="8704">
+              <caret line="539" column="17" selection-start-line="539" selection-start-column="17" selection-end-line="539" selection-end-column="17" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/venta.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="119" column="13" selection-start-line="119" selection-start-column="13" selection-end-line="119" selection-end-column="13" />
-              <folding>
-                <element signature="e#3939#4124#0" expanded="true" />
-                <element signature="e#4123#4124#0" expanded="true" />
-                <element signature="e#4319#8439#0" expanded="true" />
-                <element signature="e#8438#8439#0" expanded="true" />
-                <element signature="e#8810#8811#0" expanded="true" />
-                <element signature="e#8878#8879#0" expanded="true" />
-                <element signature="e#7892#8707#0" expanded="true" />
-                <element signature="e#8706#8707#0" expanded="true" />
-                <element signature="e#10608#11085#0" expanded="true" />
-                <element signature="e#11084#11085#0" expanded="true" />
-                <element signature="e#11128#11621#0" expanded="true" />
-                <element signature="e#11620#11621#0" expanded="true" />
-                <element signature="e#12993#14452#0" expanded="true" />
-                <element signature="e#14451#14452#0" expanded="true" />
-                <element signature="e#16883#17356#0" expanded="true" />
-                <element signature="e#17355#17356#0" expanded="true" />
-                <element signature="e#17405#17592#0" expanded="true" />
-                <element signature="e#17591#17592#0" expanded="true" />
-                <element signature="e#19478#19766#0" expanded="true" />
-                <element signature="e#19765#19766#0" expanded="true" />
-                <element signature="e#19866#20673#0" expanded="true" />
-                <element signature="e#20672#20673#0" expanded="true" />
-                <element signature="e#24010#24011#0" expanded="true" />
-                <element signature="e#24036#24037#0" expanded="true" />
-                <element signature="e#24535#24536#0" expanded="true" />
-                <element signature="e#24563#24564#0" expanded="true" />
-                <element signature="e#24264#24566#0" expanded="true" />
-                <element signature="e#24565#24566#0" expanded="true" />
-                <element signature="e#24610#24835#0" expanded="true" />
-                <element signature="e#24834#24835#0" expanded="true" />
-                <element signature="e#25761#26063#0" expanded="true" />
-                <element signature="e#26062#26063#0" expanded="true" />
-                <element signature="e#26107#26332#0" expanded="true" />
-                <element signature="e#26331#26332#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="2142">
+              <caret line="177" selection-start-line="177" selection-end-line="177" />
             </state>
           </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/bottom_sheet_dialog1.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="46" column="48" selection-start-line="46" selection-start-column="48" selection-end-line="46" selection-end-column="48" />
-            </state>
-          </provider>
-          <provider editor-type-id="android-designer2" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/bottom_sheet_dialog.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="279">
-              <caret line="85" column="38" selection-end-line="107" selection-end-column="15" />
-            </state>
-          </provider>
-          <provider editor-type-id="android-designer2" />
         </entry>
       </file>
     </leaf>
@@ -214,9 +153,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>txtmuni</find>
-      <find>resttemplate</find>
-      <find>customers</find>
       <find>opera</find>
       <find>forma</find>
       <find>forma_pago</find>
@@ -241,9 +177,12 @@
       <find>REVISO2</find>
       <find>RADIO5</find>
       <find>bottomSheetLayout</find>
-      <find>isempty</find>
       <find>mensaje</find>
       <find>bottomsheet</find>
+      <find>isempty</find>
+      <find>&quot;&quot;+phon</find>
+      <find>cobros</find>
+      <find>ventas</find>
     </findStrings>
     <replaceStrings>
       <replace>spMunicipiosPref</replace>
@@ -2905,19 +2844,19 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/TableActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/data/database.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/Preferences/LocationPreferences.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/data/webservice.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_location.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/DetailActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/locationActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/bottom_sheet_dialog.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/framelayout_botton_sheet.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/framelayout_bottom_sheet1.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/bottom_sheet_dialog1.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/bottom_sheet_dialog.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/data/webservice.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/locationActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/venta.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="676" />
     <option name="width" value="697" />
     <option name="height" value="735" />
@@ -2973,21 +2912,11 @@
               <item name="rasoftec" type="cbb59c9e:AndroidPsiDirectoryNode" />
               <item name="tpos2" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="tpos" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-            </path>
-            <path>
-              <item name="tpos" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="layout" type="ddeffd01:AndroidResFolderTypeNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -3047,7 +2976,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -3159,11 +3087,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.21482602" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.21482602" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Build Variants" order="4" side_tool="true" />
@@ -3179,12 +3107,12 @@
       <window_info anchor="bottom" id="Version Control" order="6" show_stripe_button="false" />
       <window_info anchor="bottom" id="Build" order="7" weight="0.33114755" />
       <window_info anchor="bottom" id="Find" order="8" weight="0.44590163" />
-      <window_info anchor="bottom" id="Android Profiler" order="9" />
+      <window_info anchor="bottom" id="Android Profiler" order="9" show_stripe_button="false" />
       <window_info anchor="right" id="Assistant" order="0" weight="0.32980332" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
       <window_info anchor="right" id="Theme Preview" order="2" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
-      <window_info anchor="right" id="Preview" order="4" weight="0.25567323" />
+      <window_info anchor="right" id="Preview" order="4" weight="0.3524962" />
       <window_info anchor="right" id="Device File Explorer" order="5" side_tool="true" weight="0.32980332" />
       <window_info anchor="right" id="Gradle" order="6" weight="0.32980332" />
     </layout>
@@ -3252,27 +3180,14 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/locationActivity.java</url>
-          <line>213</line>
+          <line>208</line>
           <properties />
-          <option name="timeStamp" value="55" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/venta.java</url>
-          <line>174</line>
-          <properties />
-          <option name="timeStamp" value="56" />
+          <option name="timeStamp" value="57" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/SplashActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="14" column="41" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support/appcompat-v7/26.1.0/2b34456c30d6b6e5db5fa3e8fa02f6cebd5531fd/appcompat-v7-26.1.0-sources.jar!/android/support/v7/app/AppCompatViewInflater.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
@@ -3328,9 +3243,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="23" column="6" selection-start-line="23" selection-start-column="6" selection-end-line="23" selection-end-column="6" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3415,13 +3327,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
           <caret line="550" selection-start-line="550" selection-end-line="550" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/data/webservice.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="517">
-          <caret line="553" lean-forward="true" selection-start-line="553" selection-end-line="553" />
         </state>
       </provider>
     </entry>
@@ -3529,47 +3434,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/locationActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="232" column="49" selection-start-line="232" selection-start-column="49" selection-end-line="232" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/framelayout_botton_sheet.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="50" selection-start-line="12" selection-start-column="50" selection-end-line="12" selection-end-column="50" />
-          <folding>
-            <element signature="e#525#556#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/DetailActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="139" column="18" selection-start-line="139" selection-start-column="11" selection-end-line="139" selection-end-column="18" />
-          <folding>
-            <element signature="e#2163#2328#0" expanded="true" />
-            <element signature="e#2327#2328#0" expanded="true" />
-            <element signature="e#2407#2628#0" expanded="true" />
-            <element signature="e#2627#2628#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/framelayout_botton_sheet.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/nodo_producto.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="426">
           <caret line="78" column="38" selection-start-line="78" selection-start-column="38" selection-end-line="78" selection-end-column="38" />
-          <folding>
-            <element signature="e#760#761#0" expanded="true" />
-            <element signature="e#796#797#0" expanded="true" />
-            <element signature="e#896#897#0" expanded="true" />
-            <element signature="e#932#933#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3589,62 +3458,54 @@
       </provider>
       <provider editor-type-id="android-designer2" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/bottom_sheet_dialog.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/DetailActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="85" column="38" selection-end-line="107" selection-end-column="15" />
+        <state relative-caret-position="177">
+          <caret line="139" column="18" selection-start-line="139" selection-start-column="11" selection-end-line="139" selection-end-column="18" />
         </state>
       </provider>
-      <provider editor-type-id="android-designer2" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/bottom_sheet_dialog1.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="46" column="48" selection-start-line="46" selection-start-column="48" selection-end-line="46" selection-end-column="48" />
+        <state relative-caret-position="499">
+          <caret line="78" column="15" selection-start-line="78" selection-start-column="15" selection-end-line="78" selection-end-column="15" />
         </state>
       </provider>
       <provider editor-type-id="android-designer2" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/bottom_sheet_dialog.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="58" column="32" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/data/venta.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="528">
+          <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/locationActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1117">
+          <caret line="276" selection-start-line="276" selection-end-line="276" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/data/webservice.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8704">
+          <caret line="539" column="17" selection-start-line="539" selection-start-column="17" selection-end-line="539" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/rasoftec/tpos2/venta.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="119" column="13" selection-start-line="119" selection-start-column="13" selection-end-line="119" selection-end-column="13" />
-          <folding>
-            <element signature="e#3939#4124#0" expanded="true" />
-            <element signature="e#4123#4124#0" expanded="true" />
-            <element signature="e#4319#8439#0" expanded="true" />
-            <element signature="e#8438#8439#0" expanded="true" />
-            <element signature="e#8810#8811#0" expanded="true" />
-            <element signature="e#8878#8879#0" expanded="true" />
-            <element signature="e#7892#8707#0" expanded="true" />
-            <element signature="e#8706#8707#0" expanded="true" />
-            <element signature="e#10608#11085#0" expanded="true" />
-            <element signature="e#11084#11085#0" expanded="true" />
-            <element signature="e#11128#11621#0" expanded="true" />
-            <element signature="e#11620#11621#0" expanded="true" />
-            <element signature="e#12993#14452#0" expanded="true" />
-            <element signature="e#14451#14452#0" expanded="true" />
-            <element signature="e#16883#17356#0" expanded="true" />
-            <element signature="e#17355#17356#0" expanded="true" />
-            <element signature="e#17405#17592#0" expanded="true" />
-            <element signature="e#17591#17592#0" expanded="true" />
-            <element signature="e#19478#19766#0" expanded="true" />
-            <element signature="e#19765#19766#0" expanded="true" />
-            <element signature="e#19866#20673#0" expanded="true" />
-            <element signature="e#20672#20673#0" expanded="true" />
-            <element signature="e#24010#24011#0" expanded="true" />
-            <element signature="e#24036#24037#0" expanded="true" />
-            <element signature="e#24535#24536#0" expanded="true" />
-            <element signature="e#24563#24564#0" expanded="true" />
-            <element signature="e#24264#24566#0" expanded="true" />
-            <element signature="e#24565#24566#0" expanded="true" />
-            <element signature="e#24610#24835#0" expanded="true" />
-            <element signature="e#24834#24835#0" expanded="true" />
-            <element signature="e#25761#26063#0" expanded="true" />
-            <element signature="e#26062#26063#0" expanded="true" />
-            <element signature="e#26107#26332#0" expanded="true" />
-            <element signature="e#26331#26332#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="2142">
+          <caret line="177" selection-start-line="177" selection-end-line="177" />
         </state>
       </provider>
     </entry>
