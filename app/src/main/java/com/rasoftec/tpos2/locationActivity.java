@@ -28,6 +28,7 @@ import com.rasoftec.ApplicationTpos;
 import com.rasoftec.PreferenceManager;
 import com.rasoftec.tpos.R;
 import com.rasoftec.tpos2.Preferences.LocationPreferences;
+import com.rasoftec.tpos2.beans.FormatoFactura;
 import com.rasoftec.tpos2.data.database;
 import com.rasoftec.tpos2.data.webservice;
 
@@ -265,6 +266,23 @@ public class locationActivity extends AppCompatActivity {
                 e.getMessage();
 
             } finally {
+               /* FormatoFactura formatoFactura = new FormatoFactura(
+                        p.get(0).getDpi(),
+                 /*       p.get(0).getNombre(),
+                        p.get(0).getNit(),
+                        p.get(0).getDireccion(),
+                        p.get(0).getDepto(),
+                        p.get(0).getMunicipio(),
+                        p.get(0).getZona(),
+                        p.get(0).getEmail(),
+                        p.get(0).getLatitude(),
+                        p.get(0).getLongitude(),
+                        p.get(0).getLongitude(),
+                        cod,
+                        dbObjetc.get_ruta().trim(),
+
+                );*/
+
                 /*Intent cambiarActividad = new Intent(getApplicationContext(), menu_principal.class);
                 startActivity(cambiarActividad);
                 if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
@@ -273,7 +291,7 @@ public class locationActivity extends AppCompatActivity {
                //
                 //
                 // 3......00Toast.makeText(getApplicationContext(), fahtocel.toString(), Toast.LENGTH_SHORT);
-                fahtocel.toString();
+
             }
             return null;
         }

@@ -131,7 +131,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/imageButton6"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_account_box_black_24dp"
+        app:srcCompat="@drawable/ic_account_convert"
         tools:ignore="ContentDescription,VectorDrawableCompat" />
 
     <TextView
@@ -141,7 +141,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="104dp"
-        android:text="Cliente(s) en Ruta"
+        android:text="Pendientes de envio"
         android:textAlignment="center"
         android:textColor="@android:color/background_light"
         android:textSize="12sp"

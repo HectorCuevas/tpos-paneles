@@ -1,7 +1,6 @@
 package com.rasoftec.tpos2;
 
 import android.Manifest;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,24 +13,14 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.rasoftec.tpos.R;
-import com.rasoftec.tpos2.data.database;
-import com.rasoftec.tpos2.data.factura_encabezado;
-import com.rasoftec.ApplicationTpos;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static android.text.TextUtils.isEmpty;
 import static com.rasoftec.ApplicationTpos.newFactura_encabezado;
-import static com.rasoftec.ApplicationTpos.p;
 
 public class DetailActivity extends AppCompatActivity{
     EditText txtName, txtDpi, txtNit, txtCel, txtEmail;

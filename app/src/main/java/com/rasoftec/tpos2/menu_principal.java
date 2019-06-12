@@ -479,6 +479,7 @@ public class menu_principal extends AppCompatActivity {
                     ArrayList<venta3> lista_info = new ArrayList<>();
                     if (t15.length() > 0) {
                         int limite = t15.length();
+                        //cobrado facturado
                         float tota = 0;
                         float saldo = 0;
                         for (int i = 0; i < limite; i++) {
@@ -489,7 +490,7 @@ public class menu_principal extends AppCompatActivity {
                             saldo += s_s;
 
 
-                            venta3 t17 = new venta3(t16.getString("co_alma") + " Factura #" + " " + t16.get("co_art"), t16.getString("art_des"), "Total:" + " " + t16.getString("stock_act") + " Saldo:" + " " + t16.get("prec_vta1"));
+                            venta3 t17 = new venta3(t16.getString("co_alma") + " Factura #" + " " + t16.get("co_art"), t16.getString("art_des"), "Total:" + " " + t16.getString("stock_act") + " Cobrado:" + " " + t16.get("prec_vta1"));
                             lista_info.add(t17);
 
                         }
@@ -497,7 +498,7 @@ public class menu_principal extends AppCompatActivity {
 
                         double s2 = nodo_factura.round(saldo, 2);
 
-                        t13.setText("Venta Profit" + "\n" + "Total Vendido en Q" + to2 + "\n" + "Saldo en Q" + s2);
+                        t13.setText("Venta Profit" + "\n" + "Total Facturado en Q" + to2 + "\n" + "Cobrado en Q" + s2);
 
                         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lista_info);
                         t.setAdapter(adapter);

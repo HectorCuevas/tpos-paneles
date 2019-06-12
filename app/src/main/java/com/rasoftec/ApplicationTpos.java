@@ -1,17 +1,11 @@
 package com.rasoftec;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 import com.rasoftec.tpos2.beans.detalleFactura;
-import com.rasoftec.tpos2.data.database;
-import com.rasoftec.tpos2.data.factura_encabezado;
+import com.rasoftec.tpos2.beans.factura_encabezado;
 import com.rasoftec.tpos2.nodo_producto;
 
 public class ApplicationTpos extends Application {
