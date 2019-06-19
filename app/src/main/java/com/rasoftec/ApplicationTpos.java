@@ -22,6 +22,8 @@ public class ApplicationTpos extends Application {
     public static ArrayList<detalleFactura> detalleFactura = new ArrayList<>();
     public static String locationCode;
     public static int posMun = 0;
+    /*** Facturas pendientes por enviar ***/
+
   //  public static List<factura_encabezado> p = new List<factura_encabezado>() {
 
 }

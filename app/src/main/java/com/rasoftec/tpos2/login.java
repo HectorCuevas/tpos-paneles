@@ -42,21 +42,19 @@ public class login extends AppCompatActivity {
     private EditText pin;
     private JSONArray t;
     private ErrorRed error;
-    private static String IMEI="";   //Guarda el IMEI DEL DISPOSITIVO.
-database base;
+    private static String IMEI = "";   //Guarda el IMEI DEL DISPOSITIVO.
+    database base;
     private ProgressDialog d;
-    private static String yase="";
-    private static final int PERMISO_READ_PHONE_STATE=100; //Bandera testigo de permiso para obtener el imei del telefono.
+    private static String yase = "";
+    private static final int PERMISO_READ_PHONE_STATE = 100; //Bandera testigo de permiso para obtener el imei del telefono.
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
         configurar();
-        error= new ErrorRed(this);
-
-
-
+        error = new ErrorRed(this);
 
 
         estado_app();
@@ -77,12 +75,11 @@ database base;
     private void estado_app() {
 
 
-
     }
 
     private String getimei() {
         TelephonyManager tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        if (Build.VERSION.SDK_INT >=23) {
+        if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISO_READ_PHONE_STATE);
                 // TODO: Consider calling
@@ -92,7 +89,7 @@ database base;
                 //                                          int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
-                return  tel.getDeviceId();
+                return tel.getDeviceId();
             }
         }
         return tel.getDeviceId();
@@ -101,9 +98,9 @@ database base;
 
     private void configurar() {
 
-        pin=(EditText)findViewById(R.id.pin);
-        base=new database(this);
-        TextView ver= (TextView) findViewById(R.id.version);
+        pin = (EditText) findViewById(R.id.pin);
+        base = new database(this);
+        TextView ver = (TextView) findViewById(R.id.version);
         ver.setText("Version 2.0.1");
 
     }
@@ -112,18 +109,20 @@ database base;
     public void click(View view) throws JSONException, IOException {
 
 //
-        try{
+        try {
             if (pin.getText().length() > 0) {
-                if(error.conexion()&&error.existedatos()==0)
+                if (error.conexion() && error.existedatos() == 0)
 
-                new webservice(this).execute("999", "0", getimei(), pin.getText().toString());
-                else   mensaje("Error de Red","Por el Momento no se Cuenta con Internet para Iniciar el Sistema ");
-            }else{
+                    new webservice(this).execute("999", "0", getimei(), pin.getText().toString());
+                else
+                    mensaje("Error de Red", "Por el Momento no se Cuenta con Internet para Iniciar el Sistema ");
+            } else {
                 mensaje("Pin", "No El Pin no Es Valido");
 
-            }}catch (Exception e){
+            }
+        } catch (Exception e) {
 
-            mensaje("Error de Red","Por el Momento no se Cuenta con Internet para Iniciar el Sistema "+e.getLocalizedMessage());
+            mensaje("Error de Red", "Por el Momento no se Cuenta con Internet para Iniciar el Sistema " + e.getLocalizedMessage());
 
         }
 //           if(error.conexion()&&error.existedatos()==0) {
@@ -230,7 +229,6 @@ database base;
 
 
 //        AsyncTask<String, Integer, String> tem = new LoadRecipesTask2().execute("999", "0", getimei(), pin.getText().toString());
-
 
 
     }
@@ -418,7 +416,7 @@ database base;
 //
 //    }
 
-//     Prueba de Progress Bar
+    //     Prueba de Progress Bar
     private void obtener_facturas() {
 
         AsyncTask<String, String, String> t18 = new webservice(this);
@@ -426,21 +424,19 @@ database base;
         String t14 = null;
 
 
-            try {
-                t14 = t18.execute("lista","10").get();
+        try {
+            t14 = t18.execute("lista", "10").get();
 
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-
-
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
 
     }
 
-    private void mensaje(String enca,String cuer) {
+    private void mensaje(String enca, String cuer) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -449,8 +445,6 @@ database base;
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         View v2 = inflater.inflate(R.layout.mensaje, null);
-
-
 
 
         builder.setView(v2)
@@ -491,36 +485,35 @@ database base;
 
         String t14 = null;
         try {
-            t14 = t12.execute(base.get_ruta().trim().toString(),"2").get();
+            t14 = t12.execute(base.get_ruta().trim().toString(), "2").get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        JSONArray t6=new JSONArray(t14);
-            base.limpiar_producto();
-            for(int i=0;i<t6.length();i++) {
-                JSONObject t7 = null;
-                try {
-                    t7 = t6.getJSONObject(i);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-                try {
-                    base.insertproducto(t7);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-//                Log.i("Fue insertado",""+exito);
-
-
+        JSONArray t6 = new JSONArray(t14);
+        base.limpiar_producto();
+        for (int i = 0; i < t6.length(); i++) {
+            JSONObject t7 = null;
+            try {
+                t7 = t6.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
 
+            try {
+                base.insertproducto(t7);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+//                Log.i("Fue insertado",""+exito);
+
 
         }
+
+
+    }
 
     private void carga_clientes() {
         AsyncTask<String, String, String> t12 = new webservice(this);
@@ -528,20 +521,16 @@ database base;
 
         String t14 = null;
         try {
-            Log.i("Revisar Ruta",base.get_ruta());
-            t14 = t12.execute(base.get_ruta().trim().toString(),"8").get();
+            Log.i("Revisar Ruta", base.get_ruta());
+            t14 = t12.execute(base.get_ruta().trim().toString(), "8").get();
 
 
-          base.limpiar_cliente();
-            JSONArray info=new JSONArray(t14);
-            for(int i=0;i<info.length();i++){
-                JSONObject tem= info.getJSONObject(i);
+            base.limpiar_cliente();
+            JSONArray info = new JSONArray(t14);
+            for (int i = 0; i < info.length(); i++) {
+                JSONObject tem = info.getJSONObject(i);
 
                 base.insertcliente(tem);
-
-
-
-
 
 
             }
@@ -561,19 +550,18 @@ database base;
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        switch (requestCode){
-            case PERMISO_READ_PHONE_STATE :
+        switch (requestCode) {
+            case PERMISO_READ_PHONE_STATE:
 
-                if (permissions[0].toString().equals(Manifest.permission.READ_PHONE_STATE)){
-                    if (grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                        IMEI=getimei();
-                    }
-                    else { //No acepto darle permisos a la aplicacion, se le dara la oportunidad una vez mas..
-                        View view = View.inflate(this,R.layout.mensaje,null);
-                        TextView encabezado = (TextView)view.findViewById(R.id.info_mensa);
-                        TextView cuerpo = (TextView)view.findViewById(R.id.info_mensa2);
+                if (permissions[0].toString().equals(Manifest.permission.READ_PHONE_STATE)) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        IMEI = getimei();
+                    } else { //No acepto darle permisos a la aplicacion, se le dara la oportunidad una vez mas..
+                        View view = View.inflate(this, R.layout.mensaje, null);
+                        TextView encabezado = (TextView) view.findViewById(R.id.info_mensa);
+                        TextView cuerpo = (TextView) view.findViewById(R.id.info_mensa2);
                         encabezado.setText("Error de permisos");
-                        cuerpo.setText("Usted debe de conceder los permisos para que la app funcione.\n"+
+                        cuerpo.setText("Usted debe de conceder los permisos para que la app funcione.\n" +
                                 "Desea darle permisos ahora?\n");
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -583,7 +571,7 @@ database base;
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                intent.setData(Uri.parse("package:" +getPackageName()));
+                                intent.setData(Uri.parse("package:" + getPackageName()));
                                 /*intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);*/
@@ -595,11 +583,10 @@ database base;
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
-                                IMEI="";
+                                IMEI = "";
                             }
                         });
                         builder.show();
-
 
 
                     }

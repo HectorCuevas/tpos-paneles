@@ -1,4 +1,3 @@
-
 package com.rasoftec.tpos2;
 
 import android.Manifest;
@@ -27,8 +26,11 @@ import android.widget.Toast;
 import com.rasoftec.ApplicationTpos;
 import com.rasoftec.PreferenceManager;
 import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.Funciones.AlmacenarFactura;
 import com.rasoftec.tpos2.Preferences.LocationPreferences;
 import com.rasoftec.tpos2.beans.FormatoFactura;
+import com.rasoftec.tpos2.beans.detalleFactura;
+import com.rasoftec.tpos2.beans.factura_encabezado;
 import com.rasoftec.tpos2.data.database;
 import com.rasoftec.tpos2.data.webservice;
 
@@ -39,6 +41,8 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
+import java.util.ArrayList;
 
 import static com.rasoftec.ApplicationTpos.detalleVenta;
 import static com.rasoftec.ApplicationTpos.newFactura_encabezado;
@@ -203,12 +207,14 @@ public class locationActivity extends AppCompatActivity {
 
     /*** Clase asincrona para transporte de datos ***/
     private class CelsiusAsync extends AsyncTask<Void, Void, Void> {
-
+        AlmacenarFactura almacenarFactura = new AlmacenarFactura();
 
         @Override
         protected Void doInBackground(Void... params) {
             int cod = wsCod.movilizandome();
             for (int j = 0; j < ApplicationTpos.detalleFactura.size(); j++) {
+
+            //    almacenarFactura.AlmacenarDetalle(ApplicationTpos.detalleFactura.get(j));
                 detalle = new SoapObject(NAMESPACE, METHOD_NAME2);
                 detalle.addProperty("id_mov", cod);
                 detalle.addProperty("usuarioMov", dbObjetc.get_ruta().trim());
@@ -229,7 +235,9 @@ public class locationActivity extends AppCompatActivity {
                     e.getMessage();
                 }
             }
-            ApplicationTpos.detalleFactura.clear();
+            /*** Metodo para almacenar la factura temporalmente ***/
+            AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente, Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura );ApplicationTpos.detalleFactura.clear();
+
             encabezado = new SoapObject(NAMESPACE, METHOD_NAME1);
             encabezado.addProperty("id_mov", cod);
             encabezado.addProperty("usuarioMov", dbObjetc.get_ruta().trim());
@@ -266,32 +274,13 @@ public class locationActivity extends AppCompatActivity {
                 e.getMessage();
 
             } finally {
-               /* FormatoFactura formatoFactura = new FormatoFactura(
-                        p.get(0).getDpi(),
-                 /*       p.get(0).getNombre(),
-                        p.get(0).getNit(),
-                        p.get(0).getDireccion(),
-                        p.get(0).getDepto(),
-                        p.get(0).getMunicipio(),
-                        p.get(0).getZona(),
-                        p.get(0).getEmail(),
-                        p.get(0).getLatitude(),
-                        p.get(0).getLongitude(),
-                        p.get(0).getLongitude(),
-                        cod,
-                        dbObjetc.get_ruta().trim(),
-
-                );*/
-
-                /*Intent cambiarActividad = new Intent(getApplicationContext(), menu_principal.class);
+          //      almacenarFactura.AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente,Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura);
+               /* Toast.makeText(getApplicationContext(), "ERROR: No se pudo completar la transacción, revisar Pendientes de envio", Toast.LENGTH_SHORT).show();
+                Intent cambiarActividad = new Intent(getApplicationContext(), menu_principal.class);
                 startActivity(cambiarActividad);
                 if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
                     startActivity(cambiarActividad);
                 }*/
-               //
-                //
-                // 3......00Toast.makeText(getApplicationContext(), fahtocel.toString(), Toast.LENGTH_SHORT);
-
             }
             return null;
         }
@@ -325,5 +314,18 @@ public class locationActivity extends AppCompatActivity {
         if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
             startActivity(cambiarActividad);
         }
+    }
+    public void AlmacenarEncabezado(String usuarioMov, String codCliente, String totalEncabezado,
+                                    factura_encabezado factura_encabezado, ArrayList<detalleFactura> detalleFacturas){
+        factura_encabezado.setUsuarioMov(usuarioMov);
+        factura_encabezado.setCodCliente(codCliente);
+        factura_encabezado.setTotalFact(totalEncabezado);
+        factura_encabezado.setCobrado(totalEncabezado);
+        factura_encabezado.setForma_pag("CONT");
+
+        dbObjetc.insertFacturaSinEnviar(detalleFacturas, factura_encabezado);
+        FormatoFactura nformato = new FormatoFactura();
+        nformato.setDetalleFacturas(detalleFacturas);
+       // nformato.getDetalleFacturas().get(0).getCantidad();
     }
 }

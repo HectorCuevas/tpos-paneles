@@ -5,7 +5,15 @@ import android.widget.ImageView;
 
 public class factura_encabezado {
 
-    private String numeroDpi;
+    /*** datos cliente ***/
+    private String usuarioMov;
+    private String codCliente;
+    private String forma_pag;
+    private String  totalFact;
+    private String procesado;
+    private String cobrado;
+    private String fecha;
+    /*** cobrado  en la factura ***/
     private String nombre;
     private String nit;
     private String dpi;
@@ -16,15 +24,61 @@ public class factura_encabezado {
     private String email;
     private String latitude;
     private String longitude;
-    private ImageView dpiFrontal;
-    private ImageView dpiTrasero;
 
-    public String getNumeroDpi() {
-        return numeroDpi;
+    public String getUsuarioMov() {
+        return usuarioMov;
     }
 
-    public void setNumeroDpi(String numeroDpi) {
-        this.numeroDpi = numeroDpi;
+    public void setUsuarioMov(String usuarioMov) {
+        this.usuarioMov = usuarioMov;
+    }
+
+    public String getCodCliente() {
+        return codCliente;
+    }
+
+    public void setCodCliente(String codCliente) {
+        this.codCliente = codCliente;
+    }
+
+    public String getForma_pag() {
+        return forma_pag;
+    }
+
+    public void setForma_pag(String forma_pag) {
+        this.forma_pag = forma_pag;
+    }
+
+    public String getTotalFact() {
+        return totalFact;
+    }
+
+    public void setTotalFact(String total) {
+        this.totalFact = total;
+    }
+
+    public String getProcesado() {
+        return procesado;
+    }
+
+    public void setProcesado(String procesado) {
+        this.procesado = procesado;
+    }
+
+    public String getCobrado() {
+        return cobrado;
+    }
+
+    public void setCobrado(String cobrado) {
+        this.cobrado = cobrado;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
     public String getNombre() {
@@ -83,21 +137,6 @@ public class factura_encabezado {
         this.email = email;
     }
 
-    public ImageView getDpiFrontal() {
-        return dpiFrontal;
-    }
-
-    public void setDpiFrontal(ImageView dpiFrontal) {
-        this.dpiFrontal = dpiFrontal;
-    }
-
-    public ImageView getDpiTrasero() {
-        return dpiTrasero;
-    }
-
-    public void setDpiTrasero(ImageView dpiTrasero) {
-        this.dpiTrasero = dpiTrasero;
-    }
 
     public String getDpi() {
         return dpi;
@@ -138,8 +177,8 @@ public class factura_encabezado {
     public factura_encabezado(){
 
     }
-    public factura_encabezado(String numeroDpi, String nombre, String nit, String direccion, String depto, String municipio, String zona, String email) {
-        this.numeroDpi = numeroDpi;
+    public factura_encabezado(String nombre, String nit, String direccion, String depto, String municipio, String zona, String email) {
+
         this.nombre = nombre;
         this.nit = nit;
         this.direccion = direccion;

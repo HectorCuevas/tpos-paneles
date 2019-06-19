@@ -1,9 +1,19 @@
+
 package com.rasoftec.tpos2.beans;
 
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+
 public class FormatoFactura {
     /*** Encabezado ***/
+    //private String usuarioMov;
+    //private String codCliente;
+    //private String forma_pag;
+  //  private String totalFactEnc;
+
+
+
     private String numeroDpi;
     private String nombre;
     private String nit;
@@ -24,14 +34,24 @@ public class FormatoFactura {
     private Double totalFactura;
     private int numeroCel;
 
+    public ArrayList<detalleFactura> getDetalleFacturas() {
+        return detalleFacturas;
+    }
+
+    public void setDetalleFacturas(ArrayList<detalleFactura> detalleFacturas) {
+        this.detalleFacturas = detalleFacturas;
+    }
+
+    private ArrayList<detalleFactura> detalleFacturas;
+
     /*** Contructor ***/
 
-    public FormatoFactura() {
+    public FormatoFactura(){
 
     }
     public FormatoFactura(String numeroDpi, String nombre, String nit,
                           String direccion, String depto, String municipio, String zona,
-                          String email, String latitude, String longitude, long idMovilizandome,
+                          String email, String latitude, String longitude,
                           String usuarioMovilizandome, String codigoArticulo, Double precioArticulo,
                           int cantidad, Double totalFactura, int numeroCel) {
         this.numeroDpi = numeroDpi;
@@ -45,7 +65,7 @@ public class FormatoFactura {
         this.latitude = latitude;
         this.longitude = longitude;
 
-        this.idMovilizandome = idMovilizandome;
+        //this.idMovilizandome = idMovilizandome;
         this.usuarioMovilizandome = usuarioMovilizandome;
         this.codigoArticulo = codigoArticulo;
         this.precioArticulo = precioArticulo;

@@ -90,7 +90,7 @@ public class menu_principal extends AppCompatActivity {
 
     //    Area de Acciones de los Botones
     public void cliente(View v) {
-        Intent i2 = new Intent(this, lista.class);
+        Intent i2 = new Intent(this, FacturasPorEnviarActivity.class);
         i2.putExtra("ruta", ruta_actual);
         i2.putExtra("tipo_venta", 1);
         startActivity(i2);

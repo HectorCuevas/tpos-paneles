@@ -143,7 +143,7 @@ public class DetailActivity extends AppCompatActivity{
             startActivity(changeActivity);
         }}
     }
-    /*** Public methods to clear text boxes ***/
+    /*** Public methods to clear text boxes.3 ***/
 
     public void clearName(View view){
         txtName.getText().clear();
