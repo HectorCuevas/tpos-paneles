@@ -34,18 +34,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="0" />
+            android:text="Q0" />
         <RadioButton
             android:id="@+id/radio_s10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="10" />
+            android:text="Q10" />
         <RadioButton
             android:id="@+id/radio_s15"
             android:checked="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="15" />
+            android:text="Q15" />
     </RadioGroup>
     <EditText
         android:id="@+id/txtOtroValorSim"

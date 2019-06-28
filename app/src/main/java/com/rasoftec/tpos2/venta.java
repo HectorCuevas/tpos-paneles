@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.rasoftec.ApplicationTpos;
 import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.Funciones.Categorias;
 import com.rasoftec.tpos2.data.database;
 import com.rasoftec.tpos2.data.detalle;
 import com.rasoftec.tpos2.data.nodo_factura;
@@ -53,37 +54,40 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class venta extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    private String CustomerName;
-
-    private BottomSheetDialog mBottomSheetDialog, mBottomSheetDialog1;
-    private String CustomerNit;
-    String m_text;
-    int nuevoPrecio=15;
+    private Categorias productos = new Categorias();
+    private BottomSheetDialog mBottomSheetDialog, mBottomSheetDialog1, ventanaModal;
+    int nuevoPrecio = 15;
     private String actual;
     private String nombre;
     View bottomSheet, bottomSheeet1;
-    int pos;
     private String ruta;
     ArrayList<nodo_producto> carrito = new ArrayList<>();
     ArrayList<nodo_producto> lista_info = new ArrayList<>();
     private ListView lista_g;
-    RadioButton radio10;
-    private CheckBox abono;
-    EditText cobro_venta;
+    RadioButton radio10Gratis;
     ArrayList<nodo_factura> facturas_actual;
     database base;
     String numero;
     private Boolean isPhoneNumber;
-    int tipo, cantidad;
+    int tipo, cantidad = 10;
     int PhoneNumber = 0;
-    int contadorCantidadRecargas = 0;
     int cantidadRecarga = 10;
     int total_pos;
-    double abono_actual_v = 0.00;
     EditText numeroDeTelefono;
     private ErrorRed ero;
     int codigo = 0;
     ArrayAdapter<nodo_producto> adapter;
+
+    /*** Nuevas variables y  constantes ***/
+    CheckBox bonificacion;
+    RadioButton radio15;
+    RadioButton radio20;
+    RadioButton radio25Gratis;
+    EditText txtOtros;
+    View bottomSheetLayout;
+
+    String valorRecarga = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,37 +106,51 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
         nodo_lista_todo();
         configuracion();
 
+        setTitle("Area de Venta(s)");
 
         bottomSheet = findViewById(R.id.framelayout_bottom_sheet);
-
         bottomSheeet1 = findViewById(R.id.framelayout_bottom_sheet1);
 
-
-
-        setTitle("Area de Venta(s)");
-    }
-
-
-    private void configuracion() {
+        /*** Nueva Area de ventas ***/
 
 
     }
 
-    private void mensaje(String reviso, final nodo_producto reviso2) {
-        try {
-            //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-            final String sbCodigo = reviso.substring(0, 7);
-            if (reviso.equals("ORGA.01")) {
-                isPhoneNumber = false;
-            } else{
+
+    private void setCategorias(String codigo ,nodo_producto articulo, String codCategoria) {
+        switch (codCategoria) {
+            case "A1":
+                esCantidadProducto(articulo, codCategoria);
+                break;
+            case "S2":
                 isPhoneNumber = true;
-            }
-            final View bottomSheetLayout = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
+                logicaProductos(codigo, articulo);
+                //agregarProductoSinCantidad(valorRecarga, articulo, codCategoria);
+                break;
+            case "S1":
+                isPhoneNumber = false;
+                logicaProductos(codigo, articulo);
+                esRecarga();
+                break;
+            case "O1":
+                esCantidadProducto(articulo, codCategoria);
+                break;
+            case "T1":
+                esCantidadProducto(articulo, codCategoria);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void logicaProductos(final String codigoArticulo, final nodo_producto articulo) {
+        try {
+            /*** Parte del layout ***/
+            //  Toast.makeText(getApplicationContext(), articulo.getDescripcion(), Toast.LENGTH_LONG).show();
+            bottomSheetLayout = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
             numeroDeTelefono = bottomSheetLayout.findViewById(R.id.txtNumeroDeTelefono);
             numeroDeTelefono.requestFocus();
-            if(!sbCodigo.equals("SIMCARD")){
-                showKeyboard();
-            }
+            showKeyboard();
             mBottomSheetDialog = new BottomSheetDialog(this);
             mBottomSheetDialog.setContentView(bottomSheetLayout);
             mBottomSheetDialog.show();
@@ -143,138 +161,193 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                     mBottomSheetDialog.dismiss();
                 }
             });
-
             (bottomSheetLayout.findViewById(R.id.button_ok)).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    try{
-                        CheckBox bonificacion = bottomSheetLayout.findViewById(R.id.checkBoxBono);
-                        radio10 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_10);
-                        RadioButton radio15 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_15);
-                        RadioButton radio20 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_20);
-                        RadioButton radio25 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_25);
-                        //RadioButton radio50 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_50);
-                       // RadioButton radio100 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_100);
-                        EditText txtOtros = (EditText) bottomSheetLayout.findViewById(R.id.txtOtros);
-                        if( !isEmpty(txtOtros.getText().toString())){
-                            m_text = txtOtros.getText().toString();
-                        }else if (radio10.isChecked()) {
-                            m_text = "10";
-                        }else if (radio15.isChecked()) {
-                            m_text = "15";
-                        }else if (radio20.isChecked()) {
-                            m_text = "20";
-                        }else if (radio25.isChecked()) {
-                            m_text = "25";
-                        }
+                public void onClick(View view) {
 
-//                        TextView total = (TextView) bottomSheetLayout.findViewById(R.id.tv_title);
-                        cantidadRecarga=Integer.parseInt(m_text);
-                        String phone = numeroDeTelefono.getText().toString();
-                        PhoneNumber = Integer.parseInt(phone);
-                        if (m_text.length() > 0) {
-                            cantidad = Integer.parseInt(m_text);
-                            if (cantidad > 0) {
-                                nodo_producto tem = reviso2;
-                                nodo_producto existe = existe(reviso2.getCodigo(), cantidad);
-                                tem.setNumeroCel(PhoneNumber);
-                                ValidateIfPhoneNumber(cantidad); //This function validate if it's phone number or reload / return int:cantidad.
-                                if (existe == null && sbCodigo.equals("SIMCARD")) {
-                                    tem.setCompra(1);
-                                    tem.setPrecio(nuevoPrecio);
-                                    carrito.add(tem);
-                                }else if(existe == null){
-                                    tem.setCompra(cantidad);
-                                    carrito.add(tem);
-                                }
-                            //    Toast.makeText(getApplicationContext(), carrito.get(0).getPrecio()+"", Toast.LENGTH_SHORT).show();
-                                actualizar_total(carrito);
-                                nodo_producto reviso1 = new nodo_producto();
-                                reviso1.setCodigo("ORGA.01");
-                                reviso1.setCompra(cantidadRecarga);
-                                reviso1.setDescripcion("Recarga electronica");
-                                if(bonificacion.isChecked()){
-                                    reviso1.setPrecio(0);
-                                }else
-                                    reviso1.setPrecio(1.0);
-                                reviso1.setStock(1500);
-                                reviso1.setNumeroCel(Integer.parseInt(phone));
-                                //mensaje(reviso1.getCodigo(), reviso1);
-                                carrito.add(reviso1);
-                                contadorCantidadRecargas += 10;
-                                actualizar_total(carrito);
-                                nodo_lista_todo();
-                            } else {
-                                nodo_producto existe = existe(reviso2.getCodigo(), cantidad);
-                                carrito.remove(existe);
-                                actualizar_total(carrito);
-                                nodo_lista_todo();
-                            }
-                        } else {
-                            info("Debe Ingresar Una Cantidad para Agregar el Articulo");
+                   // CheckBox bonificacion = bottomSheetLayout.findViewById(R.id.checkBoxBono);
+                    radio10Gratis = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_10);
+                    radio15 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_15);
+                    radio20 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_20);
+                    radio25Gratis = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_25);
+                    txtOtros = (EditText) bottomSheetLayout.findViewById(R.id.txtOtros);
 
-                        }
-
-                        //Toast.makeText(getApplicationContext(), ""+PhoneNumber, Toast.LENGTH_SHORT).show();
-                        if(isEmpty(numeroDeTelefono.getText().toString())){
-                            Toast.makeText(getApplicationContext(), "Asigne un numero", Toast.LENGTH_SHORT).show();
-                        }else{
-                            mBottomSheetDialog.dismiss();
-                        }
-                    }catch (Exception e){
-                        Toast.makeText(getApplicationContext(), "Asigne un numero de telefono" +e.toString(), Toast.LENGTH_SHORT).show();
+                    /*** Obtenemos el codigo del articulo ***/
+                    final String codigoCategoria = productos.getCategoria(articulo.getDescripcion());
+                    //  Toast.makeText(getApplicationContext(), codigoCategoria, Toast.LENGTH_LONG).show();
+                    /*** Validamos si es sim para hacer recarga o numero de telefono ***/
+                    isPhoneNumber = productos.validarSiEsNumero(codigoCategoria);
+                    String valorRadio = "10";
+                    if (!isEmpty(txtOtros.getText().toString())) {
+                        valorRadio = txtOtros.getText().toString();
+                    } else if (radio10Gratis.isChecked()) {
+                        valorRadio = "10";
+                    } else if (radio15.isChecked()) {
+                        valorRadio = "10";
+                    } else if (radio20.isChecked()) {
+                        valorRadio = "25";
+                    } else if (radio25Gratis.isChecked()) {
+                        valorRadio = "25";
                     }
+                    valorRecarga = valorRadio;
+                    agregarProductoSinCantidad(valorRadio, articulo, codigoCategoria);
+
+                    mBottomSheetDialog.dismiss();
                 }
             });
-            if(sbCodigo.equals("SIMCARD")){
-
-                final View bottomSheetLayoutSim = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog1, null);
-                mBottomSheetDialog1 = new BottomSheetDialog(this);
-                mBottomSheetDialog1.setContentView(bottomSheetLayoutSim);
-                mBottomSheetDialog1.show();
-                (bottomSheetLayoutSim.findViewById(R.id.button_closeSim)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mBottomSheetDialog1.dismiss();
-                    }
-                });
-                (bottomSheetLayoutSim.findViewById(R.id.button_okSim)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        RadioButton radio0 = (RadioButton) bottomSheetLayoutSim.findViewById(R.id.radio_0);
-                        RadioButton radios10 = (RadioButton) bottomSheetLayoutSim.findViewById(R.id.radio_s10);
-                        RadioButton radios15 = (RadioButton) bottomSheetLayoutSim.findViewById(R.id.radio_s15);
-                        TextView txtOTrosSim = (TextView)bottomSheetLayoutSim.findViewById(R.id.txtOtroValorSim);
-
-                        if( !isEmpty(txtOTrosSim.getText().toString())){
-                            nuevoPrecio = Integer.parseInt(txtOTrosSim.getText().toString());
-                        }else if(radio0.isChecked()){
-                            nuevoPrecio = 0;
-                        }else if(radios10.isChecked()){
-                            nuevoPrecio = 10;
-                        }else if(radios15.isChecked()){
-                            nuevoPrecio = 15;
-                        }
-                        mBottomSheetDialog1.dismiss();
-
-                    }
-                });
-            }
-
+            String codCategoria = productos.getCategoria(articulo.getDescripcion()) ;
+         //   setCategorias(codCategoria, articulo,codCategoria );
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Error: " + e, Toast.LENGTH_LONG).show();
         }
+    }
 
+    public void esRecarga() {
+        final View bottomSheetLayoutSim = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog1, null);
+        mBottomSheetDialog1 = new BottomSheetDialog(this);
+        mBottomSheetDialog1.setContentView(bottomSheetLayoutSim);
+        mBottomSheetDialog1.show();
+        (bottomSheetLayoutSim.findViewById(R.id.button_closeSim)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBottomSheetDialog1.dismiss();
+            }
+        });
+        (bottomSheetLayoutSim.findViewById(R.id.button_okSim)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RadioButton radio0 = (RadioButton) bottomSheetLayoutSim.findViewById(R.id.radio_0);
+                RadioButton radios10 = (RadioButton) bottomSheetLayoutSim.findViewById(R.id.radio_s10);
+                RadioButton radios15 = (RadioButton) bottomSheetLayoutSim.findViewById(R.id.radio_s15);
+                TextView txtOTrosSim = (TextView) bottomSheetLayoutSim.findViewById(R.id.txtOtroValorSim);
+
+                if (!isEmpty(txtOTrosSim.getText().toString())) {
+                    nuevoPrecio = Integer.parseInt(txtOTrosSim.getText().toString());
+                } else if (radio0.isChecked()) {
+                    nuevoPrecio = 0;
+                } else if (radios10.isChecked()) {
+                    nuevoPrecio = 10;
+                } else if (radios15.isChecked()) {
+                    nuevoPrecio = 15;
+                }
+                mBottomSheetDialog1.dismiss();
+            }
+        });
     }
 
 
-    private int ValidateIfPhoneNumber(int quantity) {
+    private void esCantidadProducto(final nodo_producto producto, final String codigoCategoria) {
+        final View ventanaCantidad = getLayoutInflater().inflate(R.layout.bottom_sheet_cantidad, null);
+        ventanaModal = new BottomSheetDialog(this);
+        ventanaModal.setContentView(ventanaCantidad);
+        ventanaModal.show();
+
+        (ventanaCantidad.findViewById(R.id.button_closeDialog)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ventanaModal.dismiss();
+            }
+        });
+        (ventanaCantidad.findViewById(R.id.button_okDialog)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText txtcantidad =  ventanaModal.findViewById(R.id.txtCantidadDialog);
+                int cantidad = Integer.parseInt(txtcantidad.getText().toString());
+                producto.setCompra(cantidad);
+               // Toast.makeText(getApplicationContext(), "WENAS", Toast.LENGTH_LONG).show();
+                agregarProductoConCantidad(producto, codigoCategoria);
+                ventanaModal.dismiss();
+            }
+        });
+
+    }
+    private void agregarProductoConCantidad(nodo_producto producto, String codigoCategoria){
+        /** Para codigos T1, O1, A1 **/
+        nodo_producto bodega = existe(producto.getCodigo(), cantidad);
+        nodo_producto articulo = new nodo_producto();
+        String codigo = producto.getCodigo();
+        int cantidad = producto.getCompra();
+        String descripcion =producto.getDescripcion();
+        int stock = producto.getStock();
+        int numeroCel = 0;
+        double precio = producto.getPrecio();
+
+        articulo.setCodigo(codigo);
+        articulo.setCompra(cantidad);
+        articulo.setDescripcion(descripcion);
+        articulo.setStock(stock);
+        articulo.setNumeroCel(numeroCel);
+        articulo.setPrecio(precio);
+        hayStock(bodega, articulo, cantidad, codigoCategoria );
+        actualizar_total(carrito);
+    }
+
+    private void agregarProductoSinCantidad(String valorRadio, nodo_producto articulo, String codigoCategoria) {
+        isPhoneNumber = true;
+        cantidadRecarga = Integer.parseInt(valorRadio);
+        String phone = numeroDeTelefono.getText().toString();
+        int numeroCel = Integer.parseInt(phone);
+        if (cantidadRecarga > 0) {
+            /*** creamos un nuevo articulo ***/
+            nodo_producto stock = existe(articulo.getCodigo(), cantidadRecarga);
+            articulo.setNumeroCel(numeroCel);
+            /*** Cambiamos el valor si es numero o recarga ***/
+            validateIfPhoneNumber(cantidadRecarga);
+            /*** Valida si hay disponibles, si hay lo agrega al carrito ***/
+            hayStock(stock, articulo, cantidad, codigoCategoria);
+            /*** Agregamos la recarga automatica ***/
+            actualizar_total(carrito);
+            agregarRecarga(phone);
+        }else{
+            nodo_producto existe = existe(articulo.getCodigo(), cantidad);
+            carrito.remove(existe);
+            actualizar_total(carrito);
+            nodo_lista_todo();
+        }
+    }
+
+    private void agregarRecarga(String numero) {
+        nodo_producto recarga = new nodo_producto();
+        recarga.setCodigo("ORGA.01");
+        recarga.setCompra(cantidadRecarga);
+        recarga.setDescripcion("Recarga electronica");
+        recarga.setStock(1500);
+        recarga.setNumeroCel(Integer.parseInt(numero));
+        Double precio = 0D;
+        if (radio10Gratis.isChecked()) {
+            precio = 0.0D;
+        } else
+            precio = 1.0D;
+        recarga.setPrecio(precio);
+        // Toast.makeText(getApplicationContext(), precio + "", Toast.LENGTH_LONG).show();
+        carrito.add(recarga);
+        actualizar_total(carrito);
+        nodo_lista_todo();
+    }
+
+    public void hayStock(nodo_producto stock, nodo_producto articulo, int cantidad, String codigo) {
+        if (stock == null && codigo.equals("S1")) {
+            /*** INVESTIGAR DE DONDE SALE NUEVO PRECIO XXDXDXXDXDXD pd sale de la ventana
+             *  de precio del sim alli se setea el nuevo precio
+             *
+             *  ***/
+            articulo.setPrecio(nuevoPrecio);
+            articulo.setCompra(1);
+            carrito.add(articulo);
+        } else if (stock == null) {
+            articulo.setCompra(cantidad);
+            carrito.add(articulo);
+        }
+    }
+
+    private int validateIfPhoneNumber(int quantity) {
         if (isPhoneNumber) {
             PhoneNumber = quantity;
             cantidad = 1;
         }
         return cantidad;
     }
+
 
     private void info(String info) {
         Toast.makeText(this, info, Toast.LENGTH_LONG).show();
@@ -319,19 +392,11 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 nodo_producto reviso = (nodo_producto) parent.getItemAtPosition(position);
-                /*if(reviso.getCodigo().equals("ORGA.01")){
-                    nodo_producto reviso1 = new nodo_producto();
-                    reviso1.setCodigo("ORGA.01");
-                    reviso1.setCompra(0);
-                    reviso1.setNumeroCel(0);
-                    reviso1.setPrecio(1.0);
-                    reviso1.setStock(1500);
-                    mensaje(reviso.getCodigo(), reviso1);
-                }*/
-                mensaje(reviso.getCodigo(), reviso);
+                String codCategoria = productos.getCategoria(reviso.getDescripcion()) ;
+                setCategorias(reviso.getCodigo(), reviso, codCategoria);
+                //logicaProductos(reviso.getCodigo(), reviso);
+                // mensaje(reviso.getCodigo(), reviso);
                 //CustomersData("Cantidad de recarga", false);
-
-
             }
         });
 
@@ -370,42 +435,6 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
     }
 
-    private void CustomersData(String Description, final boolean isName) {
-        String[] singleChoiceItems = getResources().getStringArray(R.array.opcionesRecarga);
-        final int itemSelected = 0;
-        String DialogMessage = "", DialogButton = "";
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        DialogMessage = Description;
-        DialogButton = "Agregar";
-
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-        input.setHint("Otro");
-        builder.setView(input);
-        builder.setTitle(DialogMessage)
-                .setSingleChoiceItems(singleChoiceItems, itemSelected, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int selectedIndex) {
-                        String valorRecarga;
-                        pos = selectedIndex;
-                        valorRecarga = getResources().getStringArray(R.array.opcionesRecarga)[selectedIndex];
-                        cantidadRecarga = Integer.parseInt(valorRecarga);
-                    }
-                })
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (!input.getText().toString().equals("")) {
-                            cantidadRecarga = Integer.parseInt(input.getText().toString());
-                            // Toast.makeText(getApplicationContext(), ""+cantidadRecarga, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .setNegativeButton("Cancel", null);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
 
     private void forma_pago(final String descripcion, Double total_actual) {
 
@@ -420,14 +449,6 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
         } else {
             final CharSequence[] pos = {"Contado", "Credito"};
             operacion_venta(descripcion2, total, "Contado");
-        }
-    }
-
-    public void cambiarActividad(View v) {
-        Intent cambiarActividad = new Intent(this, DetailActivity.class);
-        startActivity(cambiarActividad);
-        if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
-            startActivity(cambiarActividad);
         }
     }
 
@@ -489,7 +510,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                 String tipo2 = "CONT";
                 tem.put("usuario_movilizandome", base.get_ruta().trim());
                 tem.put("co_cli", String.valueOf(actual));
-                tem.put("forma_pag", CustomerNit + "." + CustomerName);
+                tem.put("forma_pag", "CONT");
                 tem.put("total", total_carrito(carrito));
                 tem.put("cobrado", total_carrito(carrito));
                 tem.put("Procesado", "S");
@@ -520,55 +541,6 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
         }
     }
 
-    private void abono_actual(final String descripcion2, final Double total, final String s) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Cantidad de Abono en Q");
-        final Double[] cantidad = {0.00};
-
-        final EditText input = new EditText(this);
-        String[] t2 = base.get_access();
-        int t3 = Integer.parseInt(t2[1]);
-        if (t3 < 1) {
-            input.setEnabled(false);
-            input.setText("0");
-        }
-
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-        builder.setView(input);
-
-
-        builder.setPositiveButton("Abono", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                final String m_Text = input.getText().toString();
-
-                if (m_Text.length() > 0) abono_actual_v = Double.parseDouble(m_Text);
-
-
-                Log.i("Valor Actual del Abono", "" + abono_actual_v);
-                operacion_venta(descripcion2, total, s);
-                dialog.dismiss();
-
-
-            }
-        });
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-        input.requestFocus();
-
-
-    }
-
     private double total_carrito(ArrayList<nodo_producto> carrito) {
         double total_encabezado = 0;
         Iterator<nodo_producto> ite = carrito.iterator();
@@ -582,18 +554,6 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
         }
         return total_encabezado;
-    }
-
-    private void detalle(ArrayList<nodo_producto> carrito) {
-        ArrayList<detalle> tem = new ArrayList<>();
-        Iterator<nodo_producto> ite = carrito.iterator();
-        while (ite.hasNext()) {
-            nodo_producto tem2 = ite.next();
-            //detalle tem3 = new detalle(tem2.getCodigo(), tem2.getPrecio(), tem2.getCompra(), tem2.getPrecio() * tem2.getCompra());
-            // tem.add(tem3);
-        }
-
-
     }
 
     private void orga() {
@@ -690,11 +650,6 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
 
         }
-
-//            i2.putExtra("ruta", ruta);
-//        startActivity(i2);}
-
-
     }
 
     private void actual_numero(String s) {
@@ -855,6 +810,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
     }
 
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -867,9 +823,15 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
         return super.onKeyDown(keyCode, event);
     }
-    public void showKeyboard(){
+
+    public void showKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
+    private void configuracion() {
+
+
     }
 
 }

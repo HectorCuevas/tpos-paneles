@@ -751,6 +751,7 @@ public class webservice extends AsyncTask<String, String, String> {
 
         } catch (Exception e) {
 
+
             String erf = "No fue posible obtener las credenciales de inicio de sesion. codigo del error: " + e.getLocalizedMessage();
 
             publishProgress(erf, "Error en Sincronizacion");

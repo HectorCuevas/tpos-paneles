@@ -40,39 +40,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="10" />
+            android:text="Q10 GRATIS" />
         <RadioButton
             android:id="@+id/radio_15"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="15" />
+            android:text="Q10" />
         <RadioButton
             android:id="@+id/radio_20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="20" />
+            android:text="Q25 GRATIS" />
         <RadioButton
             android:id="@+id/radio_25"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="25" />
+            android:text="Q25" />
     </RadioGroup>
     <EditText
         android:id="@+id/txtOtros"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Otros"
+        android:hint="Otra cantidad"
         android:inputType="number"
         />
 
-    <CheckBox
-        android:id="@+id/checkBoxBono"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Bonificación" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
