@@ -166,31 +166,36 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                 public void onClick(View view) {
 
                    // CheckBox bonificacion = bottomSheetLayout.findViewById(R.id.checkBoxBono);
-                    radio10Gratis = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_10);
-                    radio15 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_15);
-                    radio20 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_20);
-                    radio25Gratis = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_25);
-                    txtOtros = (EditText) bottomSheetLayout.findViewById(R.id.txtOtros);
+                   try{
+                       radio10Gratis = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_10);
+                       radio15 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_15);
+                       radio25Gratis = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_20);
+                       radio20 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_25);
+                       txtOtros = (EditText) bottomSheetLayout.findViewById(R.id.txtOtros);
 
-                    /*** Obtenemos el codigo del articulo ***/
-                    final String codigoCategoria = productos.getCategoria(articulo.getDescripcion());
-                    //  Toast.makeText(getApplicationContext(), codigoCategoria, Toast.LENGTH_LONG).show();
-                    /*** Validamos si es sim para hacer recarga o numero de telefono ***/
-                    isPhoneNumber = productos.validarSiEsNumero(codigoCategoria);
-                    String valorRadio = "10";
-                    if (!isEmpty(txtOtros.getText().toString())) {
-                        valorRadio = txtOtros.getText().toString();
-                    } else if (radio10Gratis.isChecked()) {
-                        valorRadio = "10";
-                    } else if (radio15.isChecked()) {
-                        valorRadio = "10";
-                    } else if (radio20.isChecked()) {
-                        valorRadio = "25";
-                    } else if (radio25Gratis.isChecked()) {
-                        valorRadio = "25";
-                    }
-                    valorRecarga = valorRadio;
-                    agregarProductoSinCantidad(valorRadio, articulo, codigoCategoria);
+                       /*** Obtenemos el codigo del articulo ***/
+                       final String codigoCategoria = productos.getCategoria(articulo.getDescripcion());
+                       //  Toast.makeText(getApplicationContext(), codigoCategoria, Toast.LENGTH_LONG).show();
+                       /*** Validamos si es sim para hacer recarga o numero de telefono ***/
+                       isPhoneNumber = productos.validarSiEsNumero(codigoCategoria);
+                       String valorRadio = "10";
+                       if (!isEmpty(txtOtros.getText().toString())) {
+                           valorRadio = txtOtros.getText().toString();
+                           radio10Gratis.setChecked(false);
+                       } else if (radio10Gratis.isChecked()) {
+                           valorRadio = "10";
+                       } else if (radio15.isChecked()) {
+                           valorRadio = "10";
+                       } else if (radio20.isChecked()) {
+                           valorRadio = "25";
+                       } else if (radio25Gratis.isChecked()) {
+                           valorRadio = "25";
+                       }
+                       valorRecarga = valorRadio;
+                       agregarProductoSinCantidad(valorRecarga, articulo, codigoCategoria);
+                   }catch (Exception ex){
+                       Toast.makeText(getApplicationContext(), "Agrege un numero de telefono "+ex, Toast.LENGTH_LONG).show();
+                   }
 
                     mBottomSheetDialog.dismiss();
                 }
@@ -314,7 +319,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
         recarga.setStock(1500);
         recarga.setNumeroCel(Integer.parseInt(numero));
         Double precio = 0D;
-        if (radio10Gratis.isChecked()) {
+        if (radio10Gratis.isChecked() || radio25Gratis.isChecked()) {
             precio = 0.0D;
         } else
             precio = 1.0D;

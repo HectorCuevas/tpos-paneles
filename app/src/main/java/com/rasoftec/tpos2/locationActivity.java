@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,7 +21,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +49,7 @@ import static com.rasoftec.ApplicationTpos.p;
 
 public class locationActivity extends AppCompatActivity {
     EditText txtAddress, txtMunicipio, txtDepartamento, txtZona;
+    Switch swDireccion;
     database dbObjetc;
     ProgressDialog pdialog;
     SoapObject enc, detalle, encabezado;
@@ -76,16 +80,38 @@ public class locationActivity extends AppCompatActivity {
 
 
         //txtAddress = (EditText) findViewById(R.id.txtAddress);
-        spnDireccionRecarga = (Spinner) findViewById(R.id.spnDireccionRecarga);
+        //spnDireccionRecarga = (Spinner) findViewById(R.id.spnDireccionRecarga);
+        swDireccion =  findViewById(R.id.swDireccion);
         lblDeptoPref = (TextView) findViewById(R.id.lblDeptoPref);
         lblMunPref = (TextView) findViewById(R.id.lblMunPref);
         lblZonaPref = (TextView) findViewById(R.id.lblZonaPref);
         btnPref = (Button) findViewById(R.id.btnConfigPrefs);
+        RelativeLayout rl1direccion = findViewById(R.id.layoutAddress);
 
         dbObjetc = new database(this);
         wsCod = new webservice(this);
 
 
+        swDireccion.setChecked(true);
+
+
+        if(swDireccion.isChecked()) {
+            for(int i = 0; i < rl1direccion.getChildCount(); i++) {
+                View child = rl1direccion.getChildAt(i);
+                child.setEnabled(false);
+                rl1direccion.setBackgroundResource(R.color.disabled);
+                // your processing...
+            }
+        }else{
+            for(int i = 0; i < rl1direccion.getChildCount(); i++) {
+                View child = rl1direccion.getChildAt(i);
+                child.setEnabled(true);
+                rl1direccion.setBackgroundResource(R.color.enabled);
+                // your processing...
+            }
+        }
+
+      /*
         //Set adapter from resource
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.zonas, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
