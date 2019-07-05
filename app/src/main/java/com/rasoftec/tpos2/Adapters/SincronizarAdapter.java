@@ -3,12 +3,14 @@ package com.rasoftec.tpos2.Adapters;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rasoftec.tpos.R;
 import com.rasoftec.tpos2.beans.FormatoFactura;
@@ -17,34 +19,39 @@ import com.rasoftec.tpos2.beans.detalleFactura;
 import java.util.ArrayList;
 
 public class SincronizarAdapter extends ArrayAdapter<FormatoFactura> {
-    public SincronizarAdapter(Activity context, ArrayList<FormatoFactura> listItems){
-        super(context,0, listItems);
+    public SincronizarAdapter(Activity context, ArrayList<FormatoFactura> listItems) {
+        super(context, 0, listItems);
     }
 
-    @NonNull
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View listItemView=convertView;
-        if(listItemView == null){
+
+        View listItemView = convertView;
+        if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.activity_sincronizar_item, parent, false);
         }
+        try {
+            FormatoFactura currentFormato =getItem(position);
 
-        FormatoFactura currentFormato = new FormatoFactura();
+            TextView lblNombreCliente = listItemView.findViewById(R.id.lblNombreClienteSinc);
+            TextView lblDpi = listItemView.findViewById(R.id.lblDpiSinc);
+            TextView lblDepartamento = listItemView.findViewById(R.id.lblDeptoSinc);
+            TextView lblZona = listItemView.findViewById(R.id.lblZonaSinc);
+            TextView lblTotal = listItemView.findViewById(R.id.lblTotalSinc);
 
-        TextView lblNombreCliente = listItemView.findViewById(R.id.lblNombreCliente);
-        TextView lblDpi = listItemView.findViewById(R.id.lblDpi);
-        TextView lblDepartamento = listItemView.findViewById(R.id.lblDeptoSinc);
-        TextView lblZona =  listItemView.findViewById(R.id.lblZonaSinc);
-        TextView lblTotal =  listItemView.findViewById(R.id.lblTotalSinc);
-
-        lblNombreCliente.setText(currentFormato.getNombre());
-        lblDpi.setText(currentFormato.getDpi());
-        lblDepartamento.setText(currentFormato.getDepto());
-        //lblZona.setText(currentFormato.getZona());
-        //lblZona.setText(currentFormato.getZona());
+            lblNombreCliente.setText("Nombre cliente: "+currentFormato.getNombre());
+            lblDpi.setText("Venta: "+currentFormato.getCodigoArticulo());
+            lblDepartamento.setText("Departamento :"+currentFormato.getDepto());
+            lblZona.setText("Zona :"+ currentFormato.getZona());
+            lblTotal.setText("Total articulo :"+currentFormato.getTotalFactura().toString());
 
 
-        return super.getView(position, convertView, parent);
+        } catch (Exception ex) {
+            //Toast.makeText()
+            Log.i("Error", ex.toString());
+        }
+        return listItemView;
     }
 }
 

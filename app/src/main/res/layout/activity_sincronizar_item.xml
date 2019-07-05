@@ -4,19 +4,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="130dp">
     <TextView
-        android:id="@+id/lblNombreCliente"
+        android:id="@+id/lblNombreClienteSinc"
         android:layout_width="match_parent"
         android:text="Nombre cliente"
         android:layout_height="wrap_content" />
     <TextView
-        android:id="@+id/lblDpi"
-        android:layout_below="@+id/lblNombreCliente"
+        android:id="@+id/lblDpiSinc"
+        android:layout_below="@+id/lblNombreClienteSinc"
         android:layout_width="match_parent"
         android:text="DPI"
         android:layout_height="wrap_content" />
     <TextView
         android:id="@+id/lblDeptoSinc"
-        android:layout_below="@+id/lblDpi"
+        android:layout_below="@+id/lblDpiSinc"
         android:layout_width="match_parent"
         android:text="Departamento, Municipio"
         android:layout_height="wrap_content" />

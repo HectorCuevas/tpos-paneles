@@ -159,7 +159,7 @@ public class database extends SQLiteOpenHelper {
                 "  \"longitud\" VARCHAR(50)\n" +
                 "); ");
         db.execSQL(" CREATE TABLE \"factura_encabezado_enviar\"(\n" +
-                "  \"cod_encabezado\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                "  \"cod_encabezado\" INTEGER PRIMARY KEY  NOT NULL,\n" +
                 "  \"usuario_movilizandome\" INTEGER,\n" +
                 "  \"cod_cliente\" VARCHAR(100),\n" +
                 "  \"forma_pag\" VARCHAR(50),\n" +
@@ -206,17 +206,19 @@ public class database extends SQLiteOpenHelper {
     }
     public ArrayList<FormatoFactura> getFacturasPorEnviar() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor puntero = db.rawQuery("SELECT *  FROM detalle_factura" , null);
+        //Cursor puntero = db.rawQuery("SELECT *  FROM factura_encabezado_enviar" , null);
+        Cursor puntero = db.rawQuery("SELECT *  FROM factura_encabezado_enviar inner join detalle_factura on " +
+                "factura_encabezado_enviar.cod_encabezado = detalle_factura.cod_encabezado" , null);
         ArrayList<FormatoFactura> envio = new ArrayList<>();
 
         while (puntero.moveToNext()) {
+            String co_art =   puntero.getString(puntero.getColumnIndex("co_art"));
+            String prec_vta =  puntero.getString(puntero.getColumnIndex("prec_vta"));
+            int cantidad = puntero.getInt(puntero.getColumnIndex("cantidad"));
+            String totalArt =  puntero.getString(puntero.getColumnIndex("total_art"));
+            String serial =   puntero.getString(puntero.getColumnIndex("serial"));
+            int numero = puntero.getInt(puntero.getColumnIndex("numero_cel"));
 
-                  String co_art =   puntero.getString(puntero.getColumnIndex("co_art"));
-                  String prec_vta =  puntero.getString(puntero.getColumnIndex("prec_vta"));
-                  int cantidad = puntero.getInt(puntero.getColumnIndex("cantidad"));
-                  String totalArt =  puntero.getString(puntero.getColumnIndex("total_art"));
-                  String serial =   puntero.getString(puntero.getColumnIndex("serial"));
-                  int numero = puntero.getInt(puntero.getColumnIndex("numero_cel"));
 
             int codEncabezado =  puntero.getInt(puntero.getColumnIndex("cod_encabezado"));
             String usuarioMov =   puntero.getString(puntero.getColumnIndex("usuario_movilizandome"));
@@ -243,7 +245,7 @@ public class database extends SQLiteOpenHelper {
 
                   FormatoFactura formatoFactura = new FormatoFactura(dpi, nombre, nit, direccion,
                           depto, municipio, zona, email, lat, lon, usuarioMov, co_art,
-                          Double.parseDouble(prec_vta), cantidad, Double.parseDouble(totalArt), numero);
+                          Double.parseDouble(prec_vta), cantidad, total, numero);
             envio.add(formatoFactura);
         }
         puntero.close();
@@ -323,7 +325,7 @@ public class database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues encabezado = new ContentValues();
         ContentValues detalle = new ContentValues();
-        //encabezado.put("cod_encabezado", getCodigoMovilizandome());
+        encabezado.put("cod_encabezado", getCodigoMovilizandome());
         encabezado.put("usuario_movilizandome", encabezadoFact.getUsuarioMov());
         encabezado.put("cod_cliente", encabezadoFact.getCodCliente());
         encabezado.put("forma_pag", encabezadoFact.getForma_pag() );
@@ -356,8 +358,11 @@ public class database extends SQLiteOpenHelper {
             detalle.put("prec_vta", tem14.getPrecioArticulo());
             detalle.put("cantidad", tem14.getCantidad()); // int
             detalle.put("total_art", tem14.getTotalFactura());
-            detalle.put("telefono", tem14.getNumeroCel()); // int
             detalle.put("serial", "123456");
+
+            detalle.put("numero_cel", tem14.getNumeroCel());
+            detalle.put("cod_encabezado", getCodigoMovilizandome() );
+
             db.insert("detalle_factura", null, detalle);
         }
     }

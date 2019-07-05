@@ -31,27 +31,27 @@ public class FacturasPorEnviarActivity extends AppCompatActivity {
            ListView lstFacturas = findViewById(R.id.lstSinc);
            dbObject = new database(this);
            dbObject.getFacturasPorEnviar();
-           Toast.makeText(this,  dbObject.getFacturasPorEnviar().get(0).toString(), Toast.LENGTH_LONG).show();
+         //  Toast.makeText(this,  dbObject.getFacturasPorEnviar().get(0).toString(), Toast.LENGTH_LONG).show();
            for (int i = 0; i < dbObject.getFacturasPorEnviar().size(); i++) {
                FormatoFactura formatoFactura = new FormatoFactura();
                formatoFactura.setNombre(dbObject.getFacturasPorEnviar().get(i).getNombre());
-               formatoFactura.setDpi(dbObject.getFacturasPorEnviar().get(i).getDpi());
-               formatoFactura.setDpi(dbObject.getFacturasPorEnviar().get(i).getDepto());
-               res.setText(dbObject.getFacturasPorEnviar().get(i).getDpi());
+               formatoFactura.setCodigoArticulo(dbObject.getFacturasPorEnviar().get(i).getCodigoArticulo());
+               formatoFactura.setDepto(dbObject.getFacturasPorEnviar().get(i).getDepto());
+               formatoFactura.setZona(dbObject.getFacturasPorEnviar().get(i).getZona());
+               formatoFactura.setTotalFactura(dbObject.getFacturasPorEnviar().get(i).getPrecioArticulo());
                formatoFacturas.add(formatoFactura);
            }
 
 
-
            SincronizarAdapter sincronizarAdapter = new SincronizarAdapter(this, formatoFacturas);
            lstFacturas.setAdapter(sincronizarAdapter);
-
+/*
            lstFacturas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                @Override
                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                }
-           });
+           });*/
 
 
        }catch (Exception ex){
