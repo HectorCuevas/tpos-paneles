@@ -1,4 +1,4 @@
-package com.rasoftec.tpos2.data;
+package com.rasoftec.tpos2.Data;
 
 import java.io.Serializable;
 import java.util.List;

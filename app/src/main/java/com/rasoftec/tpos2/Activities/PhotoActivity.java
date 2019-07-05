@@ -1,5 +1,5 @@
 
-package com.rasoftec.tpos2;
+package com.rasoftec.tpos2.Activities;
 
 import org.ksoap2.SoapEnvelope;
 
@@ -10,56 +10,26 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.rasoftec.ApplicationTpos;
 import com.rasoftec.tpos.R;
-import com.rasoftec.tpos2.data.database;
-import com.rasoftec.tpos2.data.webservice;
+import com.rasoftec.tpos2.Data.database;
+import com.rasoftec.tpos2.Data.webservice;
+import com.rasoftec.tpos2.menu_principal;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
-import static android.support.v4.content.FileProvider.getUriForFile;
 import static com.rasoftec.ApplicationTpos.detalleVenta;
-import static com.rasoftec.ApplicationTpos.newFactura_encabezado;
 import static com.rasoftec.ApplicationTpos.p;
 
 

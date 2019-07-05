@@ -1,4 +1,4 @@
-package com.rasoftec.tpos2;
+package com.rasoftec.tpos2.Activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.venta;
 
 import static android.text.TextUtils.isEmpty;
 import static com.rasoftec.ApplicationTpos.newFactura_encabezado;

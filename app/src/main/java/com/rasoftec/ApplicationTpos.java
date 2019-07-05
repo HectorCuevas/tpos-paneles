@@ -4,8 +4,8 @@ import android.app.Application;
 
 import java.util.ArrayList;
 
-import com.rasoftec.tpos2.beans.detalleFactura;
-import com.rasoftec.tpos2.beans.factura_encabezado;
+import com.rasoftec.tpos2.Beans.detalleFactura;
+import com.rasoftec.tpos2.Beans.factura_encabezado;
 import com.rasoftec.tpos2.nodo_producto;
 
 public class ApplicationTpos extends Application {

@@ -3,7 +3,7 @@ package com.rasoftec.tpos2;
 import android.content.Context;
 import android.util.Log;
 
-import com.rasoftec.tpos2.data.database;
+import com.rasoftec.tpos2.Data.database;
 
 import org.json.JSONArray;
 import org.json.JSONException;

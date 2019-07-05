@@ -1,7 +1,4 @@
-package com.rasoftec.tpos2.beans;
-
-import android.media.Image;
-import android.widget.ImageView;
+package com.rasoftec.tpos2.Beans;
 
 public class factura_encabezado {
 
@@ -177,14 +174,21 @@ public class factura_encabezado {
     public factura_encabezado(){
 
     }
-    public factura_encabezado(String nombre, String nit, String direccion, String depto, String municipio, String zona, String email) {
 
+    //agregar dpi
+    public factura_encabezado(
+                              String totalFact,
+                              String nombre,  String direccion, String depto,
+                              String municipio, String zona) {
+
+        this.totalFact = totalFact;
         this.nombre = nombre;
-        this.nit = nit;
+
         this.direccion = direccion;
         this.depto = depto;
         this.municipio = municipio;
+
         this.zona = zona;
-        this.email = email;
+
     }
 }

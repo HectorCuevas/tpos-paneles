@@ -1,6 +1,5 @@
-package com.rasoftec.tpos2.data;
+package com.rasoftec.tpos2.Data;
 
-import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,13 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.rasoftec.ApplicationTpos;
 import com.rasoftec.tpos2.Nodo_tarea;
-import com.rasoftec.tpos2.beans.FormatoFactura;
-import com.rasoftec.tpos2.beans.detalleFactura;
-import com.rasoftec.tpos2.beans.factura_encabezado;
+import com.rasoftec.tpos2.Beans.FormatoFactura;
+import com.rasoftec.tpos2.Beans.detalleFactura;
+import com.rasoftec.tpos2.Beans.factura_encabezado;
 import com.rasoftec.tpos2.nodo_producto;
 
 import org.json.JSONException;
@@ -23,8 +21,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-
-import android.widget.Toast;
 
 public class database extends SQLiteOpenHelper {
     public static String DATABASE_NAME = "basetar760.db";
@@ -204,6 +200,34 @@ public class database extends SQLiteOpenHelper {
                 "  \"key_image\" BLOB\n" +
                 "); ");*/
     }
+
+    public ArrayList<factura_encabezado> getEncabezadoFacturasPorEnviar() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor puntero = db.rawQuery("SELECT *  FROM factura_encabezado_enviar" , null);
+        ArrayList<factura_encabezado> facturas = new ArrayList<>();
+        while (puntero.moveToNext()) {
+            int codEncabezado =  puntero.getInt(puntero.getColumnIndex("cod_encabezado"));
+            String usuarioMov =   puntero.getString(puntero.getColumnIndex("usuario_movilizandome"));
+            String cod_cliente =  puntero.getString(puntero.getColumnIndex("cod_cliente"));
+            Double total =   puntero.getDouble(puntero.getColumnIndex("total"));
+            String dpi =  puntero.getString(puntero.getColumnIndex("dpi"));
+            String nombre =  puntero.getString(puntero.getColumnIndex("nombre"));
+            String nit =  puntero.getString(puntero.getColumnIndex("nit"));
+            String direccion =  puntero.getString(puntero.getColumnIndex("direccion"));
+            String municipio =  puntero.getString(puntero.getColumnIndex("municipio"));
+            String depto = puntero.getString(puntero.getColumnIndex("departamento"));
+            String zona =  puntero.getString(puntero.getColumnIndex("zona"));
+
+            String usuarioMovDet =  puntero.getString(puntero.getColumnIndex("usuario_mov"));
+
+factura_encabezado factura_encabezado = new factura_encabezado(total.toString(), nombre, direccion, depto, municipio, zona);
+            facturas.add(factura_encabezado);
+        }
+        puntero.close();
+        return facturas;
+    }
+
+
     public ArrayList<FormatoFactura> getFacturasPorEnviar() {
         SQLiteDatabase db = this.getReadableDatabase();
         //Cursor puntero = db.rawQuery("SELECT *  FROM factura_encabezado_enviar" , null);
@@ -259,16 +283,7 @@ public class database extends SQLiteOpenHelper {
         cv.put("key_image", image);
         database.insert("imagenes", null, cv);
     }
-    /*public void addCodigoDpi(int cod_dpi , String depto, String municipio) throws SQLiteException {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues cv = new  ContentValues();
-        cv.put("cod_dpi", cod_dpi);
-        cv.put("departamento", depto);
-        cv.put("municipio", municipio);
-        database.insert( "codigo_dpi", null, cv );
-        addCodigoDpi(0101, "Guatemala", "Guatemala");
-        addCodigoDpi(0102, "Guatemala", "Guatemala");
-    }*/
+
 
     //    Limpiar Cierre
     public void limpiar_cierre() {
@@ -1018,41 +1033,6 @@ public class database extends SQLiteOpenHelper {
 
     }
 
-    public boolean insert_venta(ArrayList<nodo_producto> carrito, String cliente, int codigo) {
-
-
-// iniciamos creado el insert de la venta
-        int venta = venta_codigo();
-        venta = venta + 1;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contenido = new ContentValues();
-
-        contenido.put("cod_venta", codigo);
-        contenido.put("cliente", cliente);
-        db.insert("venta", null, contenido);
-
-// ingresamos el detalle de la venta
-
-
-        Iterator<nodo_producto> t = carrito.iterator();
-
-        while (t.hasNext()) {
-            nodo_producto tem = t.next();
-            contenido = new ContentValues();
-            contenido.put("venta", venta);
-            contenido.put("producto", tem.getCodigo());
-            contenido.put("nombre", tem.getDescripcion());
-            contenido.put("cantidad", tem.getCompra());
-            contenido.put("precio", tem.getPrecio());
-
-            db.insert("venta_detalle", null, contenido);
-        }
-
-
-        return true;
-    }
 
 //    Area de Factura del Ingreso
 
@@ -1588,20 +1568,6 @@ public class database extends SQLiteOpenHelper {
 
     }
 
-    public void ver_encabezado() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor puntero = db.rawQuery("SELECT * FROM encabezado ", null);
-
-        while (puntero.moveToNext()) {
-            Log.i("revisar fac", puntero.getString(puntero.getColumnIndex("fact_num2")));
-            Log.i("revisar cobrado", puntero.getString(puntero.getColumnIndex("cobrado2")));
-            Log.i("revisar fac", puntero.getString(puntero.getColumnIndex("usuario")));
-            Log.i("revisar cobrado", puntero.getString(puntero.getColumnIndex("co_cli")));
-            Log.i("revisar cobrado", puntero.getString(puntero.getColumnIndex("estado")));
-            Log.i("revisar cobrado", puntero.getString(puntero.getColumnIndex("tipo")));
-        }
-        puntero.close();
-    }
 
     public void ver_detalle() {
         SQLiteDatabase db = this.getReadableDatabase();

@@ -24,8 +24,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.rasoftec.tpos.R;
-import com.rasoftec.tpos2.data.database;
-import com.rasoftec.tpos2.data.webservice;
+import com.rasoftec.tpos2.Data.database;
+import com.rasoftec.tpos2.Data.webservice;
 import com.rasoftec.tpos2.manejo_errores.ErrorRed;
 
 import org.json.JSONArray;
@@ -34,8 +34,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
-
-import pl.com.salsoft.sqlitestudioremote.SQLiteStudioService;
 
 
 public class login extends AppCompatActivity {

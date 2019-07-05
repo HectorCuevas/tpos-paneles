@@ -1,4 +1,4 @@
-package com.rasoftec.tpos2.data;
+package com.rasoftec.tpos2.Data;
 
 /**
  * Created by raaa on 15/08/17.

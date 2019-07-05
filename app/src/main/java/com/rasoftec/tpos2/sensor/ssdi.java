@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.rasoftec.tpos2.data.database;
+import com.rasoftec.tpos2.Data.database;
 
 /**
  * Created by raaa on 9/08/17.

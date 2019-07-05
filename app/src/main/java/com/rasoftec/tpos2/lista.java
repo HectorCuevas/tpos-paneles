@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rasoftec.tpos.R;
-import com.rasoftec.tpos2.data.database;
+import com.rasoftec.tpos2.Data.database;
 
 import java.util.ArrayList;
 

@@ -1,12 +1,9 @@
 package com.rasoftec.tpos2;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
-import com.rasoftec.ApplicationTpos;
-import com.rasoftec.tpos2.data.webservice;
+import com.rasoftec.tpos2.Data.webservice;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;

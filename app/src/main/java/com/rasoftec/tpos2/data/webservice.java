@@ -1,4 +1,4 @@
-package com.rasoftec.tpos2.data;
+package com.rasoftec.tpos2.Data;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -632,7 +632,7 @@ public class webservice extends AsyncTask<String, String, String> {
                         publishProgress("Cargando Cuentas Por Cobrar", "Iniciando Session");
                         obtener_facturas();
                         publishProgress("Sincronizando de Ventas Piso", "Sincronizando");
-                      //  ventas();
+                        ventas();
                         Intent i2 = new Intent(actual, menu_principal.class);
 ////
                         actual.startActivity(i2);
@@ -750,6 +750,7 @@ public class webservice extends AsyncTask<String, String, String> {
             return t2;
 
         } catch (Exception e) {
+
 
             String erf = "No fue posible obtener las credenciales de inicio de sesion. codigo del error: " + e.getLocalizedMessage();
 

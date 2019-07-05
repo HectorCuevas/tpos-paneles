@@ -21,10 +21,10 @@ import android.widget.TextView;
 
 import com.rasoftec.ApplicationTpos;
 import  com.rasoftec.tpos.R;
-import com.rasoftec.tpos2.data.database;
-import com.rasoftec.tpos2.data.nodo_factura;
-import com.rasoftec.tpos2.data.venta_detalle;
-import com.rasoftec.tpos2.data.webservice;
+import com.rasoftec.tpos2.Data.database;
+import com.rasoftec.tpos2.Data.nodo_factura;
+import com.rasoftec.tpos2.Data.venta_detalle;
+import com.rasoftec.tpos2.Data.webservice;
 import com.rasoftec.tpos2.manejo_errores.ErrorRed;
 import com.rasoftec.tpos2.sensor.ssdi;
 
@@ -454,7 +454,7 @@ final String s2=s;
         ArrayAdapter adapter = null;
         if(s.equals("Venta")){
             t12.setText(s);
-            ArrayList<com.rasoftec.tpos2.data.venta> lista_info = base.get_movimiento(codigo);
+            ArrayList<com.rasoftec.tpos2.Data.venta> lista_info = base.get_movimiento(codigo);
             adapter = new ArrayAdapter<>(nodo_lista.this, android.R.layout.simple_list_item_1, lista_info);
         }else{
 
@@ -471,7 +471,7 @@ final String s2=s;
         t.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(s2.equals("Venta")){  com.rasoftec.tpos2.data.venta reviso = (com.rasoftec.tpos2.data.venta) parent.getItemAtPosition(position);
+                if(s2.equals("Venta")){  com.rasoftec.tpos2.Data.venta reviso = (com.rasoftec.tpos2.Data.venta) parent.getItemAtPosition(position);
                             detalle_movimiento(reviso);}
 
             }
@@ -510,7 +510,7 @@ final String s2=s;
         long tmp = Math.round(value);
         return (double) tmp / factor;
     }
-    private void detalle_movimiento( com.rasoftec.tpos2.data.venta reviso) {
+    private void detalle_movimiento( com.rasoftec.tpos2.Data.venta reviso) {
 
         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
 

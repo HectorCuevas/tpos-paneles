@@ -1,4 +1,4 @@
-package com.rasoftec.tpos2.beans;
+package com.rasoftec.tpos2.Beans;
 
 public class detalleFactura {
 

@@ -1,7 +1,5 @@
 
-package com.rasoftec.tpos2.beans;
-
-import android.widget.ImageView;
+package com.rasoftec.tpos2.Beans;
 
 import java.util.ArrayList;
 

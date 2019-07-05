@@ -10,8 +10,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import com.rasoftec.PreferenceManager;
 import com.rasoftec.tpos.R;
-import com.rasoftec.tpos2.locationActivity;
-import com.rasoftec.tpos2.menu_principal;
+import com.rasoftec.tpos2.Activities.locationActivity;
 
 public class LocationPreferences extends AppCompatActivity{
 

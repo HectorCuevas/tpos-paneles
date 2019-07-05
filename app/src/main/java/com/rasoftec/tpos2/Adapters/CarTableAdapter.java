@@ -1,10 +1,10 @@
-package com.rasoftec.tpos2;
+package com.rasoftec.tpos2.Adapters;
 
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.rasoftec.tpos2.beans.Report;
+import com.rasoftec.tpos2.Beans.Report;
 
 import java.util.List;
 

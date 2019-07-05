@@ -1,4 +1,4 @@
-package com.rasoftec.tpos2;
+package com.rasoftec.tpos2.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 
 import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.login;
 
 import java.util.Timer;
 import java.util.TimerTask;

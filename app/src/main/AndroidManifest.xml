@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:name="com.rasoftec.ApplicationTpos"
         android:theme="@style/AppTheme">
-        <activity android:name="com.rasoftec.tpos2.SplashActivity">
+        <activity android:name="com.rasoftec.tpos2.Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,13 +40,13 @@
                 android:resource="@xml/busqueda2" />
         </activity>
         <activity android:name="com.rasoftec.tpos2.menu_principal"></activity>
-        <activity android:name="com.rasoftec.tpos2.locationActivity"></activity>
-        <activity android:name="com.rasoftec.tpos2.PhotoActivity"></activity>
-        <activity android:name="com.rasoftec.tpos2.DetailActivity"></activity>
+        <activity android:name="com.rasoftec.tpos2.Activities.locationActivity"></activity>
+        <activity android:name="com.rasoftec.tpos2.Activities.PhotoActivity"></activity>
+        <activity android:name="com.rasoftec.tpos2.Activities.DetailActivity"></activity>
         <activity android:name="com.rasoftec.tpos2.login"></activity>
         <activity android:name="com.rasoftec.tpos2.Preferences.LocationPreferences"></activity>
-        <activity android:name="com.rasoftec.tpos2.ChartActivity"></activity>
-        <activity android:name="com.rasoftec.tpos2.TableActivity"></activity>
-        <activity android:name="com.rasoftec.tpos2.FacturasPorEnviarActivity"></activity>
+        <activity android:name="com.rasoftec.tpos2.Activities.ChartActivity"></activity>
+        <activity android:name="com.rasoftec.tpos2.Activities.TableActivity"></activity>
+        <activity android:name="com.rasoftec.tpos2.Activities.FacturasPorEnviarActivity"></activity>
     </application>
 </manifest>

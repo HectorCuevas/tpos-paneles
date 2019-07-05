@@ -20,31 +20,30 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rasoftec.tpos.R;
-import com.rasoftec.tpos2.data.database;
-import com.rasoftec.tpos2.data.nodo_factura;
-import com.rasoftec.tpos2.data.producto_translado;
-import com.rasoftec.tpos2.data.traslado;
-import com.rasoftec.tpos2.data.venta;
-import com.rasoftec.tpos2.data.venta2;
-import com.rasoftec.tpos2.data.venta_detalle;
-import com.rasoftec.tpos2.data.webservice;
+import com.rasoftec.tpos2.Activities.ChartActivity;
+import com.rasoftec.tpos2.Activities.FacturasPorEnviarActivity;
+import com.rasoftec.tpos2.Activities.TableActivity;
+import com.rasoftec.tpos2.Data.database;
+import com.rasoftec.tpos2.Data.nodo_factura;
+import com.rasoftec.tpos2.Data.producto_translado;
+import com.rasoftec.tpos2.Data.traslado;
+import com.rasoftec.tpos2.Data.venta;
+import com.rasoftec.tpos2.Data.venta2;
+import com.rasoftec.tpos2.Data.venta_detalle;
+import com.rasoftec.tpos2.Data.webservice;
 import com.rasoftec.tpos2.manejo_errores.ErrorRed;
 import com.rasoftec.tpos2.sensor.ssdi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
-
-import static com.rasoftec.tpos2.data.venta_detalle.round;
 
 public class menu_principal extends AppCompatActivity {
     String ruta_actual;
