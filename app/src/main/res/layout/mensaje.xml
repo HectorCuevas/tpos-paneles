@@ -10,7 +10,7 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="314dp"
+        android:layout_width="match_parent"
         android:layout_height="68dp"
         android:background="@color/colorPrimaryDark"
 
@@ -32,7 +32,7 @@
     <TextView
         android:id="@+id/info_mensa2"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="55dp"
         android:text="Venta(s) Total del Dia"
         android:textAlignment="center"
         android:textColor="@color/rojo3"

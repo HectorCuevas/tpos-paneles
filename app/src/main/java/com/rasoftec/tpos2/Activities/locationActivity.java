@@ -1,12 +1,15 @@
 package com.rasoftec.tpos2.Activities;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,6 +28,7 @@ import com.rasoftec.tpos2.Beans.detalleFactura;
 import com.rasoftec.tpos2.Beans.factura_encabezado;
 import com.rasoftec.tpos2.Data.database;
 import com.rasoftec.tpos2.Data.webservice;
+import com.rasoftec.tpos2.manejo_errores.ErrorRed;
 import com.rasoftec.tpos2.menu_principal;
 
 import org.json.JSONException;
@@ -36,12 +40,14 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static com.rasoftec.ApplicationTpos.detalleVenta;
 import static com.rasoftec.ApplicationTpos.newFactura_encabezado;
 import static com.rasoftec.ApplicationTpos.p;
 
-public class locationActivity extends AppCompatActivity {
+public class LocationActivity extends AppCompatActivity {
     EditText txtAddress, txtMunicipio, txtDepartamento, txtZona;
     database dbObjetc;
     ProgressDialog pdialog;
@@ -66,12 +72,13 @@ public class locationActivity extends AppCompatActivity {
     Double longitude = 0D;
     Spinner spnDireccionRecarga;
     Double latitude = 0D;
+    private ErrorRed error;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
-
+        error = new ErrorRed(this);
         //txtAddress = (EditText) findViewById(R.id.txtAddress);
         spnDireccionRecarga = (Spinner) findViewById(R.id.spnDireccionRecarga);
         lblDeptoPref = (TextView) findViewById(R.id.lblDeptoPref);
@@ -91,22 +98,22 @@ public class locationActivity extends AppCompatActivity {
 
         /*** Verificacion de preferencias ***/
         try {
-            if (PreferenceManager.checkPref(locationActivity.this, PreferenceManager.PREF_STR_DEPTO)) {
-                String str = PreferenceManager.getPref(locationActivity.this, PreferenceManager.PREF_STR_DEPTO);
+            if (PreferenceManager.checkPref(LocationActivity.this, PreferenceManager.PREF_STR_DEPTO)) {
+                String str = PreferenceManager.getPref(LocationActivity.this, PreferenceManager.PREF_STR_DEPTO);
                 lblDeptoPref.setText(str);
             } else {
                 lblDeptoPref.setText("Guatemala");
             }
 
-            if (PreferenceManager.checkPref(locationActivity.this, PreferenceManager.PREF_STR_MUN)) {
-                String str = PreferenceManager.getPref(locationActivity.this, PreferenceManager.PREF_STR_MUN);
+            if (PreferenceManager.checkPref(LocationActivity.this, PreferenceManager.PREF_STR_MUN)) {
+                String str = PreferenceManager.getPref(LocationActivity.this, PreferenceManager.PREF_STR_MUN);
                 lblMunPref.setText(str);
             } else {
                 lblMunPref.setText("Guatemala");
             }
 
-            if (PreferenceManager.checkPref(locationActivity.this, PreferenceManager.PREF_STR_ZONA)) {
-                String str = PreferenceManager.getPref(locationActivity.this, PreferenceManager.PREF_STR_ZONA);
+            if (PreferenceManager.checkPref(LocationActivity.this, PreferenceManager.PREF_STR_ZONA)) {
+                String str = PreferenceManager.getPref(LocationActivity.this, PreferenceManager.PREF_STR_ZONA);
                 lblZonaPref.setText(str);
             } else {
                 lblZonaPref.setText("1");
@@ -131,9 +138,9 @@ public class locationActivity extends AppCompatActivity {
     }
 
 
-
     public void addJsonArray() {
         try {
+            Date currentTime = Calendar.getInstance().getTime();
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("usuario_movilizandome", dbObjetc.get_ruta().trim());
             jsonObject.put("cod_cliente", ApplicationTpos.codigoCliente);
@@ -143,7 +150,8 @@ public class locationActivity extends AppCompatActivity {
             jsonObject.put("procesado", "S");
             jsonObject.put("num_factura", 0);
             jsonObject.put("cobrado_2", 0.00);
-            //    jsonObject.put("fecha", getDate());
+            jsonObject.put("fecha", p.get(0).getFecha());
+          //  p.set(0).setFecha(currentTime);
             /*** required fields ***/
             jsonObject.put("dpi", p.get(0).getDpi());
             jsonObject.put("nombre_cliente", p.get(0).getNombre());
@@ -187,14 +195,36 @@ public class locationActivity extends AppCompatActivity {
             newFactura_encabezado.setMunicipio(municipio);
             newFactura_encabezado.setDepto(departamento);
             newFactura_encabezado.setZona(zona);
+            Date currentTime = Calendar.getInstance().getTime();
+            newFactura_encabezado.setFecha(currentTime.toString());
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "" + e, Toast.LENGTH_SHORT).show();
         }
 
         p.add(newFactura_encabezado);
         addJsonArray();
-        CelsiusAsync celsiustofahr = new CelsiusAsync();
-        celsiustofahr.execute();
+
+
+        try{
+            if (!error.conexion()  && error.existedatos() != 0) {
+                mensaje("Error de Red", "Por el Momento no se Cuenta con Internet para Iniciar el Sistema \n" +
+                        "Revise pendientes de envio");
+                Toast.makeText(getApplicationContext(),ApplicationTpos.totalEncabezado +"", Toast.LENGTH_LONG ).show();
+                AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente,
+                        Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura);
+                //NO QUITAR ESTA LINEA -  LIMPIA EL DETALLE DEL CARRITO DEL ENCABEZADO
+                ApplicationTpos.detalleFactura.clear();
+
+            }else{
+                CelsiusAsync celsiustofahr = new CelsiusAsync();
+                celsiustofahr.execute();
+            }
+        }catch (Exception e){
+            mensaje("Error de Red", "Por el Momento no se Cuenta con Internet para Iniciar el Sistema \n" +
+                    "Revise pendientes de envio");
+            AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente,
+                    Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura);
+        }
 
     }
 
@@ -205,9 +235,8 @@ public class locationActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             int cod = wsCod.movilizandome();
-            for (int j = 0; j < ApplicationTpos.detalleFactura.size(); j++) {
 
-            //    almacenarFactura.AlmacenarDetalle(ApplicationTpos.detalleFactura.get(j));
+            for (int j = 0; j < ApplicationTpos.detalleFactura.size(); j++) {
                 detalle = new SoapObject(NAMESPACE, METHOD_NAME2);
                 detalle.addProperty("id_mov", cod);
                 detalle.addProperty("usuarioMov", dbObjetc.get_ruta().trim());
@@ -226,11 +255,11 @@ public class locationActivity extends AppCompatActivity {
                     fahtocel = (SoapPrimitive) envelope.getResponse();
                 } catch (Exception e) {
                     e.getMessage();
+                } finally {
+               //     AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente, Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura);
                 }
             }
-            /*** Metodo para almacenar la factura temporalmente ***/
-            AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente, Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura );ApplicationTpos.detalleFactura.clear();
-
+            ApplicationTpos.detalleFactura.clear();
             encabezado = new SoapObject(NAMESPACE, METHOD_NAME1);
             encabezado.addProperty("id_mov", cod);
             encabezado.addProperty("usuarioMov", dbObjetc.get_ruta().trim());
@@ -239,13 +268,13 @@ public class locationActivity extends AppCompatActivity {
             encabezado.addProperty("total", Double.toString(ApplicationTpos.totalEncabezado));
             encabezado.addProperty("procesado", "S");
             encabezado.addProperty("cobrado", Double.toString(ApplicationTpos.totalEncabezado));
-            encabezado.addProperty("fecha", "2019-04-04");
-            if((p.get(0).getLatitude()==null) || (p.get(0).getLongitude()==null)){
+            encabezado.addProperty("fecha", p.get(0).getFecha());
+            if ((p.get(0).getLatitude() == null) || (p.get(0).getLongitude() == null)) {
                 encabezado.addProperty("latitud", "0");
                 encabezado.addProperty("longitud", "0");
-            }else{
+            } else {
                 encabezado.addProperty("latitud", p.get(0).getLatitude());
-                encabezado.addProperty("longitud", p.get(0).getLongitude());
+                encabezado.addProperty("longi   tud", p.get(0).getLongitude());
             }
             encabezado.addProperty("dpi", p.get(0).getDpi());
             encabezado.addProperty("nombre", p.get(0).getNombre());
@@ -265,16 +294,12 @@ public class locationActivity extends AppCompatActivity {
                 fahtocel = (SoapPrimitive) envelope.getResponse();
             } catch (Exception e) {
                 e.getMessage();
-
+              //  AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente, Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura);
             } finally {
-          //      almacenarFactura.AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente,Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura);
-               /* Toast.makeText(getApplicationContext(), "ERROR: No se pudo completar la transacción, revisar Pendientes de envio", Toast.LENGTH_SHORT).show();
-                Intent cambiarActividad = new Intent(getApplicationContext(), menu_principal.class);
-                startActivity(cambiarActividad);
-                if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
-                    startActivity(cambiarActividad);
-                }*/
+               // AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente, Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura);
             }
+
+
             return null;
         }
 
@@ -293,7 +318,7 @@ public class locationActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pdialog = new ProgressDialog(locationActivity.this);
+            pdialog = new ProgressDialog(LocationActivity.this);
             pdialog.setMessage("Sincronizando...");
             pdialog.show();
         }
@@ -308,8 +333,9 @@ public class locationActivity extends AppCompatActivity {
             startActivity(cambiarActividad);
         }
     }
+
     public void AlmacenarEncabezado(String usuarioMov, String codCliente, String totalEncabezado,
-                                    factura_encabezado factura_encabezado, ArrayList<detalleFactura> detalleFacturas){
+                                    factura_encabezado factura_encabezado, ArrayList<detalleFactura> detalleFacturas) {
         factura_encabezado.setUsuarioMov(usuarioMov);
         factura_encabezado.setCodCliente(codCliente);
         factura_encabezado.setTotalFact(totalEncabezado);
@@ -319,6 +345,35 @@ public class locationActivity extends AppCompatActivity {
         dbObjetc.insertFacturaSinEnviar(detalleFacturas, factura_encabezado);
         FormatoFactura nformato = new FormatoFactura();
         nformato.setDetalleFacturas(detalleFacturas);
-       // nformato.getDetalleFacturas().get(0).getCantidad();
+        // nformato.getDetalleFacturas().get(0).getCantidad();
     }
+    private void mensaje(String enca, String cuer) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View v2 = inflater.inflate(R.layout.mensaje, null);
+
+
+        builder.setView(v2)
+                .setNegativeButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        Intent cambiarActividad = new Intent(getApplicationContext(), menu_principal.class);
+                        startActivity(cambiarActividad);
+                        if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
+                            startActivity(cambiarActividad);
+                        }
+                        dialog.dismiss();
+                    }
+                });
+        TextView codigo = (TextView) v2.findViewById(R.id.info_mensa);
+        codigo.setText(enca);
+        TextView codigo2 = (TextView) v2.findViewById(R.id.info_mensa2);
+        codigo2.setText(cuer);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+
+    }
+
 }

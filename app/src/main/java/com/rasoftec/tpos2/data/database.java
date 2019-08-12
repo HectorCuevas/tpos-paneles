@@ -18,13 +18,14 @@ import com.rasoftec.tpos2.nodo_producto;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.interfaces.DSAPublicKey;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
 public class database extends SQLiteOpenHelper {
     public static String DATABASE_NAME = "basetar760.db";
-
+    int cont=0 ;
 
     public database(Context context) {
         super(context, DATABASE_NAME, null, 2);
@@ -155,7 +156,7 @@ public class database extends SQLiteOpenHelper {
                 "  \"longitud\" VARCHAR(50)\n" +
                 "); ");
         db.execSQL(" CREATE TABLE \"factura_encabezado_enviar\"(\n" +
-                "  \"cod_encabezado\" INTEGER PRIMARY KEY  NOT NULL,\n" +
+                "  \"cod_encabezado\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ,\n" +
                 "  \"usuario_movilizandome\" INTEGER,\n" +
                 "  \"cod_cliente\" VARCHAR(100),\n" +
                 "  \"forma_pag\" VARCHAR(50),\n" +
@@ -175,9 +176,21 @@ public class database extends SQLiteOpenHelper {
                 "  \"latitud\" VARCHAR(50),\n" +
                 "  \"longitud\" VARCHAR(50)\n" +
                 "); ");
+        db.execSQL("CREATE TABLE detalle_venta (\n" +
+                "    cod_detalle INTEGER       PRIMARY KEY AUTOINCREMENT\n" +
+                "                              NOT NULL,\n" +
+                "    articulo    VARCHAR (100) NOT NULL,\n" +
+                "    prec_vta    DOUBLE        NOT NULL,\n" +
+                "    cantidad    INTEGER,\n" +
+                "    total_art   DOUBLE,\n" +
+                "    estado      INTEGER       DEFAULT 0,\n" +
+                "    venta       INTEGER       NOT NULL,\n" +
+                "    nombre      VARCHAR (100) NOT NULL,\n" +
+                "    numero_cel  INTEGER       DEFAULT 0 \n" +
+                ")");
         /*** Esta tabla es la que almacena las facturas que estan pendientes de envio consume el sp_insert_det_P ***/
         db.execSQL("CREATE TABLE detalle_factura (\n" +
-                "    cod_detalle INTEGER       PRIMARY KEY AUTOINCREMENT\n" +
+                "    cod_detalle INTEGER       PRIMARY KEY AUTOINCREMENT \n" +
                 "                              NOT NULL,\n" +
                 "    usuario_mov    VARCHAR (100) NOT NULL,\n" +
                 "    co_art    VARCHAR (100) NOT NULL,\n" +
@@ -193,87 +206,199 @@ public class database extends SQLiteOpenHelper {
                 "    REFERENCES factura_encabezado_enviar (cod_encabezado) \n" +
                 ")");
 
-
-       /* db.execSQL(" CREATE TABLE \"imagenes\"(\n" +
-                "  \"id_imagen\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                "  \"key_name\" TEXT,\n" +
-                "  \"key_image\" BLOB\n" +
-                "); ");*/
     }
 
     public ArrayList<factura_encabezado> getEncabezadoFacturasPorEnviar() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor puntero = db.rawQuery("SELECT *  FROM factura_encabezado_enviar" , null);
+        Cursor puntero = db.rawQuery("SELECT *  FROM factura_encabezado_enviar", null);
         ArrayList<factura_encabezado> facturas = new ArrayList<>();
         while (puntero.moveToNext()) {
-            int codEncabezado =  puntero.getInt(puntero.getColumnIndex("cod_encabezado"));
-            String usuarioMov =   puntero.getString(puntero.getColumnIndex("usuario_movilizandome"));
-            String cod_cliente =  puntero.getString(puntero.getColumnIndex("cod_cliente"));
-            Double total =   puntero.getDouble(puntero.getColumnIndex("total"));
-            String dpi =  puntero.getString(puntero.getColumnIndex("dpi"));
-            String nombre =  puntero.getString(puntero.getColumnIndex("nombre"));
-            String nit =  puntero.getString(puntero.getColumnIndex("nit"));
-            String direccion =  puntero.getString(puntero.getColumnIndex("direccion"));
-            String municipio =  puntero.getString(puntero.getColumnIndex("municipio"));
+            int codEncabezado = puntero.getInt(puntero.getColumnIndex("cod_encabezado"));
+            String usuarioMov = puntero.getString(puntero.getColumnIndex("usuario_movilizandome"));
+            String cod_cliente = puntero.getString(puntero.getColumnIndex("cod_cliente"));
+            Double total = puntero.getDouble(puntero.getColumnIndex("total"));
+            String dpi = puntero.getString(puntero.getColumnIndex("dpi"));
+            String nombre = puntero.getString(puntero.getColumnIndex("nombre"));
+            String nit = puntero.getString(puntero.getColumnIndex("nit"));
+            String direccion = puntero.getString(puntero.getColumnIndex("direccion"));
+            String municipio = puntero.getString(puntero.getColumnIndex("municipio"));
             String depto = puntero.getString(puntero.getColumnIndex("departamento"));
-            String zona =  puntero.getString(puntero.getColumnIndex("zona"));
+            String zona = puntero.getString(puntero.getColumnIndex("zona"));
+//            String usuarioMovDet = puntero.getString(puntero.getColumnIndex("usuario_mov"));
 
-            String usuarioMovDet =  puntero.getString(puntero.getColumnIndex("usuario_mov"));
-
-factura_encabezado factura_encabezado = new factura_encabezado(total.toString(), nombre, direccion, depto, municipio, zona);
+            factura_encabezado factura_encabezado = new factura_encabezado(
+                    dpi,
+                    total.toString(),
+                    nombre,
+                    direccion,
+                    depto,
+                    municipio,
+                    zona,
+                    codEncabezado
+            );
             facturas.add(factura_encabezado);
         }
+
         puntero.close();
         return facturas;
     }
 
-
-    public ArrayList<FormatoFactura> getFacturasPorEnviar() {
+    /*** REESCRIBIR ESTA FUNCION PARA QUE SOLO DEVUELVA LO QUE NECESITO ***/
+    public ArrayList<FormatoFactura> getFacturasPorEnviar(long codF) {
         SQLiteDatabase db = this.getReadableDatabase();
+        long cod =codF;
         //Cursor puntero = db.rawQuery("SELECT *  FROM factura_encabezado_enviar" , null);
         Cursor puntero = db.rawQuery("SELECT *  FROM factura_encabezado_enviar inner join detalle_factura on " +
-                "factura_encabezado_enviar.cod_encabezado = detalle_factura.cod_encabezado" , null);
+                "factura_encabezado_enviar.cod_encabezado = detalle_factura.cod_encabezado " +
+                "where factura_encabezado_enviar.cod_encabezado = ?", new String[]{String.valueOf(cod)});
         ArrayList<FormatoFactura> envio = new ArrayList<>();
 
         while (puntero.moveToNext()) {
-            String co_art =   puntero.getString(puntero.getColumnIndex("co_art"));
-            String prec_vta =  puntero.getString(puntero.getColumnIndex("prec_vta"));
+
+
+                    String co_art = puntero.getString(puntero.getColumnIndex("co_art"));
+            String prec_vta = puntero.getString(puntero.getColumnIndex("prec_vta"));
             int cantidad = puntero.getInt(puntero.getColumnIndex("cantidad"));
-            String totalArt =  puntero.getString(puntero.getColumnIndex("total_art"));
-            String serial =   puntero.getString(puntero.getColumnIndex("serial"));
+            String totalArt = puntero.getString(puntero.getColumnIndex("total_art"));
+            String serial = puntero.getString(puntero.getColumnIndex("serial"));
             int numero = puntero.getInt(puntero.getColumnIndex("numero_cel"));
+            String usuarioMovDet = puntero.getString(puntero.getColumnIndex("usuario_mov"));
 
+            detalleFactura detalleFactura = new detalleFactura();
 
-            int codEncabezado =  puntero.getInt(puntero.getColumnIndex("cod_encabezado"));
-            String usuarioMov =   puntero.getString(puntero.getColumnIndex("usuario_movilizandome"));
-            String cod_cliente =  puntero.getString(puntero.getColumnIndex("cod_cliente"));
-            String forma_pag =  puntero.getString(puntero.getColumnIndex("forma_pag"));
-            Double total =   puntero.getDouble(puntero.getColumnIndex("total"));
-            Double cobrado =  puntero.getDouble(puntero.getColumnIndex("cobrado"));
-            String procesado =  puntero.getString(puntero.getColumnIndex("procesado"));
+           detalleFactura.setUsuarioMovilizandome(usuarioMovDet);
+           detalleFactura.setCodigoArticulo(co_art);
+           detalleFactura.setPrecioArticulo(Double.parseDouble(prec_vta));
+           detalleFactura.setCantidad(cantidad);
+           detalleFactura.setTotalFactura(Double.parseDouble(totalArt));
+           detalleFactura.setNumeroCel(numero);
+
+           ArrayList<detalleFactura> detalleFacturas = new ArrayList<detalleFactura>();
+
+            int codEncabezado = puntero.getInt(puntero.getColumnIndex("cod_encabezado"));
+            String usuarioMov = puntero.getString(puntero.getColumnIndex("usuario_movilizandome"));
+            String cod_cliente = puntero.getString(puntero.getColumnIndex("cod_cliente"));
+            String forma_pag = puntero.getString(puntero.getColumnIndex("forma_pag"));
+            Double total = puntero.getDouble(puntero.getColumnIndex("total"));
+            Double cobrado = puntero.getDouble(puntero.getColumnIndex("cobrado"));
+            String procesado = puntero.getString(puntero.getColumnIndex("procesado"));
+            String fecha =  puntero.getString(puntero.getColumnIndex("fecha"));
 
             //  puntero.getInt(puntero.getColumnIndex("fecha")),
 
-            String dpi =  puntero.getString(puntero.getColumnIndex("dpi"));
-            String nombre =  puntero.getString(puntero.getColumnIndex("nombre"));
-            String nit =  puntero.getString(puntero.getColumnIndex("nit"));
-            String direccion =  puntero.getString(puntero.getColumnIndex("direccion"));
-            String municipio =  puntero.getString(puntero.getColumnIndex("municipio"));
+            String dpi = puntero.getString(puntero.getColumnIndex("dpi"));
+            String nombre = puntero.getString(puntero.getColumnIndex("nombre"));
+            String nit = puntero.getString(puntero.getColumnIndex("nit"));
+            String direccion = puntero.getString(puntero.getColumnIndex("direccion"));
+            String municipio = puntero.getString(puntero.getColumnIndex("municipio"));
             String depto = puntero.getString(puntero.getColumnIndex("departamento"));
-            String zona =  puntero.getString(puntero.getColumnIndex("zona"));
-            String email =  puntero.getString(puntero.getColumnIndex("email"));
-            String lat =  puntero.getString(puntero.getColumnIndex("longitud"));
-            String lon =  puntero.getString(puntero.getColumnIndex("latitud"));
+            String zona = puntero.getString(puntero.getColumnIndex("zona"));
+            String email = puntero.getString(puntero.getColumnIndex("email"));
+            String lat = puntero.getString(puntero.getColumnIndex("longitud"));
+            String lon = puntero.getString(puntero.getColumnIndex("latitud"));
 
-            String usuarioMovDet =  puntero.getString(puntero.getColumnIndex("usuario_mov"));
+           // String usuarioMovDet = puntero.getString(puntero.getColumnIndex("usuario_mov"));
 
-                  FormatoFactura formatoFactura = new FormatoFactura(dpi, nombre, nit, direccion,
-                          depto, municipio, zona, email, lat, lon, usuarioMov, co_art,
-                          Double.parseDouble(prec_vta), cantidad, total, numero);
+
+            FormatoFactura formatoFactura = new FormatoFactura(dpi, nombre, nit, direccion,
+                    depto, municipio, zona, email, lat, lon, usuarioMov, co_art,
+                    Double.parseDouble(prec_vta), cantidad, total, numero, detalleFacturas, cod_cliente, fecha);
             envio.add(formatoFactura);
         }
         puntero.close();
         return envio;
+    }
+    public ArrayList<FormatoFactura> getFacturasPorEnviar() {
+        SQLiteDatabase db = this.getReadableDatabase();
+       // long cod =codF;
+        //Cursor puntero = db.rawQuery("SELECT *  FROM factura_encabezado_enviar" , null);
+        Cursor puntero = db.rawQuery("SELECT *  FROM factura_encabezado_enviar inner join detalle_factura on " +
+                "factura_encabezado_enviar.cod_encabezado = detalle_factura.cod_encabezado ", null);
+               // "where factura_encabezado_enviar.cod_encabezado = ?", new String[]{String.valueOf(cod)});
+        ArrayList<FormatoFactura> envio = new ArrayList<>();
+
+        while (puntero.moveToNext()) {
+
+
+            String co_art = puntero.getString(puntero.getColumnIndex("co_art"));
+            String prec_vta = puntero.getString(puntero.getColumnIndex("prec_vta"));
+            int cantidad = puntero.getInt(puntero.getColumnIndex("cantidad"));
+            String totalArt = puntero.getString(puntero.getColumnIndex("total_art"));
+            String serial = puntero.getString(puntero.getColumnIndex("serial"));
+            int numero = puntero.getInt(puntero.getColumnIndex("numero_cel"));
+            String usuarioMovDet = puntero.getString(puntero.getColumnIndex("usuario_mov"));
+            ArrayList<detalleFactura> detalleFacturas = new ArrayList<detalleFactura>();
+            detalleFactura detalleFactura = new detalleFactura();
+
+            detalleFactura.setUsuarioMovilizandome(usuarioMovDet);
+            detalleFactura.setCodigoArticulo(co_art);
+            detalleFactura.setPrecioArticulo(Double.parseDouble(prec_vta));
+            detalleFactura.setCantidad(cantidad);
+            detalleFactura.setTotalFactura(Double.parseDouble(totalArt));
+            detalleFactura.setNumeroCel(numero);
+
+            detalleFacturas.add(detalleFactura);
+
+
+            int codEncabezado = puntero.getInt(puntero.getColumnIndex("cod_encabezado"));
+            String usuarioMov = puntero.getString(puntero.getColumnIndex("usuario_movilizandome"));
+            String cod_cliente = puntero.getString(puntero.getColumnIndex("cod_cliente"));
+            String forma_pag = puntero.getString(puntero.getColumnIndex("forma_pag"));
+            Double total = puntero.getDouble(puntero.getColumnIndex("total"));
+            Double cobrado = puntero.getDouble(puntero.getColumnIndex("cobrado"));
+            String procesado = puntero.getString(puntero.getColumnIndex("procesado"));
+            String fecha =  puntero.getString(puntero.getColumnIndex("fecha"));
+            //  puntero.getInt(puntero.getColumnIndex("fecha")),
+
+            String dpi = puntero.getString(puntero.getColumnIndex("dpi"));
+            String nombre = puntero.getString(puntero.getColumnIndex("nombre"));
+            String nit = puntero.getString(puntero.getColumnIndex("nit"));
+            String direccion = puntero.getString(puntero.getColumnIndex("direccion"));
+            String municipio = puntero.getString(puntero.getColumnIndex("municipio"));
+            String depto = puntero.getString(puntero.getColumnIndex("departamento"));
+            String zona = puntero.getString(puntero.getColumnIndex("zona"));
+            String email = puntero.getString(puntero.getColumnIndex("email"));
+            String lat = puntero.getString(puntero.getColumnIndex("longitud"));
+            String lon = puntero.getString(puntero.getColumnIndex("latitud"));
+
+            // String usuarioMovDet = puntero.getString(puntero.getColumnIndex("usuario_mov"));
+
+
+            FormatoFactura formatoFactura = new FormatoFactura(dpi, nombre, nit, direccion,
+                    depto, municipio, zona, email, lat, lon, usuarioMov, co_art,
+                    Double.parseDouble(prec_vta), cantidad, total, numero, detalleFacturas, cod_cliente, fecha);
+            envio.add(formatoFactura);
+        }
+        puntero.close();
+        return envio;
+    }
+
+    public long getLastInsertId() {
+        long index = 0;
+        SQLiteDatabase sdb = getReadableDatabase();
+        Cursor cursor = sdb.query(
+                "sqlite_sequence",
+                new String[]{"seq"},
+                "name = ?",
+                new String[]{"factura_encabezado_enviar"},
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor.moveToFirst()) {
+            index = cursor.getLong(cursor.getColumnIndex("seq"));
+        }
+        cursor.close();
+        return index;
+    }
+
+    public void limpiarEnvioFacturas(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "factura_encabezado_enviar";
+        db.delete(query, null, null);
+        query = "detalle_factura";
+        db.delete(query, null, null);
     }
 
     public void addEntry(String name, byte[] image) throws SQLiteException {
@@ -284,6 +409,51 @@ factura_encabezado factura_encabezado = new factura_encabezado(total.toString(),
         database.insert("imagenes", null, cv);
     }
 
+    public void insertFacturaSinEnviar(ArrayList<detalleFactura> detalle1Fact, factura_encabezado encabezadoFact) throws SQLiteException {
+       // cont++;
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues encabezado = new ContentValues();
+        ContentValues detalle = new ContentValues();
+       // encabezado.put("cod_encabezado", getCodigoMovilizandome()+cont);
+        encabezado.put("usuario_movilizandome", encabezadoFact.getUsuarioMov());
+        encabezado.put("cod_cliente", encabezadoFact.getCodCliente());
+        encabezado.put("forma_pag", encabezadoFact.getForma_pag());
+        encabezado.put("total", encabezadoFact.getTotalFact());
+        encabezado.put("cobrado", encabezadoFact.getCobrado());
+        encabezado.put("procesado", encabezadoFact.getProcesado());
+        encabezado.put("numFactura", 00);
+        // encabezado.put("fecha", jsonObject.getString("fecha"));
+        if (get_estado() == 3) {
+            encabezado.put("fecha", fecha_actual2());
+        }
+        encabezado.put("dpi", encabezadoFact.getDpi());
+        encabezado.put("nombre", encabezadoFact.getNombre());
+        encabezado.put("nit", encabezadoFact.getNit());
+        encabezado.put("direccion", encabezadoFact.getDireccion());
+        encabezado.put("municipio", encabezadoFact.getMunicipio());
+        encabezado.put("departamento", encabezadoFact.getDepto());
+        encabezado.put("zona", encabezadoFact.getZona());
+        encabezado.put("email", encabezadoFact.getEmail());
+        encabezado.put("latitud", encabezadoFact.getLatitude());
+        encabezado.put("longitud", encabezadoFact.getLongitude());
+        db.insert("factura_encabezado_enviar", null, encabezado);
+        int i=1;
+        Iterator<detalleFactura> tem = detalle1Fact.iterator();
+        while (tem.hasNext()) {
+            detalleFactura tem14 = tem.next();
+           // detalle.put("cod_detalle", getCodigoMovilizandome()+cont+i);
+            detalle.put("usuario_mov", encabezadoFact.getUsuarioMov());
+            detalle.put("co_art", tem14.getCodigoArticulo());
+            detalle.put("prec_vta", tem14.getPrecioArticulo());
+            detalle.put("cantidad", tem14.getCantidad()); // int
+            detalle.put("total_art", tem14.getTotalFactura());
+            detalle.put("serial", "123456");
+            detalle.put("numero_cel", tem14.getNumeroCel());
+            detalle.put("cod_encabezado", getLastInsertId());
+            db.insert("detalle_factura", null, detalle);
+            i++;
+        }
+    }
 
     //    Limpiar Cierre
     public void limpiar_cierre() {
@@ -316,6 +486,13 @@ factura_encabezado factura_encabezado = new factura_encabezado(total.toString(),
 
     }
 
+
+    public int getCodigoMovilizandome() throws SQLiteException {
+        int ultimo = get_encabezado();
+        int actual = ultimo + 1;
+        ApplicationTpos.codigoMovilizandome = actual;
+        return actual;
+    }
     public void set_venta(int i, int y) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "UPDATE venta SET estado=1 , movilizandome=" + y + " where cod_venta=" + i;
@@ -335,60 +512,6 @@ factura_encabezado factura_encabezado = new factura_encabezado(total.toString(),
         String query = "UPDATE encabezado SET estado=1  where cod_encabezado=" + i;
         db.execSQL(query);
     }
-
-    public void insertFacturaSinEnviar(ArrayList<detalleFactura> detalle1Fact, factura_encabezado encabezadoFact) throws SQLiteException {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues encabezado = new ContentValues();
-        ContentValues detalle = new ContentValues();
-        encabezado.put("cod_encabezado", getCodigoMovilizandome());
-        encabezado.put("usuario_movilizandome", encabezadoFact.getUsuarioMov());
-        encabezado.put("cod_cliente", encabezadoFact.getCodCliente());
-        encabezado.put("forma_pag", encabezadoFact.getForma_pag() );
-        encabezado.put("total", encabezadoFact.getTotalFact() );
-        encabezado.put("cobrado", encabezadoFact.getCobrado() );
-        encabezado.put("procesado", encabezadoFact.getProcesado() );
-        encabezado.put("numFactura", 00 );
-        // encabezado.put("fecha", jsonObject.getString("fecha"));
-        if (get_estado() == 3) {
-            encabezado.put("fecha", fecha_actual2());
-        }
-        encabezado.put("dpi", encabezadoFact.getDpi());
-        encabezado.put("nombre", encabezadoFact.getNombre());
-        encabezado.put("nit", encabezadoFact.getNit() );
-        encabezado.put("direccion", encabezadoFact.getDireccion() );
-        encabezado.put("municipio", encabezadoFact.getMunicipio() );
-        encabezado.put("departamento", encabezadoFact.getDepto());
-        encabezado.put("zona", encabezadoFact.getZona());
-        encabezado.put("email", encabezadoFact.getEmail() );
-        encabezado.put("latitud", encabezadoFact.getLatitude() );
-        encabezado.put("longitud", encabezadoFact.getLongitude() );
-        db.insert("factura_encabezado_enviar", null, encabezado);
-
-        Iterator<detalleFactura> tem = detalle1Fact.iterator();
-        while (tem.hasNext()) {
-            detalleFactura tem14 = tem.next();
-          //  detalle.put("cod_detalle", getCodigoMovilizandome());
-            detalle.put("usuario_mov", encabezadoFact.getUsuarioMov());
-            detalle.put("co_art", tem14.getCodigoArticulo());
-            detalle.put("prec_vta", tem14.getPrecioArticulo());
-            detalle.put("cantidad", tem14.getCantidad()); // int
-            detalle.put("total_art", tem14.getTotalFactura());
-            detalle.put("serial", "123456");
-
-            detalle.put("numero_cel", tem14.getNumeroCel());
-            detalle.put("cod_encabezado", getCodigoMovilizandome() );
-
-            db.insert("detalle_factura", null, detalle);
-        }
-    }
-
-    public int getCodigoMovilizandome() throws SQLiteException {
-        int ultimo = get_encabezado();
-        int actual = ultimo + 1;
-        ApplicationTpos.codigoMovilizandome = actual;
-        return  actual;
-    }
-
     public int setVenta(ArrayList<nodo_producto> detalleFact, JSONObject jsonObject) throws JSONException {
         int ultimo = get_encabezado();
         int actual = ultimo + 1;

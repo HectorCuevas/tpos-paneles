@@ -4,6 +4,8 @@ package com.rasoftec.tpos2.Beans;
 import java.util.ArrayList;
 
 public class FormatoFactura {
+
+
     /*** Encabezado ***/
     //private String usuarioMov;
     //private String codCliente;
@@ -11,7 +13,7 @@ public class FormatoFactura {
   //  private String totalFactEnc;
 
 
-
+    private String fecha;
     private String numeroDpi;
     private String nombre;
     private String nit;
@@ -25,6 +27,7 @@ public class FormatoFactura {
     private String longitude;
     /*** Detalle ***/
     private long idMovilizandome;
+    private String codCliente;
     private String usuarioMovilizandome;
     private String codigoArticulo;
     private Double precioArticulo;
@@ -40,8 +43,22 @@ public class FormatoFactura {
         this.detalleFacturas = detalleFacturas;
     }
 
-    private ArrayList<detalleFactura> detalleFacturas;
+    public String getCodCliente() {
+        return codCliente;
+    }
 
+    public void setCodCliente(String codCliente) {
+        this.codCliente = codCliente;
+    }
+
+    private ArrayList<detalleFactura> detalleFacturas;
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
     /*** Contructor ***/
 
     public FormatoFactura(){
@@ -51,7 +68,8 @@ public class FormatoFactura {
                           String direccion, String depto, String municipio, String zona,
                           String email, String latitude, String longitude,
                           String usuarioMovilizandome, String codigoArticulo, Double precioArticulo,
-                          int cantidad, Double totalFactura, int numeroCel) {
+                          int cantidad, Double totalFactura, int numeroCel,
+                          ArrayList<detalleFactura> detalleFacturas,String idCliente, String fecha) {
         this.numeroDpi = numeroDpi;
         this.nombre = nombre;
         this.nit = nit;
@@ -70,6 +88,9 @@ public class FormatoFactura {
         this.cantidad = cantidad;
         this.totalFactura = totalFactura;
         this.numeroCel = numeroCel;
+        this.detalleFacturas = detalleFacturas;
+        this.codCliente = idCliente;
+        this.fecha = fecha;
     }
 
 

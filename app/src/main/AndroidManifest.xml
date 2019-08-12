@@ -40,7 +40,7 @@
                 android:resource="@xml/busqueda2" />
         </activity>
         <activity android:name="com.rasoftec.tpos2.menu_principal"></activity>
-        <activity android:name="com.rasoftec.tpos2.Activities.locationActivity"></activity>
+        <activity android:name="com.rasoftec.tpos2.Activities.LocationActivity"></activity>
         <activity android:name="com.rasoftec.tpos2.Activities.PhotoActivity"></activity>
         <activity android:name="com.rasoftec.tpos2.Activities.DetailActivity"></activity>
         <activity android:name="com.rasoftec.tpos2.login"></activity>
@@ -48,5 +48,6 @@
         <activity android:name="com.rasoftec.tpos2.Activities.ChartActivity"></activity>
         <activity android:name="com.rasoftec.tpos2.Activities.TableActivity"></activity>
         <activity android:name="com.rasoftec.tpos2.Activities.FacturasPorEnviarActivity"></activity>
+        <activity android:name="com.rasoftec.tpos2.Activities.EncabezadoFacturaActivity"></activity>
     </application>
 </manifest>

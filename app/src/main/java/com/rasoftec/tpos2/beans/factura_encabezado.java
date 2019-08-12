@@ -3,6 +3,7 @@ package com.rasoftec.tpos2.Beans;
 public class factura_encabezado {
 
     /*** datos cliente ***/
+    private long codFact;
     private String usuarioMov;
     private String codCliente;
     private String forma_pag;
@@ -21,6 +22,14 @@ public class factura_encabezado {
     private String email;
     private String latitude;
     private String longitude;
+
+    public long getCodFact() {
+        return codFact;
+    }
+
+    public void setCodFact(long codFact) {
+        this.codFact = codFact;
+    }
 
     public String getUsuarioMov() {
         return usuarioMov;
@@ -176,11 +185,12 @@ public class factura_encabezado {
     }
 
     //agregar dpi
-    public factura_encabezado(
+    public factura_encabezado(String dpi,
                               String totalFact,
                               String nombre,  String direccion, String depto,
-                              String municipio, String zona) {
+                              String municipio, String zona, long codFact) {
 
+        this.dpi = dpi;
         this.totalFact = totalFact;
         this.nombre = nombre;
 
@@ -189,6 +199,7 @@ public class factura_encabezado {
         this.municipio = municipio;
 
         this.zona = zona;
+        this.codFact = codFact;
 
     }
 }

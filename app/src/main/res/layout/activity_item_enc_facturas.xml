@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="16dp"
+    android:layout_height="130dp">
+    <TextView
+        android:id="@+id/lblNombreClienteFactura"
+        android:text="Nombre cliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="Direccion"
+        android:id="@+id/lblDireccionFactura"
+        android:layout_below="@+id/lblNombreClienteFactura"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="Dpi"
+        android:layout_below="@id/lblDireccionFactura"
+        android:id="@+id/lblDpiFacturas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="totalFacura"
+        android:id="@+id/lblTotalFactura"
+        android:layout_below="@id/lblDpiFacturas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

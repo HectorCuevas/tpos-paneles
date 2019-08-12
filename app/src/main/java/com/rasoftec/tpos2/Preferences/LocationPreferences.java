@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import com.rasoftec.PreferenceManager;
 import com.rasoftec.tpos.R;
-import com.rasoftec.tpos2.Activities.locationActivity;
+import com.rasoftec.tpos2.Activities.LocationActivity;
 
 public class LocationPreferences extends AppCompatActivity{
 
@@ -190,7 +190,7 @@ public class LocationPreferences extends AppCompatActivity{
 
     }
     public void fnOkey(View view){
-        Intent cambiarActividad = new Intent(getApplicationContext(), locationActivity.class);
+        Intent cambiarActividad = new Intent(getApplicationContext(), LocationActivity.class);
         startActivity(cambiarActividad);
         if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
             startActivity(cambiarActividad);
@@ -199,7 +199,7 @@ public class LocationPreferences extends AppCompatActivity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent changeLocation = new Intent(getApplicationContext(), locationActivity.class);
+        Intent changeLocation = new Intent(getApplicationContext(), LocationActivity.class);
         startActivity(changeLocation);
         if (changeLocation.resolveActivity(getPackageManager()) != null) {
             startActivity(changeLocation);

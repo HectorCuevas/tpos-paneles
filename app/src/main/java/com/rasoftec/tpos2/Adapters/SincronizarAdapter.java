@@ -1,6 +1,7 @@
 package com.rasoftec.tpos2.Adapters;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import com.rasoftec.tpos.R;
 import com.rasoftec.tpos2.Beans.FormatoFactura;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 
 public class SincronizarAdapter extends ArrayAdapter<FormatoFactura> {
@@ -19,13 +22,24 @@ public class SincronizarAdapter extends ArrayAdapter<FormatoFactura> {
     }
 
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         View listItemView = convertView;
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.activity_sincronizar_item, parent, false);
         }
+       /* View view = super.getView(position,convertView,parent);
+        if(position %2 == 1)
+        {
+            // Set a background color for ListView regular row/item
+            view.setBackgroundColor(Color.parseColor("#FFB6B546"));
+        }
+        else
+        {
+            // Set the background color for alternate row/item
+            view.setBackgroundColor(Color.parseColor("#FFCCCB4C"));
+        }*/
         try {
             FormatoFactura currentFormato =getItem(position);
 
@@ -37,9 +51,9 @@ public class SincronizarAdapter extends ArrayAdapter<FormatoFactura> {
 
             lblNombreCliente.setText("Nombre cliente: "+currentFormato.getNombre());
             lblDpi.setText("Venta: "+currentFormato.getCodigoArticulo());
-            lblDepartamento.setText("Departamento :"+currentFormato.getDepto());
-            lblZona.setText("Zona :"+ currentFormato.getZona());
-            lblTotal.setText("Total articulo :"+currentFormato.getTotalFactura().toString());
+            lblDepartamento.setText("Ubicacion: "+currentFormato.getDepto()+", "+ currentFormato.getMunicipio() +", zona "+ currentFormato.getZona());
+            lblZona.setText("Telefono: "+ currentFormato.getNumeroCel());
+            lblTotal.setText("Total articulo: "+currentFormato.getTotalFactura().toString());
 
 
         } catch (Exception ex) {

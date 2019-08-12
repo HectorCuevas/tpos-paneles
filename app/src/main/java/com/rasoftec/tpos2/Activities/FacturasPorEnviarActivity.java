@@ -1,5 +1,8 @@
 package com.rasoftec.tpos2.Activities;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -7,11 +10,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rasoftec.ApplicationTpos;
 import com.rasoftec.tpos.R;
 import com.rasoftec.tpos2.Adapters.SincronizarAdapter;
 import com.rasoftec.tpos2.Beans.FormatoFactura;
 import com.rasoftec.tpos2.Data.database;
-
 import java.util.ArrayList;
 
 public class FacturasPorEnviarActivity extends AppCompatActivity {
@@ -23,19 +26,23 @@ public class FacturasPorEnviarActivity extends AppCompatActivity {
        try {
            super.onCreate(savedInstanceState);
            setContentView(R.layout.activity_sincronizar);
-           res = findViewById(R.id.lblres);
+         //  res = findViewById(R.id.lblres);
            final ArrayList<FormatoFactura> formatoFacturas = new ArrayList<FormatoFactura>();
            ListView lstFacturas = findViewById(R.id.lstSinc);
            dbObject = new database(this);
-           dbObject.getFacturasPorEnviar();
-         //  Toast.makeText(this,  dbObject.getFacturasPorEnviar().get(0).toString(), Toast.LENGTH_LONG).show();
-           for (int i = 0; i < dbObject.getFacturasPorEnviar().size(); i++) {
+
+           //dbObject.getFacturasPorEnviar(ApplicationTpos.currentEncabezado.getCodCliente());
+           ArrayList<FormatoFactura> db = dbObject.getFacturasPorEnviar(ApplicationTpos.currentEncabezado.getCodFact());
+
+           for (int i = 0; i < db.size(); i++) {
                FormatoFactura formatoFactura = new FormatoFactura();
-               formatoFactura.setNombre(dbObject.getFacturasPorEnviar().get(i).getNombre());
-               formatoFactura.setCodigoArticulo(dbObject.getFacturasPorEnviar().get(i).getCodigoArticulo());
-               formatoFactura.setDepto(dbObject.getFacturasPorEnviar().get(i).getDepto());
-               formatoFactura.setZona(dbObject.getFacturasPorEnviar().get(i).getZona());
-               formatoFactura.setTotalFactura(dbObject.getFacturasPorEnviar().get(i).getPrecioArticulo());
+               formatoFactura.setNombre(db.get(i).getNombre());
+               formatoFactura.setCodigoArticulo(db.get(i).getCodigoArticulo());
+               formatoFactura.setDepto(db.get(i).getDepto());
+               formatoFactura.setZona(db.get(i).getZona());
+               formatoFactura.setTotalFactura(db.get(i).getPrecioArticulo());
+               formatoFactura.setMunicipio(db.get(i).getMunicipio());
+               formatoFactura.setNumeroCel(db.get(i).getNumeroCel());
                formatoFacturas.add(formatoFactura);
            }
 
@@ -55,5 +62,14 @@ public class FacturasPorEnviarActivity extends AppCompatActivity {
            Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
        }
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        Intent cambiarActividad = new Intent(getApplicationContext(), EncabezadoFacturaActivity.class);
+        startActivity(cambiarActividad);
+        if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
+            startActivity(cambiarActividad);
+        }
+    }
 }

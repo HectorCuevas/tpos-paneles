@@ -137,7 +137,7 @@ public class DetailActivity extends AppCompatActivity{
         newFactura_encabezado.setCel(cel);
         newFactura_encabezado.setEmail("t:"+cel+" e:"+email);
        // ApplicationTpos.params.add(a);//last
-        Intent changeActivity = new Intent(this, locationActivity.class);
+        Intent changeActivity = new Intent(this, LocationActivity.class);
         //changeActivity.putExtra("list", params);
         startActivity(changeActivity);
         if (changeActivity.resolveActivity(getPackageManager()) != null) {
