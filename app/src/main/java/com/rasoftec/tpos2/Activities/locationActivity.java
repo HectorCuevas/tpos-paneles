@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.rasoftec.ApplicationTpos;
 import com.rasoftec.PreferenceManager;
-import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.R;
 import com.rasoftec.tpos2.Funciones.AlmacenarFactura;
 import com.rasoftec.tpos2.Preferences.LocationPreferences;
 import com.rasoftec.tpos2.Beans.FormatoFactura;
@@ -209,7 +209,7 @@ public class LocationActivity extends AppCompatActivity {
             if (!error.conexion()  && error.existedatos() != 0) {
                 mensaje("Error de Red", "Por el Momento no se Cuenta con Internet para Iniciar el Sistema \n" +
                         "Revise pendientes de envio");
-                Toast.makeText(getApplicationContext(),ApplicationTpos.totalEncabezado +"", Toast.LENGTH_LONG ).show();
+              //  Toast.makeText(getApplicationContext(),ApplicationTpos.totalEncabezado +"", Toast.LENGTH_LONG ).show();
                 AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente,
                         Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura);
                 //NO QUITAR ESTA LINEA -  LIMPIA EL DETALLE DEL CARRITO DEL ENCABEZADO

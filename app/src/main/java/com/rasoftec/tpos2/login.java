@@ -23,7 +23,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.R;
 import com.rasoftec.tpos2.Data.database;
 import com.rasoftec.tpos2.Data.webservice;
 import com.rasoftec.tpos2.manejo_errores.ErrorRed;

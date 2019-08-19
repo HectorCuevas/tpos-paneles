@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.rasoftec.ApplicationTpos;
-import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.R;
 import com.rasoftec.tpos2.Adapters.EncabezadoFacturaAdapter;
 import com.rasoftec.tpos2.Beans.FormatoFactura;
 import com.rasoftec.tpos2.Beans.factura_encabezado;

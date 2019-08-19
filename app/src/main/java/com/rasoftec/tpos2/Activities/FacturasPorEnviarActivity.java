@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rasoftec.ApplicationTpos;
-import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.R;
 import com.rasoftec.tpos2.Adapters.SincronizarAdapter;
 import com.rasoftec.tpos2.Beans.FormatoFactura;
 import com.rasoftec.tpos2.Data.database;

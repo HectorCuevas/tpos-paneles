@@ -1,53 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rasoftec.tpos">
+    package="com.rasoftec.tpos2">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
+        android:name="com.rasoftec.ApplicationTpos"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name="com.rasoftec.ApplicationTpos"
         android:theme="@style/AppTheme">
-        <activity android:name="com.rasoftec.tpos2.Activities.SplashActivity">
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/provider_paths" />
+
+        <activity android:name=".Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.rasoftec.tpos2.lista">
+        <activity android:name=".lista">
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/busqueda2" />
         </activity>
-        <activity android:name="com.rasoftec.tpos2.nodo_lista" />
-        <activity android:name="com.rasoftec.tpos2.cobro" />
-        <activity android:name="com.rasoftec.tpos2.venta">
+        <activity android:name=".nodo_lista" />
+        <activity android:name=".cobro" />
+        <activity android:name=".venta">
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/busqueda2" />
         </activity>
-        <activity android:name="com.rasoftec.tpos2.menu_principal"></activity>
-        <activity android:name="com.rasoftec.tpos2.Activities.LocationActivity"></activity>
-        <activity android:name="com.rasoftec.tpos2.Activities.PhotoActivity"></activity>
-        <activity android:name="com.rasoftec.tpos2.Activities.DetailActivity"></activity>
-        <activity android:name="com.rasoftec.tpos2.login"></activity>
-        <activity android:name="com.rasoftec.tpos2.Preferences.LocationPreferences"></activity>
-        <activity android:name="com.rasoftec.tpos2.Activities.ChartActivity"></activity>
-        <activity android:name="com.rasoftec.tpos2.Activities.TableActivity"></activity>
-        <activity android:name="com.rasoftec.tpos2.Activities.FacturasPorEnviarActivity"></activity>
-        <activity android:name="com.rasoftec.tpos2.Activities.EncabezadoFacturaActivity"></activity>
+        <activity android:name=".menu_principal" />
+        <activity android:name=".Activities.LocationActivity" />
+        <activity android:name=".Activities.PhotoActivity" />
+        <activity android:name=".Activities.DetailActivity" />
+        <activity android:name=".login" />
+        <activity android:name=".Preferences.LocationPreferences" />
+        <activity android:name=".Activities.ChartActivity" />
+        <activity android:name=".Activities.TableActivity" />
+        <activity android:name=".Activities.FacturasPorEnviarActivity" />
+        <activity android:name=".Activities.EncabezadoFacturaActivity" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
+
 </manifest>

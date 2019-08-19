@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 
-import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.R;
 import com.rasoftec.tpos2.Nodo_tarea;
 import com.rasoftec.tpos2.manejo_errores.ErrorRed;
 import com.rasoftec.tpos2.menu_principal;

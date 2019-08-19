@@ -9,7 +9,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.R;
 
 import java.util.ArrayList;
 

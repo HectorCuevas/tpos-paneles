@@ -21,10 +21,11 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.R;
 import com.rasoftec.tpos2.Activities.ChartActivity;
 import com.rasoftec.tpos2.Activities.EncabezadoFacturaActivity;
 import com.rasoftec.tpos2.Activities.FacturasPorEnviarActivity;
+import com.rasoftec.tpos2.Activities.PhotoActivity;
 import com.rasoftec.tpos2.Activities.TableActivity;
 import com.rasoftec.tpos2.Adapters.EncabezadoFacturaAdapter;
 import com.rasoftec.tpos2.Data.database;
@@ -91,12 +92,13 @@ public class menu_principal extends AppCompatActivity {
 
     //    Area de Acciones de los Botones
     public void cliente(View v) {
-        Intent i2 = new Intent(this, EncabezadoFacturaActivity.class);
+        //descomentar esta linea para activity de facturas pendientes de enviar
+        //Intent i2 = new Intent(this, EncabezadoFacturaActivity.class);
+        Intent i2 = new Intent(this, PhotoActivity.class);
         i2.putExtra("ruta", ruta_actual);
         i2.putExtra("tipo_venta", 1);
         startActivity(i2);
         finish();
-
     }
 
     public void v_f_r(View v) {

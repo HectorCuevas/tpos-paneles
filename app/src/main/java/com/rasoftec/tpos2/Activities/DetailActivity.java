@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.R;
 import com.rasoftec.tpos2.venta;
 
 import static android.text.TextUtils.isEmpty;

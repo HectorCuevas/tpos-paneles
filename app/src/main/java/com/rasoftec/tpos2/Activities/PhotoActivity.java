@@ -1,232 +1,224 @@
-
 package com.rasoftec.tpos2.Activities;
 
-import org.ksoap2.SoapEnvelope;
-
-import android.app.ProgressDialog;
-
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
+import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.rasoftec.ApplicationTpos;
-import com.rasoftec.tpos.R;
-import com.rasoftec.tpos2.Data.database;
-import com.rasoftec.tpos2.Data.webservice;
-import com.rasoftec.tpos2.menu_principal;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import static com.rasoftec.ApplicationTpos.detalleVenta;
-import static com.rasoftec.ApplicationTpos.p;
-
+import com.rasoftec.tpos2.R;
+import java.io.File;
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class PhotoActivity extends AppCompatActivity {
 
-    private final String CARPETA_RAIZ = "misImagenesPrueba/";
-    private final String RUTA_IMAGEN = CARPETA_RAIZ + "misFotos";
+    private final String CARPETA_RAIZ="misImagenesPrueba/";
+    private final String RUTA_IMAGEN=CARPETA_RAIZ+"misFotos";
 
-    final int COD_SELECCIONA = 10;
-    final int COD_FOTO = 20;
-    Bitmap bitmap;
-    database base;
+    final int COD_SELECCIONA=10;
+    final int COD_FOTO=20;
+
     Button botonCargar;
     ImageView imagen;
     String path;
-    database dbObjetc;
-    byte[] byteArray;
-
-    //EditText ed_input;
-    //RadioGroup rg_temp;
-    //RadioButton radioTemp;
-    //Button btn_convert;
-    String tempValue;
-    ProgressDialog pdialog;
-    SoapObject enc, detalle, encabezado;
-    SoapPrimitive fahtocel, celtofah;
-    webservice wsCod;
-    String METHOD_NAME1 = "encabezado_insert";
-    String METHOD_NAME2 = "detalle_insert";
-    String SOAP_ACTION1 = "http://grupomenas.carrierhouse.us/wstposp/encabezado_insert";
-    String SOAP_ACTION2 = "http://grupomenas.carrierhouse.us/wstposp/detalle_insert";
-
-    String NAMESPACE = "http://grupomenas.carrierhouse.us/wstposp/";
-    String SOAP_URL1 = "http://grupomenas.carrierhouse.us/wstposp/GetStockArtWS.asmx";
-    String SOAP_URL = "http://grupomenas.carrierhouse.us/wstops2/GetStockArtWS.asmx";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photos);
-        imagen = (ImageView) findViewById(R.id.imagemId);
-        botonCargar = (Button) findViewById(R.id.btnCargarImg);
-        dbObjetc = new database(this);
-        wsCod = new webservice(this);
+        imagen= (ImageView) findViewById(R.id.imagemId);
+        botonCargar= (Button) findViewById(R.id.btnCargarImg);
+
+        if(validaPermisos()){
+            botonCargar.setEnabled(true);
+        }else{
+            botonCargar.setEnabled(false);
+        }
 
     }
 
-    public void addJsonArray() {
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("usuario_movilizandome", dbObjetc.get_ruta().trim());
-            jsonObject.put("cod_cliente", ApplicationTpos.codigoCliente);
-            jsonObject.put("forma_pago", "CONT");
-            jsonObject.put("total", ApplicationTpos.totalEncabezado);
-            jsonObject.put("cobrado", ApplicationTpos.totalEncabezado);
-            jsonObject.put("procesado", "S");
-            jsonObject.put("num_factura", 0);
-            jsonObject.put("cobrado_2", 0.00);
-            //    jsonObject.put("fecha", getDate());
-            /*** required fields ***/
-            jsonObject.put("dpi", p.get(0).getDpi());
-            jsonObject.put("nombre_cliente", p.get(0).getNombre());
-            jsonObject.put("nit", p.get(0).getNit());
-            jsonObject.put("direccion", p.get(0).getDireccion());
-            jsonObject.put("municipio", p.get(0).getMunicipio());
-            jsonObject.put("departamento", p.get(0).getDepto());
-            jsonObject.put("zona", p.get(0).getZona());
-            jsonObject.put("email", p.get(0).getEmail());
-            storeDatabase(jsonObject);
-        } catch (JSONException e) {
-            Toast.makeText(this, "No se ha podido crear el objeto json", Toast.LENGTH_SHORT).show();
-        }
-    }
+    private boolean validaPermisos() {
 
-    public void storeDatabase(JSONObject jsonObject) {
-        try {
-            dbObjetc.setVenta(detalleVenta, jsonObject);
-        } catch (Exception e) {
-            Toast.makeText(this, "No se ha podido crear el objeto json", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void checkout(View view) {
-        addJsonArray();
-        CelsiusAsync celsiustofahr = new CelsiusAsync();
-        celsiustofahr.execute();
-        Toast.makeText(this, "Hecho", Toast.LENGTH_SHORT).show();
-        //
-        // Toast.makeText(get, "Almacenado con exito", Toast.LENGTH_SHORT).show();
-        /*Intent cambiarActividad = new Intent(this, PhotoActivity.class);
-        startActivity(cambiarActividad);
-        if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
-            startActivity(cambiarActividad);
-        }*/
-       /* Intent i = new Intent(venta.this, menu_principal.class);
-        nodo_producto t2 = existeorga(carrito);
-        if (t2 != null) {
-            //           Log.i("Existe","si");
-            total_pos = t2.getCompra();
-            orga();
-        } else {
-            i.putExtra("ruta", ruta);
-            startActivity(i);
-        }
-        info("Se Realizo la Venta con Exito");
-        base.setcliente(actual);*/
-
-    }
-
-    private class CelsiusAsync extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            int cod = wsCod.movilizandome();
-            for (int j = 0; j < ApplicationTpos.detalleFactura.size(); j++) {
-                detalle = new SoapObject(NAMESPACE, METHOD_NAME2);
-                detalle.addProperty("id_mov", cod);
-                detalle.addProperty("usuarioMov", dbObjetc.get_ruta().trim());
-                detalle.addProperty("co_art", ApplicationTpos.detalleFactura.get(j).getCodigoArticulo());
-                detalle.addProperty("prec_vta", ApplicationTpos.detalleFactura.get(j).getPrecioArticulo().toString());
-                detalle.addProperty("cantidad", ApplicationTpos.detalleFactura.get(j).getCantidad());
-                detalle.addProperty("total_art", ApplicationTpos.detalleFactura.get(j).getTotalFactura().toString());
-                detalle.addProperty("telefono", ApplicationTpos.detalleFactura.get(j).getNumeroCel());
-                detalle.addProperty("serial", "1234679");
-                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-                envelope.dotNet = true;
-                envelope.setOutputSoapObject(detalle);
-                HttpTransportSE httpTransport = new HttpTransportSE(SOAP_URL1);
-                try {
-                    httpTransport.call(SOAP_ACTION2, envelope);
-                    fahtocel = (SoapPrimitive) envelope.getResponse();
-                } catch (Exception e) {
-                    e.getMessage();
-                }
-            }
-            encabezado = new SoapObject(NAMESPACE, METHOD_NAME1);
-            encabezado.addProperty("id_mov", cod);
-            encabezado.addProperty("usuarioMov", "99204");
-            encabezado.addProperty("codCliente", "99201001");
-            encabezado.addProperty("forma_pag", "CONT");
-            encabezado.addProperty("total", "54");
-            encabezado.addProperty("procesado", "S");
-            encabezado.addProperty("cobrado", "54");
-            encabezado.addProperty("fecha", "2019-04-01");
-            encabezado.addProperty("dpi", "1346789");
-            encabezado.addProperty("nombre", "asd");
-            encabezado.addProperty("nit", "1235");
-            encabezado.addProperty("direccion", "guatemala");
-            encabezado.addProperty("municipio", "guatemala");
-            encabezado.addProperty("departamento", "guatemala");
-            encabezado.addProperty("zona", 9);
-            encabezado.addProperty("email", "assdasd");
-            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-            envelope.dotNet = true;
-            envelope.setOutputSoapObject(encabezado);
-            HttpTransportSE httpTransport = new HttpTransportSE(SOAP_URL);
-            httpTransport.debug = true;
-            try {
-                httpTransport.call(SOAP_ACTION1, envelope);
-                fahtocel = (SoapPrimitive) envelope.getResponse();
-            } catch (Exception e) {
-                e.getMessage();
-
-            } finally {
-                fahtocel.toString();
-            }
-            return null;
+        if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
+            return true;
         }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            pdialog.dismiss();
-            Toast.makeText(getApplicationContext(), "Enc success", Toast.LENGTH_LONG).show();
-            Intent cambiarActividad = new Intent(getApplicationContext(), menu_principal.class);
-            startActivity(cambiarActividad);
-            if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
-                startActivity(cambiarActividad);
-            }
+        if((checkSelfPermission(CAMERA)==PackageManager.PERMISSION_GRANTED)&&
+                (checkSelfPermission(WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED)){
+            return true;
         }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pdialog = new ProgressDialog(PhotoActivity.this);
-            pdialog.setMessage("Sincronizando...");
-            pdialog.show();
+        if((shouldShowRequestPermissionRationale(CAMERA)) ||
+                (shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE))){
+            cargarDialogoRecomendacion();
+        }else{
+            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE,CAMERA},100);
         }
+
+        return false;
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent cambiarActividad = new Intent(getApplicationContext(), DetailActivity.class);
-        startActivity(cambiarActividad);
-        if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
-            startActivity(cambiarActividad);
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode==100){
+            if(grantResults.length==2 && grantResults[0]==PackageManager.PERMISSION_GRANTED
+                    && grantResults[1]==PackageManager.PERMISSION_GRANTED){
+                botonCargar.setEnabled(true);
+            }else{
+                solicitarPermisosManual();
+            }
+        }
+
+    }
+
+    private void solicitarPermisosManual() {
+        final CharSequence[] opciones={"si","no"};
+        final AlertDialog.Builder alertOpciones=new AlertDialog.Builder(PhotoActivity.this);
+        alertOpciones.setTitle("¿Desea configurar los permisos de forma manual?");
+        alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (opciones[i].equals("si")){
+                    Intent intent=new Intent();
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri=Uri.fromParts("package",getPackageName(),null);
+                    intent.setData(uri);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getApplicationContext(),"Los permisos no fueron aceptados",Toast.LENGTH_SHORT).show();
+                    dialogInterface.dismiss();
+                }
+            }
+        });
+        alertOpciones.show();
+    }
+
+    private void cargarDialogoRecomendacion() {
+        AlertDialog.Builder dialogo=new AlertDialog.Builder(PhotoActivity.this);
+        dialogo.setTitle("Permisos Desactivados");
+        dialogo.setMessage("Debe aceptar los permisos para el correcto funcionamiento de la App");
+
+        dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE,CAMERA},100);
+            }
+        });
+        dialogo.show();
+    }
+
+    public void onclick(View view) {
+        cargarImagen();
+    }
+
+    private void cargarImagen() {
+
+        final CharSequence[] opciones={"Tomar Foto","Cargar Imagen","Cancelar"};
+        final AlertDialog.Builder alertOpciones=new AlertDialog.Builder(PhotoActivity.this);
+        alertOpciones.setTitle("Seleccione una Opción");
+        alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (opciones[i].equals("Tomar Foto")){
+                    tomarFotografia();
+                }else{
+                    if (opciones[i].equals("Cargar Imagen")){
+                        Intent intent=new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        intent.setType("image/");
+                        startActivityForResult(intent.createChooser(intent,"Seleccione la Aplicación"),COD_SELECCIONA);
+                    }else{
+                        dialogInterface.dismiss();
+                    }
+                }
+            }
+        });
+        alertOpciones.show();
+    }
+
+    private void tomarFotografia() {
+       try{
+           File fileImagen=new File(Environment.getExternalStorageDirectory(),RUTA_IMAGEN);
+           boolean isCreada=fileImagen.exists();
+           String nombreImagen="";
+           if(isCreada==false){
+               isCreada=fileImagen.mkdirs();
+           }
+
+           if(isCreada==true){
+               nombreImagen=(System.currentTimeMillis()/1000)+".jpg";
+           }
+
+
+           path=Environment.getExternalStorageDirectory()+
+                   File.separator+RUTA_IMAGEN+File.separator+nombreImagen;
+
+           File imagen=new File(path);
+
+           Intent intent=null;
+           intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+           if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N)
+           {
+               String authorities=getApplicationContext().getPackageName()+".provider";
+               Uri imageUri=FileProvider.getUriForFile(this,authorities,imagen);
+               intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+           }else
+           {
+               intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imagen));
+           }
+           startActivityForResult(intent,COD_FOTO);
+       }catch (Exception ex){
+
+           Toast.makeText(getApplicationContext(), ex.toString(), Toast.LENGTH_LONG).show();
+
+       }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK){
+
+            switch (requestCode){
+                case COD_SELECCIONA:
+                    Uri miPath=data.getData();
+                    imagen.setImageURI(miPath);
+                    break;
+
+                case COD_FOTO:
+                    MediaScannerConnection.scanFile(this, new String[]{path}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
+
+                        }
+                    });
+
+                    Bitmap bitmap = BitmapFactory.decodeFile(path);
+                    imagen.setImageBitmap(bitmap);
+
+                    break;
+            }
+
+
         }
     }
+
 }

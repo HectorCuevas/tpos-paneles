@@ -20,7 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rasoftec.ApplicationTpos;
-import  com.rasoftec.tpos.R;
+import  com.rasoftec.tpos2.R;
 import com.rasoftec.tpos2.Data.database;
 import com.rasoftec.tpos2.Data.nodo_factura;
 import com.rasoftec.tpos2.Data.venta_detalle;

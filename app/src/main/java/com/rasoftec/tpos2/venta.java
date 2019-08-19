@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rasoftec.ApplicationTpos;
-import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.R;
 import com.rasoftec.tpos2.Activities.DetailActivity;
 import com.rasoftec.tpos2.Funciones.Categorias;
 import com.rasoftec.tpos2.Data.database;

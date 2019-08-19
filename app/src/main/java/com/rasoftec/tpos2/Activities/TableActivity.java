@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.R;
 
 import de.codecrafters.tableview.SortState;
 import de.codecrafters.tableview.TableView;

@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import com.rasoftec.PreferenceManager;
-import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.R;
 import com.rasoftec.tpos2.Activities.LocationActivity;
 
 public class LocationPreferences extends AppCompatActivity{

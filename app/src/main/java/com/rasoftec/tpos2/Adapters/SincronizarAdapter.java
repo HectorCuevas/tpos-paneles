@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.R;
 import com.rasoftec.tpos2.Beans.FormatoFactura;
 
 import org.jetbrains.annotations.Nullable;
@@ -55,7 +55,7 @@ public class SincronizarAdapter extends ArrayAdapter<FormatoFactura> {
             lblZona.setText("Telefono: "+ currentFormato.getNumeroCel());
             lblTotal.setText("Total articulo: "+currentFormato.getTotalFactura().toString());
 
-
+            //exception to sincronizar adapter
         } catch (Exception ex) {
             //Toast.makeText()
             Log.i("Error", ex.toString());

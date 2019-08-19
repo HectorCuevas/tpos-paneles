@@ -18,7 +18,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.R;
 import com.rasoftec.tpos2.Data.database;
 import com.rasoftec.tpos2.Data.nodo_factura;
 import com.rasoftec.tpos2.manejo_errores.ErrorRed;
