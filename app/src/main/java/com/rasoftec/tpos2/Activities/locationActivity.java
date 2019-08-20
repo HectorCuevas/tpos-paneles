@@ -3,6 +3,9 @@ package com.rasoftec.tpos2.Activities;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -89,6 +93,11 @@ public class LocationActivity extends AppCompatActivity {
         dbObjetc = new database(this);
         wsCod = new webservice(this);
 
+      //  ImageView imageView = findViewById(R.id.imgPrueba);
+
+      /*  byte[] blob= newFactura_encabezado.getImagen();
+        Bitmap bmp= BitmapFactory.decodeByteArray(blob,0,blob.length);
+        imageView.setImageBitmap(bmp);*/
 
         //Set adapter from resource
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.zonas, android.R.layout.simple_spinner_item);
@@ -163,6 +172,8 @@ public class LocationActivity extends AppCompatActivity {
             jsonObject.put("email", p.get(0).getEmail());
             jsonObject.put("latitud", p.get(0).getLatitude());
             jsonObject.put("longitud", p.get(0).getLongitude());
+            //para probar imagenes
+            jsonObject.put("imagen", p.get(0).getImagen());
             storeDatabase(jsonObject);
         } catch (JSONException e) {
             /*Intent cambiarActividad = new Intent(getApplicationContext(), menu_principal.class);

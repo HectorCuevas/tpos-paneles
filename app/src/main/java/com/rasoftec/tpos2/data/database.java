@@ -153,7 +153,8 @@ public class database extends SQLiteOpenHelper {
                 "  \"zona\" VARCHAR(50),\n" +
                 "  \"email\" VARCHAR(50),\n" +
                 "  \"latitud\" VARCHAR(50),\n" +
-                "  \"longitud\" VARCHAR(50)\n" +
+                "  \"longitud\" VARCHAR (50), \n" +
+                "  \"imagen\" BLOB \n" +
                 "); ");
         db.execSQL(" CREATE TABLE \"factura_encabezado_enviar\"(\n" +
                 "  \"cod_encabezado\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ,\n" +
@@ -174,7 +175,8 @@ public class database extends SQLiteOpenHelper {
                 "  \"zona\" VARCHAR(50),\n" +
                 "  \"email\" VARCHAR(50),\n" +
                 "  \"latitud\" VARCHAR(50),\n" +
-                "  \"longitud\" VARCHAR(50)\n" +
+                "  \"longitud\" VARCHAR(50),\n" +
+                "  \"imagen\" BLOB \n" +
                 "); ");
         db.execSQL("CREATE TABLE detalle_venta (\n" +
                 "    cod_detalle INTEGER       PRIMARY KEY AUTOINCREMENT\n" +
@@ -400,15 +402,6 @@ public class database extends SQLiteOpenHelper {
         query = "detalle_factura";
         db.delete(query, null, null);
     }
-
-    public void addEntry(String name, byte[] image) throws SQLiteException {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("key_name", name);
-        cv.put("key_image", image);
-        database.insert("imagenes", null, cv);
-    }
-
     public void insertFacturaSinEnviar(ArrayList<detalleFactura> detalle1Fact, factura_encabezado encabezadoFact) throws SQLiteException {
        // cont++;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -542,6 +535,7 @@ public class database extends SQLiteOpenHelper {
         encabezado.put("email", jsonObject.getString("email"));
         encabezado.put("latitud", jsonObject.getString("zona"));
         encabezado.put("longitud", jsonObject.getString("email"));
+        encabezado.put("imagen", jsonObject.getString("imagen") );
         db.insert("factura_encabezado", null, encabezado);
 
         //insert detail
@@ -557,16 +551,6 @@ public class database extends SQLiteOpenHelper {
             detalle.setTotalFactura(tem14.getPrecio() * tem14.getCompra());
             detalle.setNumeroCel(tem14.getNumerocel());
             ApplicationTpos.detalleFactura.add(detalle);
-
-         /*   ContentValues detalle = new ContentValues();
-            detalle.put("venta", actual);
-            detalle.put("prec_vta", tem14.getPrecio());
-            detalle.put("cantidad", tem14.getCompra());
-            detalle.put("total_art", tem14.getPrecio() * tem14.getCompra());
-            detalle.put("articulo", tem14.getCodigo());
-            detalle.put("nombre", tem14.getDescripcion());
-            detalle.put("numero_cel", tem14.getNumerocel());
-            db.insert("detalle_venta", null, detalle);*/
         }
         return actual;
     }
@@ -605,7 +589,7 @@ public class database extends SQLiteOpenHelper {
             contenido.put("articulo", tem14.getCodigo());
             contenido.put("nombre", tem14.getDescripcion());
             contenido.put("numero_cel", tem14.getNumerocel());
-            db.insert("detalle_factura", null, contenido);
+            db.insert("detalle_venta", null, contenido);
         }
         return actual;
     }

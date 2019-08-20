@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -23,7 +25,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.rasoftec.ApplicationTpos;
 import com.rasoftec.tpos2.R;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -35,7 +41,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     final int COD_SELECCIONA=10;
     final int COD_FOTO=20;
-
+    byte [] imagenEnvio;
     Button botonCargar;
     ImageView imagen;
     String path;
@@ -52,6 +58,29 @@ public class PhotoActivity extends AppCompatActivity {
             botonCargar.setEnabled(false);
         }
 
+    }
+
+    public void addLocation(View view) {
+       try{
+           ApplicationTpos.newFactura_encabezado.setImagen(imagenEnvio);
+           Intent changeActivity = new Intent(this, LocationActivity.class);
+           startActivity(changeActivity);
+           if (changeActivity.resolveActivity(getPackageManager()) != null) {
+               startActivity(changeActivity);
+           }
+       }catch (Exception e){
+           Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+       }
+
+    }
+
+    public static byte[] imageViewToByte(ImageView image) {
+        Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+       // bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 
     private boolean validaPermisos() {
@@ -191,7 +220,26 @@ public class PhotoActivity extends AppCompatActivity {
 
        }
     }
+    private Bitmap redimensionarImagen(Bitmap bitmap, float anchoNuevo, float altoNuevo) {
 
+        int ancho=bitmap.getWidth();
+        int alto=bitmap.getHeight();
+
+        if(ancho>anchoNuevo || alto>altoNuevo){
+            float escalaAncho=anchoNuevo/ancho;
+            float escalaAlto= altoNuevo/alto;
+
+            Matrix matrix=new Matrix();
+            matrix.postScale(escalaAncho,escalaAlto);
+
+            return Bitmap.createBitmap(bitmap,0,0,ancho,alto,matrix,false);
+
+        }else{
+            return bitmap;
+        }
+
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -212,13 +260,14 @@ public class PhotoActivity extends AppCompatActivity {
                     });
 
                     Bitmap bitmap = BitmapFactory.decodeFile(path);
-                    imagen.setImageBitmap(bitmap);
 
+                    //funcion para redimensionar imagen
+
+                    imagen.setImageBitmap(redimensionarImagen(bitmap, 800, 600));
+
+                    imagenEnvio = imageViewToByte(imagen);
                     break;
             }
-
-
         }
     }
-
 }

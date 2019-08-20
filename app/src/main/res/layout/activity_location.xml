@@ -127,5 +127,10 @@
         android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
         />
+    <ImageView
+        android:id="@+id/imgPrueba"
+        android:layout_below="@id/btnConfigPrefs"
+        android:layout_width="40dp"
+        android:layout_height="30dp" />
 
 </RelativeLayout>

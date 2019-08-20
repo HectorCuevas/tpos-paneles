@@ -203,6 +203,6 @@
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimaryBtn"
         android:onClick="changeActivity"
-        android:text="Agregar ubicacion"
+        android:text="Tomar foto DPI"
         android:textColor="#fff" />
 </RelativeLayout>

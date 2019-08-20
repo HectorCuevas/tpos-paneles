@@ -22,6 +22,15 @@ public class factura_encabezado {
     private String email;
     private String latitude;
     private String longitude;
+    private byte[] imagen;
+
+    public byte[] getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
+    }
 
     public long getCodFact() {
         return codFact;

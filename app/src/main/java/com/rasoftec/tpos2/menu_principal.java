@@ -93,8 +93,9 @@ public class menu_principal extends AppCompatActivity {
     //    Area de Acciones de los Botones
     public void cliente(View v) {
         //descomentar esta linea para activity de facturas pendientes de enviar
-        //Intent i2 = new Intent(this, EncabezadoFacturaActivity.class);
-        Intent i2 = new Intent(this, PhotoActivity.class);
+
+        Intent i2 = new Intent(this, EncabezadoFacturaActivity.class);
+        //Intent i2 = new Intent(this, PhotoActivity.class);
         i2.putExtra("ruta", ruta_actual);
         i2.putExtra("tipo_venta", 1);
         startActivity(i2);
