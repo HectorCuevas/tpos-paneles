@@ -41,21 +41,7 @@ public class DetailActivity extends AppCompatActivity{
         txtNit = (EditText) findViewById(R.id.txtNit);
         txtCel = (EditText) findViewById(R.id.txtTel);
         txtEmail = (EditText) findViewById(R.id.txtEmail);
-        View bottomSheet = findViewById(R.id.framelayout_bottom_sheet);
 
-            final View bottomSheetLayout = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
-        (bottomSheetLayout.findViewById(R.id.button_close)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mBottomSheetDialog.dismiss();
-            }
-        });
-        (bottomSheetLayout.findViewById(R.id.button_ok)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Ok button clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         /*** Location manager ***/
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -86,12 +72,6 @@ public class DetailActivity extends AppCompatActivity{
                 updateLocationInfo(lastKnownLocation);
             }
         }
-
-
-       // mBottomSheetDialog = new BottomSheetDialog(this);
-       // mBottomSheetDialog.setContentView(bottomSheetLayout);
-       // mBottomSheetDialog.show();
-
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -104,6 +84,7 @@ public class DetailActivity extends AppCompatActivity{
     public void startListening() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+            //Toast.makeText(getApplicationContext(),latitude.toString() , Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -123,6 +104,7 @@ public class DetailActivity extends AppCompatActivity{
     /*** Public method to Chance activity ***/
 
     public void changeActivity(View v){
+        Toast.makeText(getApplicationContext(),latitude.toString() , Toast.LENGTH_SHORT).show();
         String name=txtName.getText().toString();
         String dpi = txtDpi.getText().toString();
         String nit = txtNit.getText().toString();

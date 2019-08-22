@@ -44,6 +44,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -60,17 +61,17 @@ public class LocationActivity extends AppCompatActivity {
     webservice wsCod;
     String METHOD_NAME1 = "encabezado_insert";
     String METHOD_NAME2 = "detalle_insert";
-    String SOAP_ACTION1 = "http://grupomenas.carrierhouse.us/wstposp/encabezado_insert";
-    String SOAP_ACTION2 = "http://grupomenas.carrierhouse.us/wstposp/detalle_insert";
+    String SOAP_ACTION1 = "http://grupomenas.carrierhouse.us/ws-imagenes/encabezado_insert";
+    String SOAP_ACTION2 = "http://grupomenas.carrierhouse.us/ws-imagenes/detalle_insert";
     Spinner spnMunicipios;
     Spinner spinner1;
     String fActual;
     Spinner spZona;
     Button btnPref;
     TextView lblZonaPref, lblMunPref, lblDeptoPref;
-    String NAMESPACE = "http://grupomenas.carrierhouse.us/wstposp/";
-    String SOAP_URL1 = "http://grupomenas.carrierhouse.us/wstposp/GetStockArtWS.asmx";
-    String SOAP_URL = "http://grupomenas.carrierhouse.us/wstops2/GetStockArtWS.asmx";
+    String NAMESPACE = "http://grupomenas.carrierhouse.us/ws-imagenes/";
+    String SOAP_URL1 = "http://grupomenas.carrierhouse.us/ws-imagenes/GetStockArtWS.asmx";
+    String SOAP_URL = "http://grupomenas.carrierhouse.us/ws-imagenes/GetStockArtWS.asmx";
     LocationManager locationManager;
     LocationListener locationListener;
     Double longitude = 0D;
@@ -95,9 +96,6 @@ public class LocationActivity extends AppCompatActivity {
 
       //  ImageView imageView = findViewById(R.id.imgPrueba);
 
-      /*  byte[] blob= newFactura_encabezado.getImagen();
-        Bitmap bmp= BitmapFactory.decodeByteArray(blob,0,blob.length);
-        imageView.setImageBitmap(bmp);*/
 
         //Set adapter from resource
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.zonas, android.R.layout.simple_spinner_item);
@@ -142,6 +140,10 @@ public class LocationActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         }
+        byte[] blob= newFactura_encabezado.getImagen();
+        Bitmap bmp= BitmapFactory.decodeByteArray(blob,0,blob.length);
+
+        // imageView.setImageBitmap(bmp);
 
 
     }
@@ -279,13 +281,12 @@ public class LocationActivity extends AppCompatActivity {
             encabezado.addProperty("total", Double.toString(ApplicationTpos.totalEncabezado));
             encabezado.addProperty("procesado", "S");
             encabezado.addProperty("cobrado", Double.toString(ApplicationTpos.totalEncabezado));
-            encabezado.addProperty("fecha", p.get(0).getFecha());
             if ((p.get(0).getLatitude() == null) || (p.get(0).getLongitude() == null)) {
                 encabezado.addProperty("latitud", "0");
                 encabezado.addProperty("longitud", "0");
             } else {
                 encabezado.addProperty("latitud", p.get(0).getLatitude());
-                encabezado.addProperty("longi   tud", p.get(0).getLongitude());
+                encabezado.addProperty("longitud", p.get(0).getLongitude());
             }
             encabezado.addProperty("dpi", p.get(0).getDpi());
             encabezado.addProperty("nombre", p.get(0).getNombre());
