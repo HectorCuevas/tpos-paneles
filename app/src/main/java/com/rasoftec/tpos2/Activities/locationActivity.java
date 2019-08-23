@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -44,7 +45,6 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -94,7 +94,7 @@ public class LocationActivity extends AppCompatActivity {
         dbObjetc = new database(this);
         wsCod = new webservice(this);
 
-      //  ImageView imageView = findViewById(R.id.imgPrueba);
+        ImageView imageView = findViewById(R.id.imgPrueba);
 
 
         //Set adapter from resource
@@ -140,10 +140,10 @@ public class LocationActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         }
-        byte[] blob= newFactura_encabezado.getImagen();
+        byte[] blob= newFactura_encabezado.getImagen2();
         Bitmap bmp= BitmapFactory.decodeByteArray(blob,0,blob.length);
 
-        // imageView.setImageBitmap(bmp);
+         imageView.setImageBitmap(bmp);
 
 
     }
@@ -176,6 +176,7 @@ public class LocationActivity extends AppCompatActivity {
             jsonObject.put("longitud", p.get(0).getLongitude());
             //para probar imagenes
             jsonObject.put("imagen", p.get(0).getImagen());
+            jsonObject.put("imagen2", p.get(0).getImagen2());
             storeDatabase(jsonObject);
         } catch (JSONException e) {
             /*Intent cambiarActividad = new Intent(getApplicationContext(), menu_principal.class);
@@ -282,11 +283,11 @@ public class LocationActivity extends AppCompatActivity {
             encabezado.addProperty("procesado", "S");
             encabezado.addProperty("cobrado", Double.toString(ApplicationTpos.totalEncabezado));
             if ((p.get(0).getLatitude() == null) || (p.get(0).getLongitude() == null)) {
-                encabezado.addProperty("latitud", "0");
-                encabezado.addProperty("longitud", "0");
+                encabezado.addProperty("lat", "0");
+                encabezado.addProperty("longt", "0");
             } else {
-                encabezado.addProperty("latitud", p.get(0).getLatitude());
-                encabezado.addProperty("longitud", p.get(0).getLongitude());
+                encabezado.addProperty("lat", p.get(0).getLatitude());
+                encabezado.addProperty("longt", p.get(0).getLongitude());
             }
             encabezado.addProperty("dpi", p.get(0).getDpi());
             encabezado.addProperty("nombre", p.get(0).getNombre());
@@ -296,6 +297,13 @@ public class LocationActivity extends AppCompatActivity {
             encabezado.addProperty("departamento", p.get(0).getDepto());
             encabezado.addProperty("zona", p.get(0).getZona());
             encabezado.addProperty("email", p.get(0).getEmail());
+
+            String img1_base64 = android.util.Base64.encodeToString(p.get(0).getImagen(), Base64.DEFAULT);
+            String img2_base64 = android.util.Base64.encodeToString(p.get(0).getImagen2(), Base64.DEFAULT);
+
+          //  byte[] encoded = Base64.getEncoder().encode(p.get(0).getImagen());
+            encabezado.addProperty("imagen", img1_base64);
+            encabezado.addProperty("imagen2", img2_base64);
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.dotNet = true;
             envelope.setOutputSoapObject(encabezado);

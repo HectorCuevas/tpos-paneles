@@ -25,6 +25,25 @@ public class FormatoFactura {
     private String email;
     private String latitude;
     private String longitude;
+
+    public byte[] getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
+    }
+
+    public byte[] getImagen2() {
+        return imagen2;
+    }
+
+    public void setImagen2(byte[] imagen2) {
+        this.imagen2 = imagen2;
+    }
+
+    private byte[] imagen;
+    private byte[] imagen2;
     /*** Detalle ***/
     private long idMovilizandome;
     private String codCliente;
@@ -69,7 +88,8 @@ public class FormatoFactura {
                           String email, String latitude, String longitude,
                           String usuarioMovilizandome, String codigoArticulo, Double precioArticulo,
                           int cantidad, Double totalFactura, int numeroCel,
-                          ArrayList<detalleFactura> detalleFacturas,String idCliente, String fecha) {
+                          ArrayList<detalleFactura> detalleFacturas,String idCliente, String fecha,
+                          byte[] imagen, byte[] imagen2) {
         this.numeroDpi = numeroDpi;
         this.nombre = nombre;
         this.nit = nit;
@@ -91,6 +111,8 @@ public class FormatoFactura {
         this.detalleFacturas = detalleFacturas;
         this.codCliente = idCliente;
         this.fecha = fecha;
+        this.imagen = imagen;
+        this.imagen2= imagen2;
     }
 
 

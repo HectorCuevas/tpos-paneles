@@ -23,6 +23,7 @@ public class factura_encabezado {
     private String latitude;
     private String longitude;
     private byte[] imagen;
+    private byte[] imagen2;
 
     public byte[] getImagen() {
         return imagen;
@@ -31,6 +32,16 @@ public class factura_encabezado {
     public void setImagen(byte[] imagen) {
         this.imagen = imagen;
     }
+
+
+    public byte[] getImagen2() {
+        return imagen2;
+    }
+
+    public void setImagen2(byte[] imagen) {
+        this.imagen2 = imagen;
+    }
+
 
     public long getCodFact() {
         return codFact;

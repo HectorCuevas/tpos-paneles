@@ -36,20 +36,23 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class PhotoActivity extends AppCompatActivity {
 
+    private static final int COD_FOTO2 = 30;
     private final String CARPETA_RAIZ="misImagenesPrueba/";
     private final String RUTA_IMAGEN=CARPETA_RAIZ+"misFotos";
 
     final int COD_SELECCIONA=10;
     final int COD_FOTO=20;
     byte [] imagenEnvio;
+    byte [] imagenEnvioTrasera;
     Button botonCargar;
-    ImageView imagen;
+    ImageView imagen1, imagen2;
     String path;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photos);
-        imagen= (ImageView) findViewById(R.id.imagemId);
+        imagen1= (ImageView) findViewById(R.id.imagemId);
+        imagen2= (ImageView) findViewById(R.id.imagemId1);
         botonCargar= (Button) findViewById(R.id.btnCargarImg);
 
         if(validaPermisos()){
@@ -60,14 +63,24 @@ public class PhotoActivity extends AppCompatActivity {
 
     }
 
+    public void addSecondPhoto(View view) {
+        cargarImagen(COD_FOTO2);
+
+    }
+
     public void addLocation(View view) {
        try{
-           ApplicationTpos.newFactura_encabezado.setImagen(imagenEnvio);
-           Intent changeActivity = new Intent(this, LocationActivity.class);
-           startActivity(changeActivity);
-           if (changeActivity.resolveActivity(getPackageManager()) != null) {
-               startActivity(changeActivity);
-           }
+         if((imagenEnvio != null) && (imagenEnvioTrasera != null)){
+             ApplicationTpos.newFactura_encabezado.setImagen(imagenEnvio);
+             ApplicationTpos.newFactura_encabezado.setImagen2(imagenEnvioTrasera);
+             Intent changeActivity = new Intent(this, LocationActivity.class);
+             startActivity(changeActivity);
+             if (changeActivity.resolveActivity(getPackageManager()) != null) {
+                 startActivity(changeActivity);
+             }
+         }else {
+             Toast.makeText(getApplicationContext(), "Debe tomar ambas fotografias", Toast.LENGTH_LONG).show();
+         }
        }catch (Exception e){
            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
        }
@@ -156,10 +169,10 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     public void onclick(View view) {
-        cargarImagen();
+        cargarImagen(COD_FOTO);
     }
 
-    private void cargarImagen() {
+    private void cargarImagen(final int type) {
 
         final CharSequence[] opciones={"Tomar Foto","Cargar Imagen","Cancelar"};
         final AlertDialog.Builder alertOpciones=new AlertDialog.Builder(PhotoActivity.this);
@@ -168,7 +181,7 @@ public class PhotoActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (opciones[i].equals("Tomar Foto")){
-                    tomarFotografia();
+                    tomarFotografia(type);
                 }else{
                     if (opciones[i].equals("Cargar Imagen")){
                         Intent intent=new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -183,7 +196,7 @@ public class PhotoActivity extends AppCompatActivity {
         alertOpciones.show();
     }
 
-    private void tomarFotografia() {
+    private void tomarFotografia(int type) {
        try{
            File fileImagen=new File(Environment.getExternalStorageDirectory(),RUTA_IMAGEN);
            boolean isCreada=fileImagen.exists();
@@ -213,7 +226,12 @@ public class PhotoActivity extends AppCompatActivity {
            {
                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imagen));
            }
-           startActivityForResult(intent,COD_FOTO);
+           if(type == COD_FOTO){
+               startActivityForResult(intent,COD_FOTO);
+           }else{
+               startActivityForResult(intent,COD_FOTO2);
+           }
+
        }catch (Exception ex){
 
            Toast.makeText(getApplicationContext(), ex.toString(), Toast.LENGTH_LONG).show();
@@ -248,25 +266,39 @@ public class PhotoActivity extends AppCompatActivity {
             switch (requestCode){
                 case COD_SELECCIONA:
                     Uri miPath=data.getData();
-                    imagen.setImageURI(miPath);
+                    imagen1.setImageURI(miPath);
                     break;
 
                 case COD_FOTO:
+                {
                     MediaScannerConnection.scanFile(this, new String[]{path}, null, new MediaScannerConnection.OnScanCompletedListener() {
                         @Override
                         public void onScanCompleted(String path, Uri uri) {
 
                         }
                     });
-
                     Bitmap bitmap = BitmapFactory.decodeFile(path);
 
                     //funcion para redimensionar imagen
-
-                    imagen.setImageBitmap(redimensionarImagen(bitmap, 800, 600));
-
-                    imagenEnvio = imageViewToByte(imagen);
+                    imagen1.setImageBitmap(redimensionarImagen(bitmap, 700, 500));
+                    imagenEnvio = imageViewToByte(imagen1);
                     break;
+                }
+                case COD_FOTO2:
+                {
+                    MediaScannerConnection.scanFile(this, new String[]{path}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
+
+                        }
+                    });
+                    Bitmap bitmap = BitmapFactory.decodeFile(path);
+
+                    //funcion para redimensionar imagen
+                    imagen2.setImageBitmap(redimensionarImagen(bitmap, 700, 500));
+                    imagenEnvioTrasera = imageViewToByte(imagen2);
+                    break;
+                }
             }
         }
     }

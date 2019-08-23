@@ -40,12 +40,12 @@ public class EncabezadoFacturaActivity extends AppCompatActivity {
     webservice wsCod;
     String METHOD_NAME1 = "encabezado_insert";
     String METHOD_NAME2 = "detalle_insert";
-    String SOAP_ACTION1 = "http://grupomenas.carrierhouse.us/wstposp/encabezado_insert";
-    String SOAP_ACTION2 = "http://grupomenas.carrierhouse.us/wstposp/detalle_insert";
+    String SOAP_ACTION1 = "http://grupomenas.carrierhouse.us/ws-imagenes/encabezado_insert";
+    String SOAP_ACTION2 = "http://grupomenas.carrierhouse.us/ws-imagenes/detalle_insert";
 
-    String NAMESPACE = "http://grupomenas.carrierhouse.us/wstposp/";
-    String SOAP_URL1 = "http://grupomenas.carrierhouse.us/wstposp/GetStockArtWS.asmx";
-    String SOAP_URL = "http://grupomenas.carrierhouse.us/wstops2/GetStockArtWS.asmx";
+    String NAMESPACE = "http://grupomenas.carrierhouse.us/ws-imagenes/";
+    String SOAP_URL1 = "http://grupomenas.carrierhouse.us/ws-imagenes/GetStockArtWS.asmx";
+    String SOAP_URL = "http://grupomenas.carrierhouse.us/ws-imagenes/GetStockArtWS.asmx";
     private ErrorRed error;
     database dbObjetc;
     ProgressDialog pdialog;
@@ -175,6 +175,8 @@ public class EncabezadoFacturaActivity extends AppCompatActivity {
                 encabezado.addProperty("departamento", db.get(j).getDepto());
                 encabezado.addProperty("zona", db.get(j).getZona());
                 encabezado.addProperty("email", db.get(j).getEmail());
+                encabezado.addProperty("imagen", db.get(j).getImagen());
+                encabezado.addProperty("imagen2", db.get(j).getImagen2());
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.dotNet = true;
                 envelope.setOutputSoapObject(encabezado);
