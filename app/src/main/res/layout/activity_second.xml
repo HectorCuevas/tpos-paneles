@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/layoutName"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_marginTop="5dp"
         android:background="#e0e0e0"
         android:padding="5dp">
@@ -44,7 +44,7 @@
     <RelativeLayout
         android:id="@+id/layoutPhone"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_below="@id/layoutName"
         android:layout_marginTop="10dp"
         android:background="#e0e0e0"
@@ -83,7 +83,7 @@
     <RelativeLayout
         android:id="@+id/layoutNit"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_below="@id/layoutPhone"
         android:layout_marginTop="10dp"
         android:background="#e0e0e0"
@@ -106,7 +106,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="5dp"
-            android:inputType="number"
+            android:inputType="text"
             android:layout_toRightOf="@id/imgName2"
             android:hint="Nit" />
 
@@ -122,7 +122,7 @@
     <RelativeLayout
         android:id="@+id/layoutDPI"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_below="@id/layoutNit"
         android:layout_marginTop="10dp"
         android:background="#e0e0e0"
@@ -161,7 +161,7 @@
     <RelativeLayout
         android:id="@+id/layoutEmail"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_below="@id/layoutDPI"
         android:layout_marginTop="10dp"
         android:background="#e0e0e0"
@@ -196,13 +196,47 @@
             android:onClick="clearEmail"
             android:src="@drawable/ic_round_close_24px" />
     </RelativeLayout>
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/layoutEmail"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+        <TextView
+            android:text="Condición de pago"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RadioGroup
+            android:id="@+id/radioGroup_opciones_pago"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
+            <RadioButton
+
+                android:id="@+id/radioContado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:checked="true"
+                android:text="Contado" />
+
+            <RadioButton
+                android:id="@+id/radioCredito"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Credito" />
+        </RadioGroup>
+    </LinearLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimaryBtn"
         android:onClick="changeActivity"
-        android:text="Tomar foto DPI"
+        android:text="Siguiente"
         android:textColor="#fff" />
 </RelativeLayout>

@@ -17,8 +17,6 @@ import com.rasoftec.tpos2.nodo_producto;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.security.interfaces.DSAPublicKey;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -145,13 +143,13 @@ public class database extends SQLiteOpenHelper {
                 "  \"numFactura\" INTEGER,\n" +
                 "  \"fecha\" DATE DEFAULT (date('now', 'localtime') ), \n" +
                 "  \"dpi\" INTEGER,\n" +
-                "  \"nombre\" VARCHAR(50),\n" +
+                "  \"nombre\" VARCHAR(50) default 'NA',\n" +
                 "  \"nit\" integer,\n" +
                 "  \"direccion\" VARCHAR(50),\n" +
                 "  \"municipio\" VARCHAR(50),\n" +
                 "  \"departamento\" VARCHAR(50),\n" +
                 "  \"zona\" VARCHAR(50),\n" +
-                "  \"email\" VARCHAR(50),\n" +
+                "  \"email\" VARCHAR(50) default 'NA',\n" +
                 "  \"latitud\" VARCHAR(50),\n" +
                 "  \"longitud\" VARCHAR (50), \n" +
                 "  \"imagen\" BLOB \n" +
@@ -257,27 +255,33 @@ public class database extends SQLiteOpenHelper {
         while (puntero.moveToNext()) {
 
 
-                    String co_art = puntero.getString(puntero.getColumnIndex("co_art"));
+            String co_art = puntero.getString(puntero.getColumnIndex("co_art"));
             String prec_vta = puntero.getString(puntero.getColumnIndex("prec_vta"));
             int cantidad = puntero.getInt(puntero.getColumnIndex("cantidad"));
             String totalArt = puntero.getString(puntero.getColumnIndex("total_art"));
             int numero = puntero.getInt(puntero.getColumnIndex("numero_cel"));
+            String serial = puntero.getString(puntero.getColumnIndex("serial"));
             String usuarioMovDet = puntero.getString(puntero.getColumnIndex("usuario_mov"));
 
             detalleFactura detalleFactura = new detalleFactura();
 
-           detalleFactura.setUsuarioMovilizandome(usuarioMovDet);
-           detalleFactura.setCodigoArticulo(co_art);
-           detalleFactura.setPrecioArticulo(Double.parseDouble(prec_vta));
-           detalleFactura.setCantidad(cantidad);
-           detalleFactura.setTotalFactura(Double.parseDouble(totalArt));
-           detalleFactura.setNumeroCel(numero);
+            detalleFactura.setUsuarioMovilizandome(usuarioMovDet);
+            detalleFactura.setCodigoArticulo(co_art);
+            detalleFactura.setPrecioArticulo(Double.parseDouble(prec_vta));
+            detalleFactura.setCantidad(cantidad);
+            detalleFactura.setTotalFactura(Double.parseDouble(totalArt));
+            detalleFactura.setNumeroCel(numero);
+            detalleFactura.setSerial(serial);
 
-           ArrayList<detalleFactura> detalleFacturas = new ArrayList<detalleFactura>();
+            ArrayList<detalleFactura> detalleFacturas = new ArrayList<detalleFactura>();
 
+            int codEncabezado = puntero.getInt(puntero.getColumnIndex("cod_encabezado"));
             String usuarioMov = puntero.getString(puntero.getColumnIndex("usuario_movilizandome"));
             String cod_cliente = puntero.getString(puntero.getColumnIndex("cod_cliente"));
+            String forma_pag = puntero.getString(puntero.getColumnIndex("forma_pag"));
             Double total = puntero.getDouble(puntero.getColumnIndex("total"));
+            Double cobrado = puntero.getDouble(puntero.getColumnIndex("cobrado"));
+            String procesado = puntero.getString(puntero.getColumnIndex("procesado"));
             String fecha =  puntero.getString(puntero.getColumnIndex("fecha"));
 
             //  puntero.getInt(puntero.getColumnIndex("fecha")),
@@ -293,15 +297,12 @@ public class database extends SQLiteOpenHelper {
             String lat = puntero.getString(puntero.getColumnIndex("longitud"));
             String lon = puntero.getString(puntero.getColumnIndex("latitud"));
 
-            byte[] imagen = puntero.getString(puntero.getColumnIndex("imagen")).getBytes();
-            byte[] imagen2 = puntero.getString(puntero.getColumnIndex("imagen2")).getBytes();
-           // String usuarioMovDet = puntero.getString(puntero.getColumnIndex("usuario_mov"));
+            // String usuarioMovDet = puntero.getString(puntero.getColumnIndex("usuario_mov"));
 
 
             FormatoFactura formatoFactura = new FormatoFactura(dpi, nombre, nit, direccion,
                     depto, municipio, zona, email, lat, lon, usuarioMov, co_art,
-                    Double.parseDouble(prec_vta), cantidad, total, numero, detalleFacturas, cod_cliente, fecha,
-                    imagen, imagen2);
+                    Double.parseDouble(prec_vta), cantidad, total, numero, detalleFacturas, cod_cliente, fecha);
             envio.add(formatoFactura);
         }
         puntero.close();
@@ -309,11 +310,11 @@ public class database extends SQLiteOpenHelper {
     }
     public ArrayList<FormatoFactura> getFacturasPorEnviar() {
         SQLiteDatabase db = this.getReadableDatabase();
-       // long cod =codF;
+        // long cod =codF;
         //Cursor puntero = db.rawQuery("SELECT *  FROM factura_encabezado_enviar" , null);
         Cursor puntero = db.rawQuery("SELECT *  FROM factura_encabezado_enviar inner join detalle_factura on " +
                 "factura_encabezado_enviar.cod_encabezado = detalle_factura.cod_encabezado ", null);
-               // "where factura_encabezado_enviar.cod_encabezado = ?", new String[]{String.valueOf(cod)});
+        // "where factura_encabezado_enviar.cod_encabezado = ?", new String[]{String.valueOf(cod)});
         ArrayList<FormatoFactura> envio = new ArrayList<>();
 
         while (puntero.moveToNext()) {
@@ -335,6 +336,7 @@ public class database extends SQLiteOpenHelper {
             detalleFactura.setCantidad(cantidad);
             detalleFactura.setTotalFactura(Double.parseDouble(totalArt));
             detalleFactura.setNumeroCel(numero);
+            detalleFactura.setSerial(serial);
 
             detalleFacturas.add(detalleFactura);
 
@@ -344,8 +346,6 @@ public class database extends SQLiteOpenHelper {
             String cod_cliente = puntero.getString(puntero.getColumnIndex("cod_cliente"));
             String forma_pag = puntero.getString(puntero.getColumnIndex("forma_pag"));
             Double total = puntero.getDouble(puntero.getColumnIndex("total"));
-            Double cobrado = puntero.getDouble(puntero.getColumnIndex("cobrado"));
-            String procesado = puntero.getString(puntero.getColumnIndex("procesado"));
             String fecha =  puntero.getString(puntero.getColumnIndex("fecha"));
             //  puntero.getInt(puntero.getColumnIndex("fecha")),
 
@@ -359,14 +359,17 @@ public class database extends SQLiteOpenHelper {
             String email = puntero.getString(puntero.getColumnIndex("email"));
             String lat = puntero.getString(puntero.getColumnIndex("longitud"));
             String lon = puntero.getString(puntero.getColumnIndex("latitud"));
-            byte[] imagen = puntero.getString(puntero.getColumnIndex("imagen")).getBytes();
-            byte[] imagen2 = puntero.getString(puntero.getColumnIndex("imagen2")).getBytes();
+            byte[] imagen = puntero.getBlob((puntero.getColumnIndex("imagen")));
+            byte[] imagen2 = puntero.getBlob(puntero.getColumnIndex("imagen2"));
+
+
+
             // String usuarioMovDet = puntero.getString(puntero.getColumnIndex("usuario_mov"));
 
 
             FormatoFactura formatoFactura = new FormatoFactura(dpi, nombre, nit, direccion,
                     depto, municipio, zona, email, lat, lon, usuarioMov, co_art,
-                    Double.parseDouble(prec_vta), cantidad, total, numero, detalleFacturas, cod_cliente, fecha, imagen, imagen2);
+                    Double.parseDouble(prec_vta), cantidad, total, numero, detalleFacturas, cod_cliente, fecha);
             envio.add(formatoFactura);
         }
         puntero.close();
@@ -401,11 +404,11 @@ public class database extends SQLiteOpenHelper {
         db.delete(query, null, null);
     }
     public void insertFacturaSinEnviar(ArrayList<detalleFactura> detalle1Fact, factura_encabezado encabezadoFact) throws SQLiteException {
-       // cont++;
+        // cont++;
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues encabezado = new ContentValues();
         ContentValues detalle = new ContentValues();
-       // encabezado.put("cod_encabezado", getCodigoMovilizandome()+cont);
+        // encabezado.put("cod_encabezado", getCodigoMovilizandome()+cont);
         encabezado.put("usuario_movilizandome", encabezadoFact.getUsuarioMov());
         encabezado.put("cod_cliente", encabezadoFact.getCodCliente());
         encabezado.put("forma_pag", encabezadoFact.getForma_pag());
@@ -427,6 +430,8 @@ public class database extends SQLiteOpenHelper {
         encabezado.put("email", encabezadoFact.getEmail());
         encabezado.put("latitud", encabezadoFact.getLatitude());
         encabezado.put("longitud", encabezadoFact.getLongitude());
+
+        //obetener imagenes de la clase formato factura
         encabezado.put("imagen", encabezadoFact.getImagen());
         encabezado.put("imagen2", encabezadoFact.getImagen2());
 
@@ -435,7 +440,7 @@ public class database extends SQLiteOpenHelper {
         Iterator<detalleFactura> tem = detalle1Fact.iterator();
         while (tem.hasNext()) {
             detalleFactura tem14 = tem.next();
-           // detalle.put("cod_detalle", getCodigoMovilizandome()+cont+i);
+            // detalle.put("cod_detalle", getCodigoMovilizandome()+cont+i);
             detalle.put("usuario_mov", encabezadoFact.getUsuarioMov());
             detalle.put("co_art", tem14.getCodigoArticulo());
             detalle.put("prec_vta", tem14.getPrecioArticulo());
@@ -537,7 +542,6 @@ public class database extends SQLiteOpenHelper {
         encabezado.put("latitud", jsonObject.getString("zona"));
         encabezado.put("longitud", jsonObject.getString("email"));
         encabezado.put("imagen", jsonObject.getString("imagen") );
-        encabezado.put("imagen2", jsonObject.getString("imagen2") );
         db.insert("factura_encabezado", null, encabezado);
 
         //insert detail
@@ -552,6 +556,7 @@ public class database extends SQLiteOpenHelper {
             detalle.setCantidad(tem14.getCompra());
             detalle.setTotalFactura(tem14.getPrecio() * tem14.getCompra());
             detalle.setNumeroCel(tem14.getNumerocel());
+            detalle.setSerial(tem14.getSerial());
             ApplicationTpos.detalleFactura.add(detalle);
         }
         return actual;

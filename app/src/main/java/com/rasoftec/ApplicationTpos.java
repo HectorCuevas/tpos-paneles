@@ -19,8 +19,10 @@ public class ApplicationTpos extends Application {
     public static int newCodeEnc;
     public static ArrayList<nodo_producto> detalleVenta = new ArrayList<>();
     public static ArrayList<detalleFactura> detalleFactura = new ArrayList<>();
-
     public static  factura_encabezado currentEncabezado = new factura_encabezado();
+    public static String tipo_venta = "required";
+    public static ArrayList<String> codigos = new ArrayList<>();
+    public static int LLEVA_FOTO = 1;
 
     /*** Facturas pendientes por enviar ***/
 

@@ -36,17 +36,19 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class PhotoActivity extends AppCompatActivity {
 
-    private static final int COD_FOTO2 = 30;
+
     private final String CARPETA_RAIZ="misImagenesPrueba/";
     private final String RUTA_IMAGEN=CARPETA_RAIZ+"misFotos";
+    private final int COD_SELECCIONA=10;
+    private final int COD_SELECCIONA2=50;
+    private final int COD_FOTO=20;
+    private static final int COD_FOTO2 = 30;
+    private byte [] imagenEnvio;
+    private byte [] imagenEnvioTrasera;
+    private Button botonCargar;
+    private ImageView imagen1, imagen2;
+    private String path;
 
-    final int COD_SELECCIONA=10;
-    final int COD_FOTO=20;
-    byte [] imagenEnvio;
-    byte [] imagenEnvioTrasera;
-    Button botonCargar;
-    ImageView imagen1, imagen2;
-    String path;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,10 +65,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     }
 
-    public void addSecondPhoto(View view) {
-        cargarImagen(COD_FOTO2);
 
-    }
 
     public void addLocation(View view) {
        try{
@@ -169,10 +168,12 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     public void onclick(View view) {
-        cargarImagen(COD_FOTO);
+        cargarImagen(COD_FOTO, COD_SELECCIONA);
     }
-
-    private void cargarImagen(final int type) {
+    public void addSecondPhoto(View view) {
+        cargarImagen(COD_FOTO2, COD_SELECCIONA2);
+    }
+    private void cargarImagen(final int type, final int cod_sel) {
 
         final CharSequence[] opciones={"Tomar Foto","Cargar Imagen","Cancelar"};
         final AlertDialog.Builder alertOpciones=new AlertDialog.Builder(PhotoActivity.this);
@@ -186,7 +187,7 @@ public class PhotoActivity extends AppCompatActivity {
                     if (opciones[i].equals("Cargar Imagen")){
                         Intent intent=new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         intent.setType("image/");
-                        startActivityForResult(intent.createChooser(intent,"Seleccione la Aplicación"),COD_SELECCIONA);
+                        startActivityForResult(intent.createChooser(intent,"Seleccione la Aplicación"),cod_sel);
                     }else{
                         dialogInterface.dismiss();
                     }
@@ -265,10 +266,20 @@ public class PhotoActivity extends AppCompatActivity {
 
             switch (requestCode){
                 case COD_SELECCIONA:
+                {
                     Uri miPath=data.getData();
-                    imagen1.setImageURI(miPath);
-                    break;
 
+                    imagen1.setImageURI(miPath);
+                    imagenEnvio = imageViewToByte(imagen1);
+                    break;
+                }
+                case COD_SELECCIONA2:
+                {
+                    Uri miPath=data.getData();
+                    imagen2.setImageURI(miPath);
+                    imagenEnvioTrasera = imageViewToByte(imagen2);
+                    break;
+                }
                 case COD_FOTO:
                 {
                     MediaScannerConnection.scanFile(this, new String[]{path}, null, new MediaScannerConnection.OnScanCompletedListener() {

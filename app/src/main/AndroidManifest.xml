@@ -25,7 +25,7 @@
             android:name="com.google.android.actions"
             android:resource="@xml/provider_paths" />
 
-        <activity android:name=".Activities.SplashActivity">
+        <activity android:name=".login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,7 +48,6 @@
         <activity android:name=".Activities.LocationActivity" />
         <activity android:name=".Activities.PhotoActivity" />
         <activity android:name=".Activities.DetailActivity" />
-        <activity android:name=".login" />
         <activity android:name=".Preferences.LocationPreferences" />
         <activity android:name=".Activities.ChartActivity" />
         <activity android:name=".Activities.TableActivity" />

@@ -40,18 +40,19 @@ public class EncabezadoFacturaActivity extends AppCompatActivity {
     webservice wsCod;
     String METHOD_NAME1 = "encabezado_insert";
     String METHOD_NAME2 = "detalle_insert";
-    String SOAP_ACTION1 = "http://grupomenas.carrierhouse.us/ws-imagenes/encabezado_insert";
-    String SOAP_ACTION2 = "http://grupomenas.carrierhouse.us/ws-imagenes/detalle_insert";
+    String SOAP_ACTION1 = "http://grupomenas.carrierhouse.us/wstposp/encabezado_insert";
+    String SOAP_ACTION2 = "http://grupomenas.carrierhouse.us/wstposp/detalle_insert";
 
-    String NAMESPACE = "http://grupomenas.carrierhouse.us/ws-imagenes/";
-    String SOAP_URL1 = "http://grupomenas.carrierhouse.us/ws-imagenes/GetStockArtWS.asmx";
-    String SOAP_URL = "http://grupomenas.carrierhouse.us/ws-imagenes/GetStockArtWS.asmx";
+    String NAMESPACE = "http://grupomenas.carrierhouse.us/wstposp/";
+    String SOAP_URL1 = "http://grupomenas.carrierhouse.us/wstposp/GetStockArtWS.asmx";
+    String SOAP_URL = "http://grupomenas.carrierhouse.us/wstops2/GetStockArtWS.asmx";
     private ErrorRed error;
     database dbObjetc;
     ProgressDialog pdialog;
     SoapObject enc, detalle, encabezado;
     SoapPrimitive fahtocel, celtofah;
     database dbObject;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,14 +65,14 @@ public class EncabezadoFacturaActivity extends AppCompatActivity {
         btnEnvio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
-                    if (!error.conexion()  && error.existedatos() != 0) {
+                try {
+                    if (!error.conexion() && error.existedatos() != 0) {
                         Toast.makeText(getApplicationContext(), "Por el Momento no se Cuenta con Internet para Iniciar el Sistema ", Toast.LENGTH_LONG).show();
-                    }else{
+                    } else {
                         CelsiusAsync celsiustofahr = new CelsiusAsync();
                         celsiustofahr.execute();
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Por el Momento no se Cuenta con Internet para Iniciar el Sistema ", Toast.LENGTH_LONG).show();
                 }
             }
@@ -107,7 +108,7 @@ public class EncabezadoFacturaActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent cambiarActividad = new Intent(getApplicationContext(), FacturasPorEnviarActivity.class);
                 ApplicationTpos.currentEncabezado = facturas.get(position);
-              //  Toast.makeText(getApplicationContext(),  ""+ApplicationTpos.currentEncabezado.getCodFact(), Toast.LENGTH_LONG ).show();
+                //  Toast.makeText(getApplicationContext(),  ""+ApplicationTpos.currentEncabezado.getCodFact(), Toast.LENGTH_LONG ).show();
                 startActivity(cambiarActividad);
                 if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
                     startActivity(cambiarActividad);
@@ -126,19 +127,19 @@ public class EncabezadoFacturaActivity extends AppCompatActivity {
             ArrayList<FormatoFactura> db = dbObject.getFacturasPorEnviar();
             int w = db.get(0).getDetalleFacturas().size();
             int cod = wsCod.movilizandome();
-            String umov="";
+            String umov = "";
             for (int j = 0; j < db.size(); j++) {
                 for (int k = 0; k < db.get(j).getDetalleFacturas().size(); k++) {
                     detalle = new SoapObject(NAMESPACE, METHOD_NAME2);
                     detalle.addProperty("id_mov", cod);
                     detalle.addProperty("usuarioMov", db.get(j).getDetalleFacturas().get(k).getUsuarioMovilizandome());
-                    umov =db.get(j).getDetalleFacturas().get(k).getUsuarioMovilizandome();
+                    umov = db.get(j).getDetalleFacturas().get(k).getUsuarioMovilizandome();
                     detalle.addProperty("co_art", db.get(j).getDetalleFacturas().get(k).getCodigoArticulo());
                     detalle.addProperty("prec_vta", db.get(j).getDetalleFacturas().get(k).getPrecioArticulo().toString());
                     detalle.addProperty("cantidad", db.get(j).getDetalleFacturas().get(k).getCantidad());
                     detalle.addProperty("total_art", db.get(j).getDetalleFacturas().get(k).getTotalFactura().toString());
                     detalle.addProperty("telefono", db.get(j).getDetalleFacturas().get(k).getNumeroCel());
-                    detalle.addProperty("serial", "1234679");
+                    detalle.addProperty("serial", db.get(j).getDetalleFacturas().get(k).getSerial());
                     SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                     envelope.dotNet = true;
                     envelope.setOutputSoapObject(detalle);
@@ -150,33 +151,31 @@ public class EncabezadoFacturaActivity extends AppCompatActivity {
                         e.getMessage();
                     }
                 }
-               // db.clear();
+                // db.clear();
                 encabezado = new SoapObject(NAMESPACE, METHOD_NAME1);
                 encabezado.addProperty("id_mov", cod);
-                encabezado.addProperty("usuarioMov",umov);
+                encabezado.addProperty("usuarioMov", umov);
                 encabezado.addProperty("codCliente", db.get(j).getCodCliente());
                 encabezado.addProperty("forma_pag", "CONT");
-                encabezado.addProperty("total",  db.get(j).getTotalFactura().toString());
+                encabezado.addProperty("total", db.get(j).getTotalFactura().toString());
                 encabezado.addProperty("procesado", "S");
                 encabezado.addProperty("cobrado", db.get(j).getTotalFactura().toString());
                 encabezado.addProperty("fecha", "2019-04-04");
-                if((db.get(j).getLatitude()==null) || db.get(j).getLongitude()==null){
+                if ((db.get(j).getLatitude() == null) || db.get(j).getLongitude() == null) {
                     encabezado.addProperty("latitud", "0");
                     encabezado.addProperty("longitud", "0");
-                }else{
+                } else {
                     encabezado.addProperty("latitud", db.get(j).getLatitude());
                     encabezado.addProperty("longitud", db.get(j).getLongitude());
                 }
-                encabezado.addProperty("dpi",db.get(j).getDpi());
-                encabezado.addProperty("nombre",db.get(j).getNombre());
+                encabezado.addProperty("dpi", db.get(j).getDpi());
+                encabezado.addProperty("nombre", db.get(j).getNombre());
                 encabezado.addProperty("nit", db.get(j).getNit());
                 encabezado.addProperty("direccion", db.get(j).getDireccion());
                 encabezado.addProperty("municipio", db.get(j).getMunicipio());
                 encabezado.addProperty("departamento", db.get(j).getDepto());
                 encabezado.addProperty("zona", db.get(j).getZona());
                 encabezado.addProperty("email", db.get(j).getEmail());
-                encabezado.addProperty("imagen", db.get(j).getImagen());
-                encabezado.addProperty("imagen2", db.get(j).getImagen2());
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.dotNet = true;
                 envelope.setOutputSoapObject(encabezado);
@@ -187,16 +186,7 @@ public class EncabezadoFacturaActivity extends AppCompatActivity {
                     fahtocel = (SoapPrimitive) envelope.getResponse();
                     dbObject.limpiarEnvioFacturas();
                 } catch (Exception e) {
-                    e.getMessage();
-
-                } finally {
-                    //      almacenarFactura.AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente,Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura);
-               /* Toast.makeText(getApplicationContext(), "ERROR: No se pudo completar la transacción, revisar Pendientes de envio", Toast.LENGTH_SHORT).show();
-                Intent cambiarActividad = new Intent(getApplicationContext(), menu_principal.class);
-                startActivity(cambiarActividad);
-                if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
-                    startActivity(cambiarActividad);
-                }*/
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -223,6 +213,7 @@ public class EncabezadoFacturaActivity extends AppCompatActivity {
             pdialog.show();
         }
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

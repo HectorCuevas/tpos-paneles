@@ -960,9 +960,7 @@ public class webservice extends AsyncTask<String, String, String> {
         try {
             String url = "http://tarjetazo.eastus2.cloudapp.azure.com/Tpos/PROSISCO_REST/api/Lst_productos_de_la_ruta/" + base.get_ruta().trim();
 
-
             RestTemplate restTemplate = new RestTemplate();
-
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             JSONArray t_c = restTemplate.getForObject(url, JSONArray.class);
             JSONArray t6 = t_c;

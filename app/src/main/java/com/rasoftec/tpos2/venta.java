@@ -57,41 +57,41 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
     private Categorias productos = new Categorias();
     private BottomSheetDialog mBottomSheetDialog, mBottomSheetDialog1, ventanaModal;
-    int nuevoPrecio = 15;
+    private int nuevoPrecio = 15;
     private String actual;
     private String nombre;
-    View bottomSheet, bottomSheeet1;
+    private View bottomSheet, bottomSheeet1;
     private String ruta;
-    ArrayList<nodo_producto> carrito = new ArrayList<>();
-    ArrayList<nodo_producto> lista_info = new ArrayList<>();
+    private ArrayList<nodo_producto> carrito = new ArrayList<>();
+    private ArrayList<nodo_producto> lista_info = new ArrayList<>();
     private ListView lista_g;
-    RadioButton radio10Gratis;
-    ArrayList<nodo_factura> facturas_actual;
-    database base;
-    String numero;
+    private RadioButton radio10Gratis;
+    private ArrayList<nodo_factura> facturas_actual;
+    private database base;
+    private String numero;
     private Boolean isPhoneNumber;
-    int tipo, cantidad = 10;
-    int PhoneNumber = 0;
-    int cantidadRecarga = 10;
-    int total_pos;
-    EditText numeroDeTelefono;
+    private int tipo, cantidad = 10;
+    private int PhoneNumber = 0;
+    private int cantidadRecarga = 10;
+    private int total_pos;
+    private EditText numeroDeTelefono;
     private ErrorRed ero;
-    int codigo = 0;
-    ArrayAdapter<nodo_producto> adapter;
+    private int codigo = 0;
+    private ArrayAdapter<nodo_producto> adapter;
 
     /*** Nuevas variables y  constantes ***/
-    CheckBox bonificacion;
-    RadioButton radio15;
-    RadioButton radio20;
-    RadioButton radio25Gratis;
-    EditText txtOtros;
-    View bottomSheetLayout;
-
-    String valorRecarga = "";
+    private CheckBox bonificacion;
+    private RadioButton radio15;
+    private RadioButton radio20;
+    private RadioButton radio25Gratis;
+    private EditText txtOtros;
+    private View bottomSheetLayout;
+    private String valorRecarga = "";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ApplicationTpos.codigos.clear();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_venta);
         ero = new ErrorRed(this);
@@ -110,6 +110,8 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
         setTitle("Area de Venta(s)");
 
         bottomSheet = findViewById(R.id.framelayout_bottom_sheet);
+
+
         bottomSheeet1 = findViewById(R.id.framelayout_bottom_sheet1);
 
         /*** Nueva Area de ventas ***/
@@ -131,13 +133,15 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
             case "S1":
                 isPhoneNumber = false;
                 logicaProductos(codigo, articulo);
-                esRecarga();
+                esTarjetaSim();
                 break;
             case "O1":
                 esCantidadProducto(articulo, codCategoria);
                 break;
             case "T1":
                 esCantidadProducto(articulo, codCategoria);
+            case "S3":
+               productoSinContrato(articulo, codCategoria);
                 break;
             default:
                 break;
@@ -168,6 +172,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
                    // CheckBox bonificacion = bottomSheetLayout.findViewById(R.id.checkBoxBono);
                    try{
+                       ApplicationTpos.codigos.add("S2");
                        radio10Gratis = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_10);
                        radio15 = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_15);
                        radio25Gratis = (RadioButton) bottomSheetLayout.findViewById(R.id.radio_20);
@@ -208,7 +213,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
         }
     }
 
-    public void esRecarga() {
+    public void esTarjetaSim() {
         final View bottomSheetLayoutSim = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog1, null);
         mBottomSheetDialog1 = new BottomSheetDialog(this);
         mBottomSheetDialog1.setContentView(bottomSheetLayoutSim);
@@ -219,6 +224,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                 mBottomSheetDialog1.dismiss();
             }
         });
+        /**** i ***/
         (bottomSheetLayoutSim.findViewById(R.id.button_okSim)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -257,6 +263,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
         (ventanaCantidad.findViewById(R.id.button_okDialog)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ApplicationTpos.codigos.add("A1");
                 EditText txtcantidad =  ventanaModal.findViewById(R.id.txtCantidadDialog);
                 int cantidad = Integer.parseInt(txtcantidad.getText().toString());
                 producto.setCompra(cantidad);
@@ -267,6 +274,62 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
         });
 
     }
+
+    private void productoSinContrato(final nodo_producto producto, final String codigoCategoria) {
+        final View ventanaCantidad = getLayoutInflater().inflate(R.layout.botton_sheet_productos_sin_contrato, null);
+        ventanaModal = new BottomSheetDialog(this);
+        ventanaModal.setContentView(ventanaCantidad);
+        ventanaModal.show();
+
+        (ventanaCantidad.findViewById(R.id.btnSinContratoClose)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ventanaModal.dismiss();
+            }
+        });
+        (ventanaCantidad.findViewById(R.id.btnSinContratoOk)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText txtValor =  ventanaModal.findViewById(R.id.txtSinContratoValor);
+                EditText txtNumero =  ventanaModal.findViewById(R.id.txtSinContratoNumero);
+                EditText txtcel =  ventanaModal.findViewById(R.id.txtSinContratoTel);
+                double precio = Double.parseDouble(txtValor.getText().toString());
+                String numero = txtNumero.getText().toString();
+                int cel = Integer.parseInt(txtcel.getText().toString());
+                ApplicationTpos.codigos.add("A1");
+                producto.setCompra(1);
+                producto.setPrecio(precio);
+                producto.setNumeroCel(cel);
+                producto.setSerial("SM:"+numero+"F:"+precio);
+                productoS3(producto, codigoCategoria);
+                ventanaModal.dismiss();
+            }
+        });
+
+    }
+
+    private void productoS3(nodo_producto producto, String codigoCategoria){
+        /** Para codigos S3 **/
+        nodo_producto bodega = existe(producto.getCodigo(), cantidad);
+        nodo_producto articulo = new nodo_producto();
+        String codigo = producto.getCodigo();
+        int cantidad = producto.getCompra();
+        String descripcion =producto.getDescripcion();
+        int stock = producto.getStock();
+        int numeroCel = producto.getNumerocel();
+        double precio = producto.getPrecio();
+        nuevoPrecio =(int) precio;
+        articulo.setSerial(producto.getSerial());
+        articulo.setCodigo(codigo);
+        articulo.setCompra(cantidad);
+        articulo.setDescripcion(descripcion);
+        articulo.setStock(stock);
+        articulo.setNumeroCel(numeroCel);
+        articulo.setPrecio(precio);
+        hayStock(bodega, articulo, cantidad, codigoCategoria );
+        actualizar_total(carrito);
+    }
+
     private void agregarProductoConCantidad(nodo_producto producto, String codigoCategoria){
         /** Para codigos T1, O1, A1 **/
         nodo_producto bodega = existe(producto.getCodigo(), cantidad);
@@ -297,6 +360,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
             /*** creamos un nuevo articulo ***/
             nodo_producto stock = existe(articulo.getCodigo(), cantidadRecarga);
             articulo.setNumeroCel(numeroCel);
+
             /*** Cambiamos el valor si es numero o recarga ***/
             validateIfPhoneNumber(cantidadRecarga);
             /*** Valida si hay disponibles, si hay lo agrega al carrito ***/
@@ -653,8 +717,6 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                 orga();
 
             }
-
-
         }
     }
 

@@ -12,7 +12,8 @@ public class FormatoFactura {
     //private String forma_pag;
   //  private String totalFactEnc;
 
-
+private byte[] imagen;
+private byte[] imagen2;
     private String fecha;
     private String numeroDpi;
     private String nombre;
@@ -25,25 +26,6 @@ public class FormatoFactura {
     private String email;
     private String latitude;
     private String longitude;
-
-    public byte[] getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(byte[] imagen) {
-        this.imagen = imagen;
-    }
-
-    public byte[] getImagen2() {
-        return imagen2;
-    }
-
-    public void setImagen2(byte[] imagen2) {
-        this.imagen2 = imagen2;
-    }
-
-    private byte[] imagen;
-    private byte[] imagen2;
     /*** Detalle ***/
     private long idMovilizandome;
     private String codCliente;
@@ -88,8 +70,7 @@ public class FormatoFactura {
                           String email, String latitude, String longitude,
                           String usuarioMovilizandome, String codigoArticulo, Double precioArticulo,
                           int cantidad, Double totalFactura, int numeroCel,
-                          ArrayList<detalleFactura> detalleFacturas,String idCliente, String fecha,
-                          byte[] imagen, byte[] imagen2) {
+                          ArrayList<detalleFactura> detalleFacturas,String idCliente, String fecha) {
         this.numeroDpi = numeroDpi;
         this.nombre = nombre;
         this.nit = nit;
@@ -111,10 +92,37 @@ public class FormatoFactura {
         this.detalleFacturas = detalleFacturas;
         this.codCliente = idCliente;
         this.fecha = fecha;
-        this.imagen = imagen;
-        this.imagen2= imagen2;
     }
 
+    public FormatoFactura(String numeroDpi, String nombre, String nit,
+                          String direccion, String depto, String municipio, String zona,
+                          String email, String latitude, String longitude,
+                          String usuarioMovilizandome, String codigoArticulo, Double precioArticulo,
+                          int cantidad, Double totalFactura, int numeroCel,
+                          ArrayList<detalleFactura> detalleFacturas,String idCliente, String fecha, byte[] imagen, byte[] imagen2) {
+        this.numeroDpi = numeroDpi;
+        this.nombre = nombre;
+        this.nit = nit;
+        this.direccion = direccion;
+        this.depto = depto;
+        this.municipio = municipio;
+        this.zona = zona;
+        this.email = email;
+        this.latitude = latitude;
+        this.longitude = longitude;
+
+        //this.idMovilizandome = idMovilizandome;
+        this.usuarioMovilizandome = usuarioMovilizandome;
+        this.codigoArticulo = codigoArticulo;
+        this.precioArticulo = precioArticulo;
+        this.cantidad = cantidad;
+        this.totalFactura = totalFactura;
+        this.numeroCel = numeroCel;
+        this.detalleFacturas = detalleFacturas;
+        this.codCliente = idCliente;
+        this.fecha = fecha;
+        //this.
+    }
 
 
     public String getNumeroDpi() {

@@ -18,6 +18,18 @@ public class detalleFactura {
     private int cantidad;
     private Double totalFactura;
     private int numeroCel;
+    private String serial;
+
+    public String getSerial() {
+        return serial;
+    }
+
+    public void setSerial(String serial) {
+        this.serial = serial;
+    }
+
+
+
 
     public String getUsuarioMovilizandome() {
         return usuarioMovilizandome;

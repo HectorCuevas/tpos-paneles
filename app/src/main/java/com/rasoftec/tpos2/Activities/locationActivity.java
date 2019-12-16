@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.rasoftec.ApplicationTpos.LLEVA_FOTO;
 import static com.rasoftec.ApplicationTpos.detalleVenta;
 import static com.rasoftec.ApplicationTpos.newFactura_encabezado;
 import static com.rasoftec.ApplicationTpos.p;
@@ -64,7 +65,7 @@ public class LocationActivity extends AppCompatActivity {
     String SOAP_ACTION1 = "http://grupomenas.carrierhouse.us/ws-imagenes/encabezado_insert";
     String SOAP_ACTION2 = "http://grupomenas.carrierhouse.us/ws-imagenes/detalle_insert";
     Spinner spnMunicipios;
-    Spinner spinner1;
+
     String fActual;
     Spinner spZona;
     Button btnPref;
@@ -96,6 +97,7 @@ public class LocationActivity extends AppCompatActivity {
 
         ImageView imageView = findViewById(R.id.imgPrueba);
 
+       // Toast.makeText(this, String.valueOf(LLEVA_FOTO), Toast.LENGTH_SHORT).show();
 
         //Set adapter from resource
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.zonas, android.R.layout.simple_spinner_item);
@@ -140,10 +142,10 @@ public class LocationActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         }
-        byte[] blob= newFactura_encabezado.getImagen2();
-        Bitmap bmp= BitmapFactory.decodeByteArray(blob,0,blob.length);
+       // byte[] blob= newFactura_encabezado.getImagen2();
+        //Bitmap bmp= BitmapFactory.decodeByteArray(blob,0,blob.length);
 
-         imageView.setImageBitmap(bmp);
+         //imageView.setImageBitmap(bmp);
 
 
     }
@@ -155,7 +157,7 @@ public class LocationActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("usuario_movilizandome", dbObjetc.get_ruta().trim());
             jsonObject.put("cod_cliente", ApplicationTpos.codigoCliente);
-            jsonObject.put("forma_pago", "CONT");
+            jsonObject.put("forma_pago", p.get(0).getForma_pag());
             jsonObject.put("total", ApplicationTpos.totalEncabezado);
             jsonObject.put("cobrado", ApplicationTpos.totalEncabezado);
             jsonObject.put("procesado", "S");
@@ -200,6 +202,7 @@ public class LocationActivity extends AppCompatActivity {
 
     public void checkout(View view) {
         try {
+            p.clear();
             //String address = txtAddress.getText().toString();
             String direccionRecarga = spnDireccionRecarga.getSelectedItem().toString();
             String municipio = lblMunPref.getText().toString();
@@ -259,7 +262,7 @@ public class LocationActivity extends AppCompatActivity {
                 detalle.addProperty("cantidad", ApplicationTpos.detalleFactura.get(j).getCantidad());
                 detalle.addProperty("total_art", ApplicationTpos.detalleFactura.get(j).getTotalFactura().toString());
                 detalle.addProperty("telefono", ApplicationTpos.detalleFactura.get(j).getNumeroCel());
-                detalle.addProperty("serial", "1234679");
+                detalle.addProperty("serial", ApplicationTpos.detalleFactura.get(j).getSerial());
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.dotNet = true;
                 envelope.setOutputSoapObject(detalle);
@@ -268,9 +271,8 @@ public class LocationActivity extends AppCompatActivity {
                     httpTransport.call(SOAP_ACTION2, envelope);
                     fahtocel = (SoapPrimitive) envelope.getResponse();
                 } catch (Exception e) {
+                   // Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     e.getMessage();
-                } finally {
-               //     AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente, Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura);
                 }
             }
             ApplicationTpos.detalleFactura.clear();
@@ -278,7 +280,7 @@ public class LocationActivity extends AppCompatActivity {
             encabezado.addProperty("id_mov", cod);
             encabezado.addProperty("usuarioMov", dbObjetc.get_ruta().trim());
             encabezado.addProperty("codCliente", ApplicationTpos.codigoCliente);
-            encabezado.addProperty("forma_pag", "CONT");
+            encabezado.addProperty("forma_pag", p.get(0).getForma_pag());
             encabezado.addProperty("total", Double.toString(ApplicationTpos.totalEncabezado));
             encabezado.addProperty("procesado", "S");
             encabezado.addProperty("cobrado", Double.toString(ApplicationTpos.totalEncabezado));
@@ -298,12 +300,19 @@ public class LocationActivity extends AppCompatActivity {
             encabezado.addProperty("zona", p.get(0).getZona());
             encabezado.addProperty("email", p.get(0).getEmail());
 
-            String img1_base64 = android.util.Base64.encodeToString(p.get(0).getImagen(), Base64.DEFAULT);
-            String img2_base64 = android.util.Base64.encodeToString(p.get(0).getImagen2(), Base64.DEFAULT);
+            if((p.get(0).getImagen() != null) || (p.get(0).getImagen2() != null) ){
+                String img1_base64 = android.util.Base64.encodeToString(p.get(0).getImagen(), Base64.DEFAULT);
+                String img2_base64 = android.util.Base64.encodeToString(p.get(0).getImagen2(), Base64.DEFAULT);
+                if(LLEVA_FOTO != 0){
+                    encabezado.addProperty("imagen", img1_base64);
+                    encabezado.addProperty("imagen2", img2_base64);
+                }else{
+                    encabezado.addProperty("imagen",null);
+                    encabezado.addProperty("imagen2", null);
+                }
+            }
 
-          //  byte[] encoded = Base64.getEncoder().encode(p.get(0).getImagen());
-            encabezado.addProperty("imagen", img1_base64);
-            encabezado.addProperty("imagen2", img2_base64);
+
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.dotNet = true;
             envelope.setOutputSoapObject(encabezado);
@@ -313,10 +322,8 @@ public class LocationActivity extends AppCompatActivity {
                 httpTransport.call(SOAP_ACTION1, envelope);
                 fahtocel = (SoapPrimitive) envelope.getResponse();
             } catch (Exception e) {
+               // Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 e.getMessage();
-              //  AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente, Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura);
-            } finally {
-               // AlmacenarEncabezado(dbObjetc.get_ruta().trim(), ApplicationTpos.codigoCliente, Double.toString(ApplicationTpos.totalEncabezado), p.get(0), ApplicationTpos.detalleFactura);
             }
 
 

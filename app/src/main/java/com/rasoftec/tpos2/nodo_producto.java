@@ -12,6 +12,18 @@ public class nodo_producto {
     double precio;
     int compra;
     int numero_cel;
+    String serial = "";
+
+    public String getSerial() {
+        return serial;
+    }
+
+    public void setSerial(String serial) {
+        this.serial = serial;
+    }
+
+
+
 
     public String getDescripcion() {
         return descripcion;

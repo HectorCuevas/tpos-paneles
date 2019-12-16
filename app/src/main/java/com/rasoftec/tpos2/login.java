@@ -99,7 +99,7 @@ public class login extends AppCompatActivity {
         pin = (EditText) findViewById(R.id.pin);
         base = new database(this);
         TextView ver = (TextView) findViewById(R.id.version);
-        ver.setText("Version 2.0.1");
+        ver.setText("Version 2.1.0");
 
     }
 

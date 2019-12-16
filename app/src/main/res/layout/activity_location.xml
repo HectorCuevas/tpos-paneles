@@ -18,7 +18,7 @@
         android:layout_below="@id/btnCheckout"
         android:id="@+id/layoutAddress"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:layout_marginTop="5dp"
         android:background="#e0e0e0"
         android:padding="5dp">
@@ -29,7 +29,6 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:id="@+id/lblDireccionRecarga"
-            android:layout_toRightOf="@id/imgName"
             android:text="Dirección a recarga" />
         <Spinner
             android:gravity="end"
