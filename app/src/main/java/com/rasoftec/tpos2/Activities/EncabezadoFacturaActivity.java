@@ -1,4 +1,4 @@
-package com.rasoftec.tpos2.Activities;
+package com.rasoftec.tpos2.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -20,10 +19,8 @@ import com.rasoftec.tpos2.Beans.FormatoFactura;
 import com.rasoftec.tpos2.Beans.factura_encabezado;
 import com.rasoftec.tpos2.Data.database;
 import com.rasoftec.tpos2.Data.webservice;
-import com.rasoftec.tpos2.Funciones.AlmacenarFactura;
 import com.rasoftec.tpos2.manejo_errores.ErrorRed;
 import com.rasoftec.tpos2.menu_principal;
-import com.rasoftec.tpos2.venta;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -32,8 +29,6 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
-
-import static com.rasoftec.ApplicationTpos.p;
 
 public class EncabezadoFacturaActivity extends AppCompatActivity {
 

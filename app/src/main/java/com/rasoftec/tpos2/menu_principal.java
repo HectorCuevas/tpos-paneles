@@ -3,6 +3,7 @@ package com.rasoftec.tpos2;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -20,14 +21,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.rasoftec.tpos2.R;
-import com.rasoftec.tpos2.Activities.ChartActivity;
-import com.rasoftec.tpos2.Activities.EncabezadoFacturaActivity;
-import com.rasoftec.tpos2.Activities.FacturasPorEnviarActivity;
-import com.rasoftec.tpos2.Activities.PhotoActivity;
-import com.rasoftec.tpos2.Activities.TableActivity;
-import com.rasoftec.tpos2.Adapters.EncabezadoFacturaAdapter;
+import com.rasoftec.tpos2.activities.ChartActivity;
+import com.rasoftec.tpos2.activities.EncabezadoFacturaActivity;
+import com.rasoftec.tpos2.activities.InventarioActivity;
+import com.rasoftec.tpos2.activities.TableActivity;
 import com.rasoftec.tpos2.Data.database;
 import com.rasoftec.tpos2.Data.nodo_factura;
 import com.rasoftec.tpos2.Data.producto_translado;
@@ -64,7 +63,7 @@ public class menu_principal extends AppCompatActivity {
         ero = new ErrorRed(this);
         ruta_actual = base.get_ruta();
         activo();
-        setTitle("Menu de Ruta" + " " + base.get_ruta());
+        setTitle("Mi ruta: " + base.get_ruta());
 // Area del inicio del Hilo  para ver si puedo enviar la informacion
 //        replicar= null;
 //       replicar= new hilo(this);
@@ -428,13 +427,13 @@ public class menu_principal extends AppCompatActivity {
         }
     }
     class venta3 {
-        String tipo_venta, cliente, total_saldo;
+        String tipo_venta, cliente, total_saldo, factura;
 
-        public venta3(String tipo_venta, String cliente, String total_saldo) {
+        public venta3(String tipo_venta, String cliente, String total_saldo, String factura) {
             this.tipo_venta = tipo_venta;
             this.cliente = cliente;
             this.total_saldo = total_saldo;
-
+            this.factura = factura;
         }
 
         @Override
@@ -480,7 +479,7 @@ public class menu_principal extends AppCompatActivity {
                     t14 = t12.execute("R" + base.get_ruta().trim(), "2").get();
                     ArrayAdapter adapter = null;
                     JSONArray t15 = new JSONArray(t14);
-                    ArrayList<venta3> lista_info = new ArrayList<>();
+                    final ArrayList<venta3> lista_info = new ArrayList<>();
                     if (t15.length() > 0) {
                         int limite = t15.length();
                         //cobrado facturado
@@ -494,7 +493,7 @@ public class menu_principal extends AppCompatActivity {
                             saldo += s_s;
 
 
-                            venta3 t17 = new venta3(t16.getString("co_alma") + " Factura #" + " " + t16.get("co_art"), t16.getString("art_des"), "Total:" + " " + t16.getString("stock_act") + " Cobrado:" + " " + t16.get("prec_vta1"));
+                            venta3 t17 = new venta3(t16.getString("co_alma") + " Factura #" + " " + t16.get("co_art"), t16.getString("art_des"), "Total:" + " " + t16.getString("stock_act") + " Cobrado:" + " " + t16.get("prec_vta1"), t16.getString("art_des") );
                             lista_info.add(t17);
 
                         }
@@ -506,6 +505,19 @@ public class menu_principal extends AppCompatActivity {
 
                         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lista_info);
                         t.setAdapter(adapter);
+                        final String URL = "https://facturaonline.azurewebsites.net/index.aspx?id=";
+                        t.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                try{
+                                    String rowid= lista_info.get(position).factura;//.split(" ")[2];
+                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URL+rowid));
+                                    startActivity(browserIntent);
+                                }catch (Exception e){
+                                    Toast.makeText(getApplicationContext(), "No se pudo armar el enlace " + e.toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     }
 
 //                        Log.i("Actual Valor de R",t15.toString());
@@ -919,51 +931,11 @@ public class menu_principal extends AppCompatActivity {
     public void inventario(View v) {
 
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        LayoutInflater inflater = this.getLayoutInflater();
-
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
-        View v2 = inflater.inflate(R.layout.inventario, null);
-        ListView t = (ListView) v2.findViewById(R.id.lista_inventario);
-        ArrayList<nodo_producto> lista_info = base.getall();
-        ArrayAdapter adapter = new ArrayAdapter<>(menu_principal.this, android.R.layout.simple_list_item_1, lista_info);
-
-        t.setAdapter(adapter);
-
-        t.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Nodo_tarea reviso = (Nodo_tarea) parent.getItemAtPosition(position);
-
-
-            }
-        });
-
-
-        builder.setView(v2)
-                // Add action buttons
-                .setNegativeButton("Aceptar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                })
-
-
-                .setPositiveButton("Consultar Saldo", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        saldo_actual();
-
-                    }
-                });
-
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
+        Intent changePrefs = new Intent(getApplicationContext(), InventarioActivity.class);
+        startActivity(changePrefs);
+        if (changePrefs.resolveActivity(getPackageManager()) != null) {
+            startActivity(changePrefs);
+        }
 
     }
 

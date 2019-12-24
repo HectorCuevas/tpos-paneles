@@ -1,10 +1,8 @@
-package com.rasoftec.tpos2.Activities;
+package com.rasoftec.tpos2.activities;
 
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -20,7 +18,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,6 +26,7 @@ import android.widget.Toast;
 
 import com.rasoftec.ApplicationTpos;
 import com.rasoftec.tpos2.R;
+import com.rasoftec.tpos2.venta;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,7 +64,14 @@ public class PhotoActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Intent i2 = new Intent(this, venta.class);
 
+        startActivity(i2);
+
+        return super.onKeyDown(keyCode, event);
+    }
 
     public void addLocation(View view) {
        try{

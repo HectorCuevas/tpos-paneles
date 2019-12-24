@@ -1,14 +1,20 @@
 package com.rasoftec.tpos2;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by raaa on 8/08/17.
  */
 
 public class nodo_producto {
 
+    @SerializedName("co_alma")
     String descripcion;
+    @SerializedName("co_alma")
     String codigo;
+    @SerializedName("co_alma")
     int stock;
+    @SerializedName("co_alma")
     double precio;
     int compra;
     int numero_cel;

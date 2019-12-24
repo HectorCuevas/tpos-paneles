@@ -1,12 +1,10 @@
 package com.rasoftec.tpos2;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,36 +28,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rasoftec.ApplicationTpos;
-import com.rasoftec.tpos2.R;
-import com.rasoftec.tpos2.Activities.DetailActivity;
+import com.rasoftec.tpos2.activities.DetailActivity;
 import com.rasoftec.tpos2.Funciones.Categorias;
 import com.rasoftec.tpos2.Data.database;
-import com.rasoftec.tpos2.Data.detalle;
 import com.rasoftec.tpos2.Data.nodo_factura;
-import com.rasoftec.tpos2.Data.webservice;
 import com.rasoftec.tpos2.manejo_errores.ErrorRed;
 import com.rasoftec.tpos2.sensor.ssdi;
 import com.rasoftec.tpos2.Data.venta_detalle;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.ExecutionException;
 
 import static android.text.TextUtils.isEmpty;
-import static android.widget.Toast.LENGTH_SHORT;
 
 public class venta extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private Categorias productos = new Categorias();
-    private BottomSheetDialog mBottomSheetDialog, mBottomSheetDialog1, ventanaModal;
+    private BottomSheetDialog mBottomSheetDialog, mBottomSheetDialog1, ventanaModal, ventanaS3;
     private int nuevoPrecio = 15;
     private String actual;
     private String nombre;
-    private View bottomSheet, bottomSheeet1;
+    private View bottomSheet, bottomSheeet1, modal;
     private String ruta;
     private ArrayList<nodo_producto> carrito = new ArrayList<>();
     private ArrayList<nodo_producto> lista_info = new ArrayList<>();
@@ -109,18 +100,19 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 
         setTitle("Area de Venta(s)");
 
+
         bottomSheet = findViewById(R.id.framelayout_bottom_sheet);
 
 
         bottomSheeet1 = findViewById(R.id.framelayout_bottom_sheet1);
 
-        /*** Nueva Area de ventas ***/
 
 
     }
 
 
     private void setCategorias(String codigo ,nodo_producto articulo, String codCategoria) {
+       // Toast.makeText(getApplicationContext(), codCategoria, LENGTH_SHORT).show();
         switch (codCategoria) {
             case "A1":
                 esCantidadProducto(articulo, codCategoria);
@@ -140,8 +132,9 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                 break;
             case "T1":
                 esCantidadProducto(articulo, codCategoria);
+                break;
             case "S3":
-               productoSinContrato(articulo, codCategoria);
+                productoSinContrato(articulo, codCategoria);
                 break;
             default:
                 break;
@@ -272,40 +265,42 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                 ventanaModal.dismiss();
             }
         });
-
     }
 
     private void productoSinContrato(final nodo_producto producto, final String codigoCategoria) {
         final View ventanaCantidad = getLayoutInflater().inflate(R.layout.botton_sheet_productos_sin_contrato, null);
-        ventanaModal = new BottomSheetDialog(this);
-        ventanaModal.setContentView(ventanaCantidad);
-        ventanaModal.show();
+        ventanaS3 = new BottomSheetDialog(this);
+        ventanaS3.setContentView(ventanaCantidad);
+        ventanaS3.show();
 
         (ventanaCantidad.findViewById(R.id.btnSinContratoClose)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ventanaModal.dismiss();
+                ventanaS3.dismiss();
             }
         });
         (ventanaCantidad.findViewById(R.id.btnSinContratoOk)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText txtValor =  ventanaModal.findViewById(R.id.txtSinContratoValor);
-                EditText txtNumero =  ventanaModal.findViewById(R.id.txtSinContratoNumero);
-                EditText txtcel =  ventanaModal.findViewById(R.id.txtSinContratoTel);
-                double precio = Double.parseDouble(txtValor.getText().toString());
-                String numero = txtNumero.getText().toString();
-                int cel = Integer.parseInt(txtcel.getText().toString());
-                ApplicationTpos.codigos.add("A1");
-                producto.setCompra(1);
-                producto.setPrecio(precio);
-                producto.setNumeroCel(cel);
-                producto.setSerial("SM:"+numero+"F:"+precio);
-                productoS3(producto, codigoCategoria);
-                ventanaModal.dismiss();
+               try{
+                   EditText txtValor =  ventanaS3.findViewById(R.id.txtSinContratoValor);
+                   EditText txtNumero =  ventanaS3.findViewById(R.id.txtSinContratoNumero);
+                   EditText txtcel =  ventanaS3.findViewById(R.id.txtSinContratoTel);
+                   double precio = Double.parseDouble(txtValor.getText().toString());
+                   String numero = txtNumero.getText().toString();
+                   int cel = Integer.parseInt(txtcel.getText().toString());
+                   ApplicationTpos.codigos.add("A1");
+                   producto.setCompra(1);
+                   producto.setPrecio(precio);
+                   producto.setNumeroCel(cel);
+                   producto.setSerial("SM:"+numero+"F:"+precio);
+                   productoS3(producto, codigoCategoria);
+                   ventanaS3.dismiss();
+               }catch (Exception e){
+                   Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+               }
             }
         });
-
     }
 
     private void productoS3(nodo_producto producto, String codigoCategoria){

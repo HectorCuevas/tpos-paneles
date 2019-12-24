@@ -1,4 +1,4 @@
-package com.rasoftec.tpos2.Activities;
+package com.rasoftec.tpos2.activities;
 
 import android.Manifest;
 import android.content.Context;

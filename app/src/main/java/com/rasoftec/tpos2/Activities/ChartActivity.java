@@ -1,4 +1,4 @@
-package com.rasoftec.tpos2.Activities;
+package com.rasoftec.tpos2.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

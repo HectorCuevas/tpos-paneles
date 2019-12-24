@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    >
+    <TextView
+        android:id="@+id/lblInvetarioTitulo"
+        android:text="SIMCARD"
+        android:textSize="20sp"
+        android:textColor="#000"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+    <TextView
+        android:id="@+id/lblInventarioDescripcion"
+        android:text="Tarjeta SIMCARD"
+        android:layout_below="@id/lblInvetarioTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/lblInvetarioStock"
+        android:text="Stock: 11.00000"
+        android:layout_below="@id/lblInventarioDescripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/lblInventarioPrecio"
+        android:layout_below="@id/lblInventarioDescripcion"
+        android:layout_toEndOf="@id/lblInvetarioStock"
+        android:text="Q1"
+        android:layout_alignParentRight="true"
+        android:gravity="end"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

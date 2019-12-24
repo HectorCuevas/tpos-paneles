@@ -23,6 +23,7 @@ public class ApplicationTpos extends Application {
     public static String tipo_venta = "required";
     public static ArrayList<String> codigos = new ArrayList<>();
     public static int LLEVA_FOTO = 1;
+    public static String URL="http://tarjetazo.eastus2.cloudapp.azure.com/Tpos/PROSISCO_REST/api/Lst_productos_de_la_ruta/C";
 
     /*** Facturas pendientes por enviar ***/
 

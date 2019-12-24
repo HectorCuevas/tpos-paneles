@@ -173,7 +173,22 @@ public class webservice extends AsyncTask<String, String, String> {
             t_c = restTemplate.getForObject(url, JSONArray.class);
 
 
-        } else if (params[1].equals("2")) {
+        }  else if (params[1].equals("Inventario")) {
+            url = "http://tarjetazo.eastus2.cloudapp.azure.com/Tpos/PROSISCO_REST/api/Lst_productos_de_la_ruta/C" + params[0];
+
+
+            restTemplate = new RestTemplate();
+
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+
+            t_c = restTemplate.getForObject(url, JSONArray.class);
+
+
+        }
+
+
+        else if (params[1].equals("2")) {
             url = "http://tarjetazo.eastus2.cloudapp.azure.com/Tpos/PROSISCO_REST/api/lst_productos_de_la_ruta/" + params[0];
 
             try {
@@ -848,59 +863,7 @@ public class webservice extends AsyncTask<String, String, String> {
         }
     }
 
-    private void cobros() {
 
-        String url = "http://tarjetazo.eastus2.cloudapp.azure.com/Tpos/PROSISCO_REST/api/sp_insert_movilizandome_encabezado/";
-
-        try {
-
-            ArrayList<encabezado> lista = base.get_encabezado_cobro();
-
-            Iterator<encabezado> ite = lista.iterator();
-            RestTemplate restTemplate = new RestTemplate();
-            while (ite.hasNext()) {
-                int codigo_movi = movilizandome();
-                Log.i("codigo movilizandome", "" + codigo_movi);
-                HashMap tem = new HashMap();
-                encabezado t14 = ite.next();
-
-
-                tem.put("id_movilizandome", codigo_movi);
-                tem.put("usuario_movilizandome", t14.usuario_movilizandome);
-                tem.put("co_cli", String.valueOf(t14.cod_cli));
-                tem.put("forma_pag", t14.forma_pag);
-                tem.put("total", t14.total);
-                tem.put("cobrado", t14.cobrado);
-                tem.put("Procesado", t14.Procesado);
-                tem.put("fact_num2", t14.fac_num2);
-                tem.put("Cobrado2", t14.Cobrado2);
-                Log.i("envio Pago", tem.toString());
-                // Add the Jackson message converter
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
-                JSONArray t_c = restTemplate.postForObject(url, tem, JSONArray.class);
-                Log.i("Valor de Cobro", t_c.toString());
-                base.set_venta(t14.encabezado, codigo_movi);
-
-                ///  );
-
-
-            }
-        } catch (Exception e) {
-
-            String erf = "Error irrecuperable al sincronizar los cobros, intente de nuevo la sincronizacion.\n" + e.getLocalizedMessage();
-
-
-            publishProgress(erf, "Error en Sincronizacion");
-            try {
-                Thread.sleep(4000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-        }
-
-
-    }
 
 
     private void carga_clientes() {

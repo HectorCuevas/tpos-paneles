@@ -14,32 +14,36 @@
         android:text="Confirmar"
         android:textColor="#fff" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_below="@id/btnCheckout"
         android:id="@+id/layoutAddress"
         android:layout_width="match_parent"
+        android:orientation="horizontal"
         android:layout_height="60dp"
         android:layout_marginTop="5dp"
         android:background="#e0e0e0"
         android:padding="5dp">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:id="@+id/lblDireccionRecarga"
             android:text="Dirección a recarga" />
-        <Spinner
+        <EditText
             android:gravity="end"
-            android:id="@+id/spnDireccionRecarga"
+            android:id="@+id/txtDireccionRecarga"
             android:textAlignment="textEnd"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-
-        </Spinner>
-    </RelativeLayout>
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:text="0" />
+        <ImageView
+            android:id="@+id/clearDireccion"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_round_close_24px" />
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/layoutZona"

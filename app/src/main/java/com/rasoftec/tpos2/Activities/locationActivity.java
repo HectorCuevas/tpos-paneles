@@ -1,13 +1,8 @@
-package com.rasoftec.tpos2.Activities;
+package com.rasoftec.tpos2.activities;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -15,11 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,20 +57,15 @@ public class LocationActivity extends AppCompatActivity {
     String METHOD_NAME2 = "detalle_insert";
     String SOAP_ACTION1 = "http://grupomenas.carrierhouse.us/ws-imagenes/encabezado_insert";
     String SOAP_ACTION2 = "http://grupomenas.carrierhouse.us/ws-imagenes/detalle_insert";
-    Spinner spnMunicipios;
-
-    String fActual;
-    Spinner spZona;
     Button btnPref;
     TextView lblZonaPref, lblMunPref, lblDeptoPref;
     String NAMESPACE = "http://grupomenas.carrierhouse.us/ws-imagenes/";
     String SOAP_URL1 = "http://grupomenas.carrierhouse.us/ws-imagenes/GetStockArtWS.asmx";
     String SOAP_URL = "http://grupomenas.carrierhouse.us/ws-imagenes/GetStockArtWS.asmx";
-    LocationManager locationManager;
-    LocationListener locationListener;
     Double longitude = 0D;
-    Spinner spnDireccionRecarga;
+    EditText txtDireccionRecarga;
     Double latitude = 0D;
+    ImageView clear;
     private ErrorRed error;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +74,12 @@ public class LocationActivity extends AppCompatActivity {
 
         error = new ErrorRed(this);
         //txtAddress = (EditText) findViewById(R.id.txtAddress);
-        spnDireccionRecarga = (Spinner) findViewById(R.id.spnDireccionRecarga);
+        txtDireccionRecarga = (EditText) findViewById(R.id.txtDireccionRecarga);
         lblDeptoPref = (TextView) findViewById(R.id.lblDeptoPref);
         lblMunPref = (TextView) findViewById(R.id.lblMunPref);
         lblZonaPref = (TextView) findViewById(R.id.lblZonaPref);
         btnPref = (Button) findViewById(R.id.btnConfigPrefs);
-
+        clear =(ImageView)  findViewById(R.id.clearDireccion);
         dbObjetc = new database(this);
         wsCod = new webservice(this);
 
@@ -99,11 +87,7 @@ public class LocationActivity extends AppCompatActivity {
 
        // Toast.makeText(this, String.valueOf(LLEVA_FOTO), Toast.LENGTH_SHORT).show();
 
-        //Set adapter from resource
-        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.zonas, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spnDireccionRecarga.setAdapter(adapter);
 
         /*** Verificacion de preferencias ***/
         try {
@@ -147,6 +131,13 @@ public class LocationActivity extends AppCompatActivity {
 
          //imageView.setImageBitmap(bmp);
 
+
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtDireccionRecarga.getText().clear();
+            }
+        });
 
     }
 
@@ -204,7 +195,7 @@ public class LocationActivity extends AppCompatActivity {
         try {
             p.clear();
             //String address = txtAddress.getText().toString();
-            String direccionRecarga = spnDireccionRecarga.getSelectedItem().toString();
+            String direccionRecarga =txtDireccionRecarga.getText().toString();
             String municipio = lblMunPref.getText().toString();
             String departamento = lblDeptoPref.getText().toString();
             String zona = lblZonaPref.getText().toString();

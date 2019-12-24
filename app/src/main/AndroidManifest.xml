@@ -45,15 +45,15 @@
                 android:resource="@xml/busqueda2" />
         </activity>
         <activity android:name=".menu_principal" />
-        <activity android:name=".Activities.LocationActivity" />
-        <activity android:name=".Activities.PhotoActivity" />
-        <activity android:name=".Activities.DetailActivity" />
+        <activity android:name=".activities.LocationActivity" />
+        <activity android:name=".activities.PhotoActivity" />
+        <activity android:name=".activities.DetailActivity" />
         <activity android:name=".Preferences.LocationPreferences" />
-        <activity android:name=".Activities.ChartActivity" />
-        <activity android:name=".Activities.TableActivity" />
-        <activity android:name=".Activities.FacturasPorEnviarActivity" />
-        <activity android:name=".Activities.EncabezadoFacturaActivity" />
-
+        <activity android:name=".activities.ChartActivity" />
+        <activity android:name=".activities.TableActivity" />
+        <activity android:name=".activities.FacturasPorEnviarActivity" />
+        <activity android:name=".activities.EncabezadoFacturaActivity" />
+        <activity android:name=".activities.InventarioActivity"></activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
