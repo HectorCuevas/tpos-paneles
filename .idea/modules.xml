@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SQLiteStudioRemote/SQLiteStudioRemote.iml" filepath="$PROJECT_DIR$/SQLiteStudioRemote/SQLiteStudioRemote.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/tpos.iml" filepath="$PROJECT_DIR$/tpos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tpos-paneles.iml" filepath="$PROJECT_DIR$/tpos-paneles.iml" />
     </modules>
   </component>
 </project>

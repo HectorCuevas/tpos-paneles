@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: de.codecrafters.tableview:tableview:2.8.0@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/tableview-2.8.0.aar/66270d27d7da4dcd8548620ef9ba2970/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/tableview-2.8.0.aar/66270d27d7da4dcd8548620ef9ba2970/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/tableview-2.8.0.aar/425ee68a725d48ca36c3c0d920d58a70/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/tableview-2.8.0.aar/425ee68a725d48ca36c3c0d920d58a70/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
